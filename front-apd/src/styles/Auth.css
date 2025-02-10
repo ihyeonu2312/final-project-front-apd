@@ -1,17 +1,21 @@
-.signup-container {
+/* ✅ 로그인 & 회원가입 공통 컨테이너 */
+.auth-container {
   max-width: 400px;
   margin: 100px auto;
   padding: 30px;
+  width: 1000px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background: #fff;
   text-align: center;
 }
 
-.signup-container h2 {
-  margin-bottom: 20px;
+.auth-container h2 {
+  margin-bottom: 15px;
+  color: black; /* ✅ 제목 색상을 검정으로 */
 }
 
+/* ✅ 입력 필드 공통 스타일 */
 .input-group {
   margin-bottom: 15px;
   text-align: left;
@@ -19,13 +23,15 @@
 
 .input-group label {
   display: block;
+  color: black;
   font-weight: bold;
   margin-bottom: 5px;
 }
+
 .input-group span {
-  font-weight: bold;
   color: red;
-  font-size: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .input-group input {
@@ -33,6 +39,8 @@
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  background: white; /* ✅ 인풋 필드를 흰색으로 */
+  color: black; /* ✅ 입력 글씨 색상 */
 }
 
 /* ✅ 공통 버튼 스타일 */
@@ -40,7 +48,7 @@
   width: 100%;
   margin-top: 10px;
   padding: 10px;
-  background: #222;
+  background: black;
   color: white;
   border: none;
   border-radius: 5px;
@@ -48,18 +56,14 @@
 }
 
 .black-button:hover {
-  background: #555;
+  background: #333;
 }
 
-/* ✅ 에러 메시지 */
-.error-message {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
 
-/* ✅ 로그인 이동 텍스트 */
-.login-text {
-  margin-top: 10px;
+
+/* ✅ 로그인 / 회원가입 이동 텍스트 */
+.auth-text {
+  color: black;
+  margin-top: 25px;
   font-size: 14px;
 }

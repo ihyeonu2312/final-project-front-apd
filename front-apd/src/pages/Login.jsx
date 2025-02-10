@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import "../styles/Login.css";
+import "../styles/Auth.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       <h2>로그인</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
@@ -51,7 +51,7 @@ const Login = () => {
         </button>
       </form>
 
-      <p className="signup-text">
+      <p className="auth-text">
         계정이 없으신가요?{" "}
         <button className="black-button" onClick={() => navigate("/signup")}>
           회원가입

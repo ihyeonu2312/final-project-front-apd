@@ -1,11 +1,12 @@
 /* ✅ 헤더 스타일 */
 .header {
-  background-color: #222;
+  background-color: #000;
   color: white;
   padding: 15px 20px;
   position: fixed;
   top: 0;
   left: 0;
+  height: 70px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -26,7 +27,7 @@
 
 /* ✅ 로고 스타일 */
 .logo img {
-  height: 40px;
+  height: 70px;
 }
 
 /* ✅ 검색창 스타일 */
@@ -43,7 +44,8 @@
   padding: 8px 12px;
   border: none;
   outline: none;
-  width: 350px;
+  background-color: white;
+  width: 500px;
 }
 
 .search-form button {
@@ -129,7 +131,7 @@
 
 .category-menu {
   width: 100%;
-  background-color: #222;
+  background-color: #000;
   text-align: center;
   padding: 10px 0;
   position: absolute;
@@ -171,7 +173,7 @@
   position: absolute;
   top: 20px;
   left: -20px;
-  background: #222;
+  background: #000;
   list-style: none;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

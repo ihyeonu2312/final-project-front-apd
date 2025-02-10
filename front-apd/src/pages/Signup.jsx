@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/Signup.css";
+import "../styles/Auth.css";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Signup = () => {
 
   const [error, setError] = useState("");
 
-  // 전화번호 입력 시 자동 하이픈(-) 추가
+  // 전화번호 입력 시 자동 하이픈(-) 추가 및 숫자만 입력 가능
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 입력 가능
     const formattedValue = rawValue
@@ -75,7 +75,7 @@ const Signup = () => {
   };
 
   return (
-    <div className="signup-container">
+    <div className="auth-container">
       <h2>회원가입</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -135,7 +135,7 @@ const Signup = () => {
           />
         </div>
         <div className="input-group">
-          <label>전화번호 <span> *숫자만 입력 가능</span></label>
+          <label>전화번호 <span>* 숫자만 입력 가능</span></label>
           <input
             type="tel"
             name="phone"
@@ -172,7 +172,7 @@ const Signup = () => {
           회원가입
         </button>
       </form>
-      <p className="login-text">
+      <p className="auth-text">
         이미 계정이 있으신가요?{" "}
         <button className="black-button" onClick={() => navigate("/login")}>
           로그인
