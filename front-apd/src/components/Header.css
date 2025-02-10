@@ -106,7 +106,7 @@
 /* ✅ QR 코드 팝업 */
 .qr-code {
   position: absolute;
-  top: 40px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   background: white;
@@ -118,7 +118,7 @@
 }
 
 .qr-code img {
-  width: 500px;
+  width: 150px;
   height: auto;
 }
 
