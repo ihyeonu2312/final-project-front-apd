@@ -1,10 +1,10 @@
 import React from "react";
-import "./Footer.css"; // 푸터 스타일 추가
+import "./footer.css"; 
 
 const Footer = () => {
   return (
     <footer className="footer">
-      <p>© 2025 My Shop. All rights reserved.</p>
+      <p>© 2025 알팡당 | All rights reserved.</p>
     </footer>
   );
 };

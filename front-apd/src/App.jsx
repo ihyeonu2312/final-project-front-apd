@@ -1,28 +1,34 @@
 import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // ✅ React Router 추가
 import "./App.css";
-import Header from "./components/Header";  // ✅ 헤더 추가
-import Footer from "./components/Footer";  // ✅ 푸터 추가
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
-      <Header /> {/* ✅ 헤더 추가 */}
+    <Router> {/* ✅ React Router 적용 */}
+      <Header />
       <main className="main-content">
-        <h1>알팡당 쇼핑몰에 오신 것을 환영합니다!</h1>
-        <div className="card">
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test HMR
-          </p>
-        </div>
+        <Routes> {/* ✅ 페이지 라우팅 */}
+          <Route path="/" element={<Home />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/used" element={<Used />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </main>
-      <Footer /> {/* ✅ 푸터 추가 */}
-    </>
+      <Footer />
+    </Router>
   );
 }
+
+// ✅ 임시 컴포넌트 추가
+const Home = () => <h1>홈 페이지</h1>;
+const Shop = () => <h1>쇼핑 페이지</h1>;
+const Used = () => <h1>중고거래 페이지</h1>;
+const Cart = () => <h1>장바구니 페이지</h1>;
+const Login = () => <h1>로그인 페이지</h1>;
 
 export default App;
