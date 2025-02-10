@@ -22,6 +22,38 @@
   width: 90%;
   max-width: 1200px;
 }
+.search-form {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.search-form input {
+  padding: 8px 12px;
+  border: none;
+  outline: none;
+  width: 200px;
+}
+
+.search-form button {
+  padding: 8px 12px;
+  background: black;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ✅ 아이콘 크기 */
+.search-form button svg {
+  font-size: 18px;
+}
 
 /* 로고 스타일 */
 .logo img {

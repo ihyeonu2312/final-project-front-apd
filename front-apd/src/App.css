@@ -44,3 +44,14 @@ button {
 button:hover {
   background-color: #4a54e1;
 }
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('./assets/fonts/Pretendard-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Pretendard', sans-serif;
+}
