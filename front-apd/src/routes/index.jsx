@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
+import Signup from "../pages/Signup";
 import Cart from "../pages/Cart";
 import Used from "../pages/Used";
 import Support from "../pages/Support";
@@ -14,7 +15,7 @@ import Sports from "../pages/Sports";
 import Jewelry from "../pages/Jewelry";
 import NotFound from "../pages/NotFound";
 
-const AppRoutes = () => {
+function AppRoutes() {
   return (
     <Routes>
       {/* 메인 페이지 */}
@@ -22,6 +23,7 @@ const AppRoutes = () => {
 
       {/* 주요 페이지 */}
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/used" element={<Used />} />
       <Route path="/support" element={<Support />} />
@@ -40,6 +42,6 @@ const AppRoutes = () => {
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
-};
+}
 
 export default AppRoutes;

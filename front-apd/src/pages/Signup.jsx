@@ -1,30 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
-import "../styles/Login.css";
+import "../styles/Signup.css";
 
-const Login = () => {
+const Signup = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore(); // Zustand 상태 관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // ✅ 로그인 API 호출 (현재는 가짜 데이터 사용)
-    if (email === "test@example.com" && password === "password123") {
-      login({ email, name: "테스트 유저" }); // Zustand에 사용자 정보 저장
-      alert("로그인 성공!");
-      navigate("/"); // 메인 페이지로 이동
-    } else {
-      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+    if (password !== confirmPassword) {
+      alert("비밀번호가 일치하지 않습니다.");
+      return;
     }
+
+    alert("회원가입 성공!");
+    navigate("/login"); // 회원가입 후 로그인 페이지로 이동
   };
 
   return (
-    <div className="login-container">
-      <h2>로그인</h2>
+    <div className="signup-container">
+      <h2>회원가입</h2>
       <form onSubmit={handleSubmit}>
         <div className="input-group">
           <label>이메일</label>
@@ -46,20 +43,22 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="login-button">
-          로그인
-        </button>
-      </form>
-
-      {/* ✅ 회원가입 버튼 추가 */}
-      <p className="signup-text">
-        계정이 없으신가요?{" "}
-        <button className="signup-button" onClick={() => navigate("/signup")}>
+        <div className="input-group">
+          <label>비밀번호 확인</label>
+          <input
+            type="password"
+            placeholder="비밀번호 확인"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="signup-button">
           회원가입
         </button>
-      </p>
+      </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
