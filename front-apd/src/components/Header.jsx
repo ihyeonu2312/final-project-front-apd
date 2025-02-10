@@ -1,13 +1,23 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faQrcode, faUser, faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faQrcode, faUser, faCartShopping, faBars } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
 import logo from "../assets/logo.png";
 import qrCodeImage from "../assets/qrcode.png";
 
 const Header = () => {
   const [showQR, setShowQR] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태
+  const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 상태
+
+  // ✅ 검색 이벤트 핸들러
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim() !== "") {
+      alert(`🔍 검색어: ${searchQuery}`);
+    }
+  };
 
   return (
     <header className="header">
@@ -18,12 +28,17 @@ const Header = () => {
         </Link>
 
         {/* ✅ 검색창 */}
-        <div className="search-form">
-          <input type="text" placeholder="검색어를 입력하세요..." />
-          <button>
+        <form className="search-form" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
-        </div>
+        </form>
 
         {/* ✅ 네비게이션 메뉴 */}
         <nav className="nav">
@@ -56,10 +71,36 @@ const Header = () => {
                 장바구니
               </Link>
             </li>
-            <li><Link to="/used">중고거래</Link></li>
           </ul>
         </nav>
       </div>
+
+      <div className="category-menu">
+  <ul>
+    <li className="dropdown"
+        onMouseEnter={() => setShowDropdown(true)}
+        onMouseLeave={() => setShowDropdown(false)}>
+      <span><FontAwesomeIcon icon={faBars} /> 모든카테고리</span>
+      {showDropdown && (
+        <ul className="dropdown-menu">
+          <li><Link to="/category/fashion">패션</Link></li>
+          <li><Link to="/category/living">생활용품</Link></li>
+          <li><Link to="/category/beauty">뷰티</Link></li>
+          <li><Link to="/category/bags">가방</Link></li>
+          <li><Link to="/category/appliances">가전</Link></li>
+          <li><Link to="/category/home">홈인테리어</Link></li>
+          <li><Link to="/category/sports">스포츠</Link></li>
+          <li><Link to="/category/jewelry">쥬얼리</Link></li>
+        </ul>
+      )}
+    </li>
+    <li><Link to="/fashion">패션</Link></li>
+    <li><Link to="/living">생활용품</Link></li>
+    <li><Link to="/beauty">뷰티</Link></li>
+    <li><Link to="/used">중고거래</Link></li>
+    <li><Link to="/support">고객센터</Link></li>
+  </ul>
+</div>
     </header>
   );
 };
