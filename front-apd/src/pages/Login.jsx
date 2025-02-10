@@ -46,15 +46,14 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="login-button">
+        <button type="submit" className="black-button">
           로그인
         </button>
       </form>
 
-      {/* ✅ 회원가입 버튼 추가 */}
       <p className="signup-text">
         계정이 없으신가요?{" "}
-        <button className="signup-button" onClick={() => navigate("/signup")}>
+        <button className="black-button" onClick={() => navigate("/signup")}>
           회원가입
         </button>
       </p>

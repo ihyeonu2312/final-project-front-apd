@@ -30,7 +30,8 @@
   border-radius: 5px;
 }
 
-.login-button {
+/* ✅ 공통 버튼 스타일 */
+.black-button {
   width: 100%;
   margin-top: 10px;
   padding: 10px;
@@ -41,24 +42,6 @@
   cursor: pointer;
 }
 
-.login-button:hover {
+.black-button:hover {
   background: #555;
-}
-
-.signup-text {
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.signup-button {
-  background: none;
-  border: none;
-  color: #007bff;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.signup-button:hover {
-  background: none;
 }
