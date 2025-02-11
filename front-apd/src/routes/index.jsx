@@ -15,6 +15,7 @@ import Sports from "../pages/Sports";
 import Jewelry from "../pages/Jewelry";
 import NotFound from "../pages/NotFound";
 
+
 function AppRoutes() {
   return (
     <Routes>
