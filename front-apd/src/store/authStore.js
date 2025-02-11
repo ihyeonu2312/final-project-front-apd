@@ -1,14 +1,26 @@
 import { create } from "zustand";
+import { login } from "../api/memberApi";
 
 export const useAuthStore = create((set) => ({
-  user: null, // 로그인한 사용자 정보
-  users: [], // 가입한 사용자 목록
+  user: null,
+  token: localStorage.getItem("token") || null,
 
-  // 로그인 기능
-  login: (userData) => set({ user: userData }),
+  login: async (credentials) => {
+    try {
+      const data = await login(credentials); // 🔥 백엔드 로그인 요청
+      set({ user: data.user, token: data.token });
+      localStorage.setItem("token", data.token); // JWT 저장
+      return data;
+    } catch (error) {
+      console.error("로그인 오류:", error);
+      throw error;
+    }
+  },
 
-  // 로그아웃 기능
-  logout: () => set({ user: null }),
+  logout: () => {
+    set({ user: null, token: null });
+    localStorage.removeItem("token");
+  },
 
   // 회원가입 기능
   register: (newUser) =>

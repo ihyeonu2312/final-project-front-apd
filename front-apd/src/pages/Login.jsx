@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태관리 추가
 import "../styles/Auth.css";
 
 const Login = () => {
@@ -9,16 +9,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // ✅ 로그인 API 호출 (현재는 가짜 데이터 사용)
-    if (email === "test@example.com" && password === "password123") {
-      login({ email, name: "테스트 유저" }); // Zustand에 사용자 정보 저장
+    
+    try {
+      const response = await login({ email, password }); // ✅ 백엔드 로그인 호출
+      console.log("로그인 성공! JWT:", response.token);
       alert("로그인 성공!");
       navigate("/"); // 메인 페이지로 이동
-    } else {
-      alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+    } catch (error) {
+      alert("로그인 실패: " + error.message);
     }
   };
 
