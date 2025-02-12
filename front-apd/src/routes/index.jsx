@@ -1,43 +1,27 @@
 import { Routes, Route } from "react-router-dom";
-import Main from "../pages/Main";
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import Cart from "../pages/Cart";
-import Used from "../pages/Used";
-import Support from "../pages/Support";
-import Fashion from "../pages/Fashion";
-import Living from "../pages/Living";
-import Beauty from "../pages/Beauty";
-import Bags from "../pages/Bags";
-import Appliances from "../pages/Appliances";
-import HomeInterior from "../pages/HomeInterior";
-import Sports from "../pages/Sports";
-import Jewelry from "../pages/Jewelry";
-import NotFound from "../pages/NotFound";
+import MainPage from "../pages/MainPage";
+import LoginPage from "../pages/LoginPage";
+import SignupPage from "../pages/SignupPage";
+import CartPage from "../pages/CartPage";
+import SupportPage from "../pages/SupportPage";
+import CategoryPage from "../pages/CategoryPage"
+import NotFound from "../pages/NotFoundPage";
 
 
 function AppRoutes() {
   return (
     <Routes>
       {/* 메인 페이지 */}
-      <Route path="/" element={<Main />} />
+      <Route path="/" element={<MainPage />} />
 
       {/* 주요 페이지 */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/used" element={<Used />} />
-      <Route path="/support" element={<Support />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/cart" element={<CartPage />} />
+      <Route path="/support" element={<SupportPage />} />
 
       {/* 카테고리 페이지 */}
-      <Route path="/fashion" element={<Fashion />} />
-      <Route path="/living" element={<Living />} />
-      <Route path="/beauty" element={<Beauty />} />
-      <Route path="/bags" element={<Bags />} />
-      <Route path="/appliances" element={<Appliances />} />
-      <Route path="/home-interior" element={<HomeInterior />} />
-      <Route path="/sports" element={<Sports />} />
-      <Route path="/jewelry" element={<Jewelry />} />
+      <Route path="/:category" element={<CategoryPage />} />
 
       {/* 404 페이지 (항상 맨 마지막에 위치) */}
       <Route path="*" element={<NotFound />} />

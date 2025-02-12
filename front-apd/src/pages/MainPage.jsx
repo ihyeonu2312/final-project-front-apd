@@ -1,6 +1,6 @@
 import React from "react";
 
-const Main = () => {
+const MainPage = () => {
   return (
     <div className="main-container">
       <h1>메인 페이지</h1>
@@ -9,4 +9,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default MainPage;

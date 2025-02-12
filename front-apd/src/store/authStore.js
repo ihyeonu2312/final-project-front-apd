@@ -1,15 +1,15 @@
 import { create } from "zustand";
-import { login } from "../api/memberApi";
+import { loginRequest, signupRequest, fetchUserProfile, logoutRequest } from "/src/api/memberApi.js"
 
 export const useAuthStore = create((set) => ({
   user: null,
   token: localStorage.getItem("token") || null,
 
-  login: async (credentials) => {
+  loginUser: async (credentials) => {
     try {
-      const data = await login(credentials); // 🔥 백엔드 로그인 요청
+      const data = await loginRequest(credentials); // 백엔드 로그인 요청
       set({ user: data.user, token: data.token });
-      localStorage.setItem("token", data.token); // JWT 저장
+      localStorage.setItem("token", data.token); // JWT 토큰 저장
       return data;
     } catch (error) {
       console.error("로그인 오류:", error);
@@ -22,10 +22,16 @@ export const useAuthStore = create((set) => ({
     localStorage.removeItem("token");
   },
 
-  // 회원가입 기능
-  register: (newUser) =>
-    set((state) => ({
-      users: [...state.users, newUser], // 유저 추가
-      user: newUser, // 가입 후 자동 로그인
-    })),
+  signup: async (newUser) => {
+    try {
+      const data = await signupRequest(newUser);
+      set({ user: data.user, token: data.token });
+      localStorage.setItem("token", data.token);
+      return data;
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      throw error;
+    }
+  },
+
 }));

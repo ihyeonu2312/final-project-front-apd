@@ -3,14 +3,14 @@ import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AppRoutes from "./routes/index"; // ✅ 라우트 분리
-import ProductList from "./pages/ProductList"; 
+// import ProductList from "./pages/ProductList"; 
 
 function App() {
   return (
     <Router>
       <Header />
       <main className="main-content">
-        <ProductList/>
+        {/* <ProductList/> */}
         <AppRoutes /> {/* ✅ 라우트 컴포넌트 추가 */}
       </main>
       <Footer />

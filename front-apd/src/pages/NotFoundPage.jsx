@@ -1,6 +1,6 @@
 import React from "react";
 
-const Cart = () => {
+const NotFoundPage = () => {
   return (
     <div>
       <h1>404 페이지</h1>
@@ -9,4 +9,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default NotFoundPage;

@@ -1,42 +1,44 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
+import axios from "axios"; // ✅ axios 사용 (fetch 제거)
 import "../styles/Auth.css";
 
-const Signup = () => {
+const SignupPage = () => {
   const navigate = useNavigate();
+  const signup = useAuthStore((state) => state.signup); // ✅ Zustand 회원가입 함수 가져오기
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
     nickname: "",
-    phone: "",
+    phoneNumber: "",
     address: "",
-    detailAdd: "",
-    authCode: "", // 사용자가 입력한 인증 코드
+    detailAddress: "",
+    authCode: "",
   });
 
   const [error, setError] = useState("");
-  const [emailSent, setEmailSent] = useState(false); // 이메일 인증 요청 상태
-  const [isCodeVerified, setIsCodeVerified] = useState(false); // 인증 코드 검증 여부
-  const [authCodeFromServer, setAuthCodeFromServer] = useState(""); // 서버에서 받은 인증 코드
+  const [emailSent, setEmailSent] = useState(false);
+  const [isCodeVerified, setIsCodeVerified] = useState(false);
 
-  // 전화번호 입력 시 자동 하이픈(-) 추가
+  // 📌 전화번호 자동 하이픈 추가
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
     const formattedValue = rawValue
       .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, "$1-$2-$3")
       .replace(/(-{1,2})$/g, "");
 
-    setFormData({ ...formData, phone: formattedValue });
+    setFormData({ ...formData, phoneNumber: formattedValue });
   };
 
-  // 입력 필드 값 변경 핸들러
+  // 📌 입력 필드 변경 핸들러
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 📌 이메일 인증 요청 (인증 코드 발송)
+  // 📌 이메일 인증 요청
   const handleEmailVerification = async () => {
     if (!formData.email.includes("@")) {
       setError("올바른 이메일 주소를 입력하세요.");
@@ -44,39 +46,37 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: formData.email }),
+      await axios.post("http://localhost:8080/api/auth/send-email", {
+        email: formData.email,
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        setAuthCodeFromServer(data.authCode); // 서버에서 받은 인증 코드 저장
-        setEmailSent(true); // 인증 코드 입력창 활성화
-        setError("");
-        alert("이메일로 인증 코드가 전송되었습니다.");
-      } else {
-        setError("이메일 전송에 실패했습니다.");
-      }
+      setEmailSent(true);
+      setError("");
+      alert("이메일로 인증 코드가 전송되었습니다.");
     } catch (error) {
-      setError("서버 오류가 발생했습니다.");
+      setError("이메일 전송에 실패했습니다.");
     }
   };
 
   // 📌 인증 코드 검증
-  const handleVerifyCode = () => {
-    if (formData.authCode === authCodeFromServer) {
-      setIsCodeVerified(true);
-      alert("이메일 인증이 완료되었습니다.");
-    } else {
-      setError("인증 코드가 올바르지 않습니다.");
+  const handleVerifyCode = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/auth/verify-email", {
+        params: { token: formData.authCode }, // 서버에서 토큰 기반 검증
+      });
+
+      if (response.data === "이메일 인증이 완료되었습니다.") {
+        setIsCodeVerified(true);
+        alert("이메일 인증이 완료되었습니다.");
+      } else {
+        setError("인증 코드가 올바르지 않습니다.");
+      }
+    } catch (error) {
+      setError("이메일 인증에 실패했습니다.");
     }
   };
 
-  // 회원가입 폼 제출 핸들러
+  // 📌 회원가입 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -92,34 +92,12 @@ const Signup = () => {
 
     setError("");
 
-    const newUser = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      nickname: formData.nickname,
-      phone: formData.phone,
-      address: formData.address,
-      detailAdd: formData.detailAdd,
-    };
-
     try {
-      const response = await fetch("http://localhost:8080/api/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
-      });
-
-      if (response.ok) {
-        alert("회원가입 성공! 로그인 페이지로 이동합니다.");
-        navigate("/login");
-      } else {
-        const data = await response.json();
-        setError(data.message || "회원가입에 실패했습니다.");
-      }
+      await signup(formData); // ✅ Zustand의 signup() 호출 (memberApi.js 통해 백엔드 연동)
+      alert("회원가입 성공! 메인 페이지로 이동합니다.");
+      navigate("/"); // 자동 로그인 후 메인 페이지 이동
     } catch (error) {
-      setError("서버 오류가 발생했습니다.");
+      setError("회원가입 실패: " + (error.response?.data?.message || error.message));
     }
   };
 
@@ -172,7 +150,7 @@ const Signup = () => {
 
         <div className="input-group">
           <label>전화번호<span> *숫자만 입력 가능</span></label>
-          <input type="tel" name="phone" placeholder="전화번호 입력" value={formData.phone} onChange={handlePhoneChange} maxLength="13" required />
+          <input type="tel" name="phoneNumber" placeholder="전화번호 입력" value={formData.phoneNumber} onChange={handlePhoneChange} maxLength="13" required />
         </div>
 
         <div className="input-group">
@@ -182,7 +160,7 @@ const Signup = () => {
 
         <div className="input-group">
           <label>상세주소</label>
-          <input type="text" name="detailAdd" placeholder="상세주소 입력" value={formData.detailAdd} onChange={handleChange} required />
+          <input type="text" name="detailAddress" placeholder="상세주소 입력" value={formData.detailAddress} onChange={handleChange} required />
         </div>
 
         <button type="submit" className="black-button">회원가입</button>
@@ -196,4 +174,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupPage;

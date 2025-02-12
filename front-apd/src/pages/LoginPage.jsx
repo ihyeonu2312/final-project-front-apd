@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태관리 추가
 import "../styles/Auth.css";
 
-const Login = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAuthStore(); // Zustand 상태 관리
+  const { loginUser } = useAuthStore(); // Zustand 상태 관리
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     
     try {
-      const response = await login({ email, password }); // ✅ 백엔드 로그인 호출
+      const response = await loginUser({ email, password }); // ✅ 백엔드 로그인 호출
       console.log("로그인 성공! JWT:", response.token);
       alert("로그인 성공!");
       navigate("/"); // 메인 페이지로 이동
@@ -61,4 +61,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;
