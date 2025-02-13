@@ -1,6 +1,8 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, Navigate } from "react-router-dom";
 import { CATEGORIES } from "../constants/categories";
+import ProductList from "../components/ProductList"; 
+import ShoppingMall from "../components/ShoppingMall"; 
 
 const categoryDescriptions = {
   APPLIANCES: "전자제품을 만나보세요!",
@@ -14,26 +16,43 @@ const categoryDescriptions = {
   USED: "중고 상품을 둘러보세요!",
 };
 
+const normalizeCategory = (category) => {
+  return category.replace(/-/g, " ").toLowerCase(); // ✅ `-`을 공백으로 변환하고 소문자로 변환
+};
+
 const CategoryPage = () => {
-  const { category } = useParams(); // URL에서 카테고리 값 가져오기
+  const { category } = useParams();
+  const [products, setProducts] = useState([]);
 
-  // ✅ 카테고리 값을 모두 소문자로 변환하여 비교
-  const normalizedCategory = category.toUpperCase();
+  // ✅ URL에서 받은 category를 변환
+  const normalizedCategory = normalizeCategory(category);
 
-  // ✅ CATEGORIES 객체에서 해당하는 키를 찾아 반환
+  // ✅ CATEGORIES 객체에서 해당하는 키 찾기
   const categoryKey = Object.entries(CATEGORIES).find(
-    ([key, value]) => value.toUpperCase() === normalizedCategory
+    ([key, value]) => value.toLowerCase() === normalizedCategory
   )?.[0];
 
+  // ✅ 존재하지 않는 카테고리라면 404 페이지로 이동
   if (!categoryKey) {
-    return <h2>존재하지 않는 카테고리입니다.</h2>;
+    return <Navigate to="/not-found" />;
   }
+
+  // ✅ 카테고리에 맞는 상품 데이터 불러오기
+  useEffect(() => {
+    fetch(`/api/products/category/${category}`)
+      .then((res) => res.json())
+      .then((data) => setProducts(data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, [category]);
 
   return (
     <div>
       <h1>{CATEGORIES[categoryKey]}</h1>
       <p>{categoryDescriptions[categoryKey]}</p>
-      {/* 해당 카테고리의 상품 리스트를 불러오는 로직 추가 가능 */}
+
+      {/* ✅ 카테고리에 해당하는 상품 리스트만 전달 */}
+      <ProductList products={products} category={category} />
+      <ShoppingMall />
     </div>
   );
 };
