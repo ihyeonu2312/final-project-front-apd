@@ -55,3 +55,8 @@ button:hover {
 body {
   font-family: 'Pretendard', sans-serif;
 }
+
+/* index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
