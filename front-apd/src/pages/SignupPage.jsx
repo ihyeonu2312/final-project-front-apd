@@ -44,19 +44,30 @@ const SignupPage = () => {
       setError("올바른 이메일 주소를 입력하세요.");
       return;
     }
-
+  
     try {
-      await axios.post("http://localhost:8080/api/auth/send-email", {
-        email: formData.email,
-      });
-
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/send-email",
+        { email: formData.email },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*", // CORS 문제 해결
+          },
+          withCredentials: true, // ✅ CORS 관련 설정 추가
+        }
+      );
+  
+      console.log("✅ 이메일 전송 성공:", response.data);
       setEmailSent(true);
       setError("");
       alert("이메일로 인증 코드가 전송되었습니다.");
     } catch (error) {
+      console.error("❌ 이메일 전송 실패:", error.response?.data || error.message);
       setError("이메일 전송에 실패했습니다.");
     }
   };
+  
 
   // 📌 인증 코드 검증
   const handleVerifyCode = async () => {
