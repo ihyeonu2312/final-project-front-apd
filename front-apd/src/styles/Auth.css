@@ -35,24 +35,28 @@
 }
 
 .input-group input {
-  width: 90%;
+  width: calc(100% - 20px); /* ✅ 부모 padding 고려하여 100%에서 20px 빼기 */
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background: white; /* ✅ 인풋 필드를 흰색으로 */
-  color: black; /* ✅ 입력 글씨 색상 */
+  background: white;
+  color: black;
+  display: block; /* ✅ 블록 요소로 변경 */
+  margin: 0 auto; /* ✅ 가운데 정렬 */
 }
+
 
 /* ✅ 공통 버튼 스타일 */
 .black-button {
-  width: 100%;
-  margin-top: 10px;
+  width: 50%;  /* ✅ 기존 100%에서 90%로 조정 */
+  margin: 10px auto; /* ✅ 자동 가운데 정렬 */
   padding: 10px;
   background: black;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: block; /* ✅ 블록 요소로 변경하여 가운데 정렬 */
 }
 
 .black-button:hover {
@@ -66,4 +70,13 @@
   color: black;
   margin-top: 25px;
   font-size: 14px;
+}
+
+/* ✅ 오류 메시지 스타일 추가 */
+.error-message {
+  color: red; /* 🔴 오류 메시지를 빨간색으로 변경 */
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center; /* ✅ 중앙 정렬 */
 }
