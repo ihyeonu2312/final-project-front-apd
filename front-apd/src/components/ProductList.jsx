@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid"; // ✅ UUID 라이브러리 추가
+import { v4 as uuidv4 } from "uuid"; // ✅ UUID 라이브러리 추가yarn add uuid
+
 
 function ProductList() {
     const [products, setProducts] = useState([]);
