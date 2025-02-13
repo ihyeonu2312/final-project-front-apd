@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { v4 as uuidv4 } from "uuid"; // ✅ UUID 라이브러리 추가yarn add uuid
-
+import { v4 as uuidv4 } from "uuid";
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -15,23 +14,22 @@ function ProductList() {
                         maxProducts: 10
                     }
                 });
-                console.log("API Response:", response.data); // ✅ 응답 데이터 확인
-    
-                if (Array.isArray(response.data)) { // ✅ 응답이 배열인지 확인 후 상태 업데이트
+                console.log("API Response:", response.data);
+
+                if (Array.isArray(response.data)) {
                     setProducts(response.data);
                 } else {
                     console.error("Unexpected API response:", response.data);
-                    setProducts([]); // ❗ 비정상 응답이면 빈 배열로 설정
+                    setProducts([]);
                 }
             } catch (error) {
                 console.error("Error fetching products:", error);
-                setProducts([]); // ❗ 에러 발생 시 빈 배열 설정
+                setProducts([]);
             }
         };
-    
+
         fetchProducts();
     }, []);
-    
 
     return (
         <div>
@@ -39,13 +37,20 @@ function ProductList() {
             {products.length === 0 ? (
                 <p>No products available.</p>
             ) : (
-                <ul>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
                     {products.map((product) => (
-                        <li key={uuidv4()}> {/* ✅ UUID를 key로 사용 */}
-                            {product.name} - ${product.price || "가격 미정"} {/* ✅ 가격 기본값 설정 */}
-                        </li>
+                        <div key={uuidv4()} style={{ border: "1px solid #ddd", padding: "10px" }}>
+                            <img
+                                src={product.imageUrl}
+                                alt={product.name}
+                                style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                            />
+                            <h3>{product.name}</h3>
+                            <p>{product.description || "설명 없음"}</p>
+                            <p><strong>가격:</strong> {product.price ? `${product.price.toLocaleString()}원` : "가격 미정"}</p>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );
