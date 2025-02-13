@@ -43,25 +43,25 @@ function ShoppingMall() {
 
                     {/* 상품 목록 */}
                     <section className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {products.length === 0 ? (
-                            <p className="text-center col-span-full text-gray-500">상품이 없습니다.</p>
-                        ) : (
-                            products.map(product => (
-                                <div key={product.productId} className="bg-white shadow rounded-lg overflow-hidden">
-                                    <img
-                                        src={product.image_url || 'https://via.placeholder.com/150'}
-                                        alt={product.name}
-                                        className="h-48 w-full object-cover"
-                                    />
-                                    <div className="p-4">
-                                        <h3 className="font-semibold text-lg">{product.name}</h3>
-                                        <p className="text-gray-600 mt-2">{product.description}</p>
-                                        <p className="mt-4 font-bold text-blue-600">${product.price}</p>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </section>
+    {Array.isArray(products) && products.length > 0 ? ( // ✅ 배열인지 확인 후 렌더링
+        products.map(product => (
+            <div key={product.productId} className="bg-white shadow rounded-lg overflow-hidden">
+                <img
+                    src={product.image_url || 'https://via.placeholder.com/150'}
+                    alt={product.name}
+                    className="h-48 w-full object-cover"
+                />
+                <div className="p-4">
+                    <h3 className="font-semibold text-lg">{product.name}</h3>
+                    <p className="text-gray-600 mt-2">{product.description}</p>
+                    <p className="mt-4 font-bold text-blue-600">${product.price}</p>
+                </div>
+            </div>
+        ))
+    ) : (
+        <p className="text-center col-span-full text-gray-500">상품이 없습니다.</p> // ✅ 에러 방지
+    )}
+</section>
                 </div>
             </main>
         </div>

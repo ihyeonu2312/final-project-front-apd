@@ -15,15 +15,23 @@ function ProductList() {
                         maxProducts: 10
                     }
                 });
-                console.log("API Response:", response.data);
-                setProducts(response.data);
+                console.log("API Response:", response.data); // ✅ 응답 데이터 확인
+    
+                if (Array.isArray(response.data)) { // ✅ 응답이 배열인지 확인 후 상태 업데이트
+                    setProducts(response.data);
+                } else {
+                    console.error("Unexpected API response:", response.data);
+                    setProducts([]); // ❗ 비정상 응답이면 빈 배열로 설정
+                }
             } catch (error) {
                 console.error("Error fetching products:", error);
+                setProducts([]); // ❗ 에러 발생 시 빈 배열 설정
             }
         };
-
+    
         fetchProducts();
     }, []);
+    
 
     return (
         <div>
