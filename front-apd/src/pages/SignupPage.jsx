@@ -25,10 +25,10 @@ const SignupPage = () => {
 
   const API_URL = "http://localhost:8080/api/user";
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
-  const [phoneAvailable, setPhoneAvailable] = useState(null); // 전화번호 사용 가능 여부
+  const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
 
-  // 📌 전화번호 자동 하이픈 추가
+  // 📌 휴대폰 번호 자동 하이픈 추가
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
     const formattedValue = rawValue
@@ -92,31 +92,45 @@ const SignupPage = () => {
     }
   };
 
-    // 📌 주소 검색 API 실행 함수
-    const handleAddressSearch = () => {
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          let fullAddress = data.address; // 전체 주소
-          let extraAddress = "";
+  const handleAddressSearch = () => {
+    if (!window.daum || !window.daum.Postcode) {
+      alert("주소 검색 API를 로드할 수 없습니다.");
+      return;
+    }
   
-          if (data.addressType === "R") {
-            if (data.bname !== "") {
-              extraAddress += data.bname;
-            }
-            if (data.buildingName !== "") {
-              extraAddress += (extraAddress !== "" ? ", " : "") + data.buildingName;
-            }
-            fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-          }
+    const width = 400; // 팝업 창 너비
+    const height = 500; // 팝업 창 높이
+    const screenWidth = window.screen.width; // 화면 너비
+    const screenHeight = window.screen.height; // 화면 높이
   
-          setFormData((prev) => ({
-            ...prev,
-            address: fullAddress,
-            detailAddress: "",
-          }));
-        },
-      }).open();
-    };
+    const left = (screenWidth - width) / 2; // 가운데 정렬 (가로)
+    const top = (screenHeight - height) / 2; // 가운데 정렬 (세로)
+  
+    new window.daum.Postcode({
+      oncomplete: (data) => {
+        let fullAddress = data.address;
+        let extraAddress = "";
+  
+        if (data.addressType === "R") {
+          if (data.bname !== "") extraAddress += data.bname;
+          if (data.buildingName !== "") extraAddress += (extraAddress !== "" ? ", " : "") + data.buildingName;
+          fullAddress += (extraAddress !== "" ? ` (${extraAddress})` : "");
+        }
+  
+        setFormData((prev) => ({
+          ...prev,
+          address: fullAddress,
+          detailAddress: "",
+        }));
+      },
+      width,
+      height,
+      left,
+      top,
+    }).open();
+  };
+  
+  
 
   // 📌 회원가입 폼 제출
   const handleSubmit = async (e) => {
@@ -133,7 +147,18 @@ const SignupPage = () => {
     }
 
     if (nicknameAvailable !== true || phoneAvailable !== true) {
-      setError("닉네임과 전화번호 중복 확인을 먼저 진행해주세요.");
+      setError("닉네임과 휴대폰 번호 중복 확인을 먼저 진행해주세요.");
+      return;
+    }
+
+    const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+    if (!phoneRegex.test(formData.phoneNumber)) {
+      setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
+      return;
+    }
+
+    if (!formData.address || formData.address.trim() === "") {
+      setError("주소를 입력하세요.");
       return;
     }
 
@@ -181,24 +206,24 @@ const SignupPage = () => {
   }
 };
 
-// 📌 전화번호 중복 확인
+// 📌 휴대폰 번호 중복 확인
 const handlePhoneCheck = async () => {
   if (!formData.phoneNumber) {
-    setError("전화번호를 입력하세요.");
+    setError("휴대폰 번호를 입력하세요.");
     return;
   }
 
   try {
-    console.log("📡 전화번호 중복 확인 요청:", formData.phoneNumber);
+    console.log("📡 휴대폰 번호 중복 확인 요청:", formData.phoneNumber);
     const response = await axios.get(`${API_URL}/check-phone`, {
       params: { phoneNumber: formData.phoneNumber }
     });
 
-    console.log("🔍 전화번호 중복 확인 응답:", response.data);
+    console.log("🔍 휴대폰 번호 중복 확인 응답:", response.data);
     setPhoneAvailable(response.data === "AVAILABLE");
   } catch (error) {
-    console.error("❌ 전화번호 중복 확인 실패:", error);
-    setError("전화번호 중복 확인 실패");
+    console.error("❌ 휴대폰 번호 중복 확인 실패:", error);
+    setError("휴대폰 번호 중복 확인 실패");
   }
 };
 
@@ -267,14 +292,14 @@ const handlePhoneCheck = async () => {
           )}
         </div>
 
-      {/* 📌 전화번호 입력 + 중복 확인 버튼 */}
+      {/* 📌 휴대폰 번호 입력 + 중복 확인 버튼 */}
       <div className="input-group">
-          <label>전화번호<span> *숫자만 입력 가능</span></label>
+          <label>휴대폰 번호<span> *숫자만 입력 가능</span></label>
           <div className="phone-auth">
             <input 
               type="tel" 
               name="phoneNumber" 
-              placeholder="전화번호 입력" 
+              placeholder="휴대폰 번호 입력" 
               value={formData.phoneNumber} 
               onChange={handlePhoneChange} 
               maxLength="13" 
@@ -286,7 +311,7 @@ const handlePhoneCheck = async () => {
           </div>
           {phoneAvailable !== null && (
             <p className={phoneAvailable ? "success-message" : "error-message"}>
-              {phoneAvailable ? "✅ 사용 가능한 전화번호입니다." : "❌ 이미 사용 중인 전화번호입니다."}
+              {phoneAvailable ? "✅ 사용 가능한 휴대폰 번호입니다." : "❌ 이미 사용 중인 휴대폰 번호입니다."}
             </p>
           )}
         </div>
