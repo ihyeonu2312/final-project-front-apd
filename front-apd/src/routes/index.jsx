@@ -3,6 +3,7 @@ import MainPage from "../pages/MainPage";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import CartPage from "../pages/CartPage";
+import UsedPage from "../pages/UsedPage";
 import SupportPage from "../pages/SupportPage";
 import CategoryPage from "../pages/CategoryPage"
 import NotFound from "../pages/NotFoundPage";
@@ -18,6 +19,7 @@ function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/cart" element={<CartPage />} />
+      <Route path="/used" element={<UsedPage />} />
       <Route path="/support" element={<SupportPage />} />
 
       {/* 카테고리 페이지 */}
