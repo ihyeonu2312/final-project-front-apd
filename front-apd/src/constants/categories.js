@@ -5,7 +5,5 @@ export const CATEGORIES = {
   FASHION: "Fashion",
   HOME_INTERIOR: "Home-Interior",
   JEWELRY: "Jewelry",
-  LIVING: "Living",
   SPORTS: "Sports",
-  USED: "Used",
 };

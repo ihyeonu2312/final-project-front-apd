@@ -17,7 +17,7 @@ function ShoppingMall() {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <header className="bg-white shadow">
+            {/* <header className="bg-white shadow">
                 <div className="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
                     <h1 className="text-2xl font-bold text-gray-900">알리 스타일 쇼핑몰</h1>
                     <input
@@ -26,7 +26,7 @@ function ShoppingMall() {
                         className="border rounded-lg p-2 w-64 focus:outline-none"
                     />
                 </div>
-            </header>
+            </header> */}
 
             <main className="max-w-7xl mx-auto mt-6 px-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">

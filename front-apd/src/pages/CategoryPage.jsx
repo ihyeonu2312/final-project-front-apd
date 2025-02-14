@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { CATEGORIES } from "../constants/categories";
 import ProductList from "../components/ProductList"; 
-import ShoppingMall from "../components/ShoppingMall"; 
 
 const categoryDescriptions = {
   APPLIANCES: "전자제품을 만나보세요!",
@@ -11,9 +10,7 @@ const categoryDescriptions = {
   FASHION: "최신 패션 트렌드를 확인하세요!",
   HOME_INTERIOR: "인테리어 소품을 확인하세요!",
   JEWELRY: "아름다운 주얼리를 만나보세요!",
-  LIVING: "생활용품을 구매하세요!",
   SPORTS: "스포츠 용품을 확인하세요!",
-  USED: "중고 상품을 둘러보세요!",
 };
 
 const normalizeCategory = (category) => {
@@ -52,7 +49,6 @@ const CategoryPage = () => {
 
       {/* ✅ 카테고리에 해당하는 상품 리스트만 전달 */}
       <ProductList products={products} category={category} />
-      <ShoppingMall />
     </div>
   );
 };

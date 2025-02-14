@@ -84,7 +84,6 @@ const Header = () => {
             {showDropdown && (
               <ul className="dropdown-menu">
                 <li><Link to="/fashion">패션</Link></li>
-                <li><Link to="/living">생활용품</Link></li>
                 <li><Link to="/beauty">뷰티</Link></li>
                 <li><Link to="/bags">가방</Link></li>
                 <li><Link to="/appliances">가전</Link></li>
@@ -95,7 +94,6 @@ const Header = () => {
             )}
           </li>
           <li><Link to="/fashion">패션</Link></li>
-          <li><Link to="/living">생활용품</Link></li>
           <li><Link to="/beauty">뷰티</Link></li>
           <li><Link to="/used">중고거래</Link></li>
           <li><Link to="/support">고객센터</Link></li>
