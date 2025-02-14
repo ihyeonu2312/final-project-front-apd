@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faQrcode, faUser, faCartShopping, faBars } from "@fortawesome/free-solid-svg-icons";
 import "./header.css";
@@ -10,13 +11,23 @@ const Header = () => {
   const [showQR, setShowQR] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태
   const [showDropdown, setShowDropdown] = useState(false); // 드롭다운 상태
+  const navigate = useNavigate();
 
-  // ✅ 검색 이벤트 핸들러
+  // ✅ Zustand에서 로그인 상태 가져오기
+  const { user, logout } = useAuthStore();
+
+  // 📌 검색 이벤트 핸들러
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== "") {
       alert(`🔍 검색어: ${searchQuery}`);
     }
+  };
+
+  // 📌 로그아웃 핸들러
+  const handleLogout = () => {
+    logout();
+    navigate("/"); // 로그아웃 후 메인 페이지로 이동
   };
 
   return (
@@ -59,18 +70,43 @@ const Header = () => {
                 )}
               </div>
             </li>
-            <li>
-              <Link to="/login">
-                <FontAwesomeIcon icon={faUser} className="nav-icon" />
-                로그인
-              </Link>
-            </li>
-            <li>
+
+            {/* ✅ 로그인 상태일 때 닉네임 & 로그아웃 버튼 표시 */}
+            {user ? (
+              <>
+                <li><FontAwesomeIcon icon={faUser} className="nav-icon" />
+                  <span className="user-nickname">{user.nickname}</span>
+                </li>
+                <li>
               <Link to="/cart">
                 <FontAwesomeIcon icon={faCartShopping} className="nav-icon" />
                 장바구니
               </Link>
             </li>
+
+                <li>
+                  <Link to="/" onClick={handleLogout}>
+                    로그아웃
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+              <li>
+                <Link to="/login">
+                  <FontAwesomeIcon icon={faUser} className="nav-icon" />
+                  로그인
+                </Link>
+              </li>
+              <li>
+              <Link to="/cart">
+                <FontAwesomeIcon icon={faCartShopping} className="nav-icon" />
+                장바구니
+              </Link>
+            </li>
+              </>
+            )}
+
           </ul>
         </nav>
       </div>
@@ -84,7 +120,6 @@ const Header = () => {
             {showDropdown && (
               <ul className="dropdown-menu">
                 <li><Link to="/fashion">패션</Link></li>
-                <li><Link to="/living">생활용품</Link></li>
                 <li><Link to="/beauty">뷰티</Link></li>
                 <li><Link to="/bags">가방</Link></li>
                 <li><Link to="/appliances">가전</Link></li>
@@ -95,7 +130,6 @@ const Header = () => {
             )}
           </li>
           <li><Link to="/fashion">패션</Link></li>
-          <li><Link to="/living">생활용품</Link></li>
           <li><Link to="/beauty">뷰티</Link></li>
           <li><Link to="/used">중고거래</Link></li>
           <li><Link to="/support">고객센터</Link></li>
