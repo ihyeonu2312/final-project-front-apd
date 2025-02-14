@@ -99,3 +99,32 @@ export const verifyEmail = async (token) => {
     );
   }
 };
+
+
+/* 🔹 닉네임 중복 확인 */
+export const checkNicknameExists = async (nickname) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/check-nickname`, {
+      params: { nickname },
+    });
+    return response.data; // "EXISTS" 또는 "AVAILABLE"
+  } catch (error) {
+    throw new Error(
+      "닉네임 중복 확인 실패: " + (error.response?.data?.message || error.message)
+    );
+  }
+};
+
+/* 🔹 전화번호 중복 확인 */
+export const checkPhoneNumberExists = async (phoneNumber) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/check-phone`, {
+      params: { phoneNumber },
+    });
+    return response.data; // "EXISTS" 또는 "AVAILABLE"
+  } catch (error) {
+    throw new Error(
+      "전화번호 중복 확인 실패: " + (error.response?.data?.message || error.message)
+    );
+  }
+};

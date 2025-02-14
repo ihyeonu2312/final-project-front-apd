@@ -18,10 +18,15 @@ const SignupPage = () => {
     detailAddress: "",
     authCode: "",
   });
-
+  
   const [error, setError] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
+
+  const API_URL = "http://localhost:8080/api/user";
+  const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
+  const [phoneAvailable, setPhoneAvailable] = useState(null); // 전화번호 사용 가능 여부
+
 
   // 📌 전화번호 자동 하이픈 추가
   const handlePhoneChange = (e) => {
@@ -87,6 +92,32 @@ const SignupPage = () => {
     }
   };
 
+    // 📌 주소 검색 API 실행 함수
+    const handleAddressSearch = () => {
+      new window.daum.Postcode({
+        oncomplete: (data) => {
+          let fullAddress = data.address; // 전체 주소
+          let extraAddress = "";
+  
+          if (data.addressType === "R") {
+            if (data.bname !== "") {
+              extraAddress += data.bname;
+            }
+            if (data.buildingName !== "") {
+              extraAddress += (extraAddress !== "" ? ", " : "") + data.buildingName;
+            }
+            fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+          }
+  
+          setFormData((prev) => ({
+            ...prev,
+            address: fullAddress,
+            detailAddress: "",
+          }));
+        },
+      }).open();
+    };
+
   // 📌 회원가입 폼 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,16 +132,75 @@ const SignupPage = () => {
       return;
     }
 
+    if (nicknameAvailable !== true || phoneAvailable !== true) {
+      setError("닉네임과 전화번호 중복 확인을 먼저 진행해주세요.");
+      return;
+    }
+
     setError("");
 
     try {
-      await signup(formData); // ✅ Zustand의 signup() 호출 (memberApi.js 통해 백엔드 연동)
+      await signup(formData);
       alert("회원가입 성공! 메인 페이지로 이동합니다.");
-      navigate("/"); // 자동 로그인 후 메인 페이지 이동
+      navigate("/");
     } catch (error) {
-      setError("회원가입 실패: " + (error.response?.data?.message || error.message));
+      console.error("❌ 회원가입 요청 실패:", error);
+
+      // 서버 응답이 있는 경우
+      if (error.response) {
+        if (error.response.status === 409) {
+          setError("이미 가입된 이메일입니다.");
+        } else {
+          setError("회원가입 실패: " + (error.response.data?.message || "서버 오류가 발생했습니다."));
+        }
+      } else {
+        setError("회원가입 실패: 네트워크 오류 또는 서버 오류입니다.");
+      }
     }
   };
+
+
+ // 📌 닉네임 중복 확인
+ const handleNicknameCheck = async () => {
+  if (!formData.nickname) {
+    setError("닉네임을 입력하세요.");
+    return;
+  }
+
+  try {
+    console.log("📡 닉네임 중복 확인 요청:", formData.nickname);
+    const response = await axios.get(`${API_URL}/check-nickname`, {
+      params: { nickname: formData.nickname }
+    });
+
+    console.log("🔍 닉네임 중복 확인 응답:", response.data);
+    setNicknameAvailable(response.data === "AVAILABLE");
+  } catch (error) {
+    console.error("❌ 닉네임 중복 확인 실패:", error);
+    setError("닉네임 중복 확인 실패");
+  }
+};
+
+// 📌 전화번호 중복 확인
+const handlePhoneCheck = async () => {
+  if (!formData.phoneNumber) {
+    setError("전화번호를 입력하세요.");
+    return;
+  }
+
+  try {
+    console.log("📡 전화번호 중복 확인 요청:", formData.phoneNumber);
+    const response = await axios.get(`${API_URL}/check-phone`, {
+      params: { phoneNumber: formData.phoneNumber }
+    });
+
+    console.log("🔍 전화번호 중복 확인 응답:", response.data);
+    setPhoneAvailable(response.data === "AVAILABLE");
+  } catch (error) {
+    console.error("❌ 전화번호 중복 확인 실패:", error);
+    setError("전화번호 중복 확인 실패");
+  }
+};
 
   return (
     <div className="auth-container">
@@ -139,7 +229,7 @@ const SignupPage = () => {
             <label>인증 코드 입력</label>
             <div className="email-auth">
               <input type="text" name="authCode" placeholder="인증 코드 입력" value={formData.authCode} onChange={handleChange} required />
-              <button type="button" onClick={handleVerifyCode}>확인</button>
+              <button type="button" className="black-button" onClick={handleVerifyCode}>확인</button>
             </div>
           </div>
         )}
@@ -154,25 +244,76 @@ const SignupPage = () => {
           <input type="password" name="confirmPassword" placeholder="비밀번호 확인" value={formData.confirmPassword} onChange={handleChange} required />
         </div>
 
-        <div className="input-group">
+         {/* 📌 닉네임 입력 + 중복 확인 버튼 */}
+         <div className="input-group">
           <label>닉네임</label>
-          <input type="text" name="nickname" placeholder="닉네임 입력" value={formData.nickname} onChange={handleChange} required />
+          <div className="nickname-auth">
+            <input 
+              type="text" 
+              name="nickname" 
+              placeholder="닉네임 입력" 
+              value={formData.nickname} 
+              onChange={handleChange} 
+              required 
+            />
+            <button type="button" className="black-button" onClick={handleNicknameCheck}>
+              중복 확인
+            </button>
+          </div>
+          {nicknameAvailable !== null && (
+            <p className={nicknameAvailable ? "success-message" : "error-message"}>
+              {nicknameAvailable ? "✅ 사용 가능한 닉네임입니다." : "❌ 이미 사용 중인 닉네임입니다."}
+            </p>
+          )}
         </div>
 
-        <div className="input-group">
+      {/* 📌 전화번호 입력 + 중복 확인 버튼 */}
+      <div className="input-group">
           <label>전화번호<span> *숫자만 입력 가능</span></label>
-          <input type="tel" name="phoneNumber" placeholder="전화번호 입력" value={formData.phoneNumber} onChange={handlePhoneChange} maxLength="13" required />
+          <div className="phone-auth">
+            <input 
+              type="tel" 
+              name="phoneNumber" 
+              placeholder="전화번호 입력" 
+              value={formData.phoneNumber} 
+              onChange={handlePhoneChange} 
+              maxLength="13" 
+              required 
+            />
+            <button type="button" className="black-button" onClick={handlePhoneCheck}>
+              중복 확인
+            </button>
+          </div>
+          {phoneAvailable !== null && (
+            <p className={phoneAvailable ? "success-message" : "error-message"}>
+              {phoneAvailable ? "✅ 사용 가능한 전화번호입니다." : "❌ 이미 사용 중인 전화번호입니다."}
+            </p>
+          )}
         </div>
-
-        <div className="input-group">
+         {/* 📌 주소 입력 필드 + 검색 버튼 */}
+         <div className="input-group">
           <label>주소</label>
-          <input type="text" name="address" placeholder="주소 입력" value={formData.address} onChange={handleChange} required />
+          <div className="address-auth">
+            <input type="text" name="address" placeholder="주소 검색" value={formData.address} readOnly />
+            <button type="button" className="black-button" onClick={handleAddressSearch}>
+              주소 찾기
+            </button>
+          </div>
         </div>
 
+        {/* 📌 상세 주소 입력 필드 */}
         <div className="input-group">
           <label>상세주소</label>
-          <input type="text" name="detailAddress" placeholder="상세주소 입력" value={formData.detailAddress} onChange={handleChange} required />
+          <input 
+            type="text" 
+            name="detailAddress" 
+            placeholder="상세 주소 입력" 
+            value={formData.detailAddress} 
+            onChange={handleChange} 
+            required 
+          />
         </div>
+
 
         <button type="submit" className="black-button">회원가입</button>
       </form>
