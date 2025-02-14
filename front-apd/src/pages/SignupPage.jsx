@@ -28,19 +28,34 @@ const SignupPage = () => {
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
 
-  // 📌 휴대폰 번호 자동 하이픈 추가
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
     const formattedValue = rawValue
       .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, "$1-$2-$3")
       .replace(/(-{1,2})$/g, "");
-
-    setFormData({ ...formData, phoneNumber: formattedValue });
+  
+    setFormData((prev) => ({
+      ...prev,
+      phoneNumber: formattedValue,
+    }));
+  
+    // ✅ 전화번호 입력 값이 변경되면 중복 확인 상태 초기화
+    setPhoneAvailable(null);
   };
 
   // 📌 입력 필드 변경 핸들러
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+  
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  
+    // ✅ 닉네임 입력 값이 변경되면 중복 확인 상태 초기화
+    if (name === "nickname") {
+      setNicknameAvailable(null);
+    }
   };
 
   // 📌 이메일 인증 요청
@@ -206,10 +221,13 @@ const SignupPage = () => {
   }
 };
 
-// 📌 휴대폰 번호 중복 확인
 const handlePhoneCheck = async () => {
-  if (!formData.phoneNumber) {
-    setError("휴대폰 번호를 입력하세요.");
+  const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+  
+  // ✅ 올바른 형식이 아니면 중복 확인 요청을 보내지 않고 에러 메시지 표시
+  if (!phoneRegex.test(formData.phoneNumber)) {
+    setPhoneAvailable(null); // ✅ 상태 초기화
+    setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
     return;
   }
 
@@ -221,6 +239,7 @@ const handlePhoneCheck = async () => {
 
     console.log("🔍 휴대폰 번호 중복 확인 응답:", response.data);
     setPhoneAvailable(response.data === "AVAILABLE");
+    setError(""); // ✅ 성공 시 기존 에러 메시지 초기화
   } catch (error) {
     console.error("❌ 휴대폰 번호 중복 확인 실패:", error);
     setError("휴대폰 번호 중복 확인 실패");
