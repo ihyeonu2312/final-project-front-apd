@@ -41,6 +41,40 @@ export const signupRequest = async (userData) => {
   }
 };
 
+/* 🔹 개인정보 수집 및 이용 동의 요청 */
+export const agreeToConsent = async () => {
+  try {
+    const response = await axios.post(`${API_URL}/auth/consent`, {
+      consentAgreed: true,
+    });
+
+    localStorage.setItem("consentToken", response.data); // ✅ 동의 토큰 저장
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      "개인정보 동의 요청 실패: " + (error.response?.data?.message || error.message)
+    );
+  }
+};
+
+/* 🔹 개인정보 동의 확인 (JWT 기반) */
+export const checkConsent = async () => {
+  try {
+    const token = localStorage.getItem("consentToken");
+    if (!token) return false;
+
+    const response = await axios.get(`${API_URL}/auth/check-consent`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data === "true"; // ✅ 동의 여부 반환
+  } catch (error) {
+    return false; // ❌ 실패 시 false 반환
+  }
+};
+
 /* 🔹 사용자 프로필 조회 */
 export const fetchUserProfile = async () => {
   try {
@@ -101,6 +135,8 @@ export const verifyEmail = async (token) => {
 };
 
 
+
+// membercontroller
 /* 🔹 닉네임 중복 확인 */
 export const checkNicknameExists = async (nickname) => {
   try {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-import { CATEGORIES } from "../constants/categories";
-import ProductList from "../components/ProductList"; 
+import ProductList from "../components/ProductList";  // ✅ 상품 리스트 컴포넌트
+import { CATEGORIES } from "../constants/categories";  // ✅ 카테고리 매핑 객체
 
+// ✅ 카테고리 설명 추가
 const categoryDescriptions = {
   APPLIANCES: "전자제품을 만나보세요!",
   BAGS: "다양한 가방 컬렉션을 둘러보세요!",
@@ -13,44 +14,55 @@ const categoryDescriptions = {
   SPORTS: "스포츠 용품을 확인하세요!",
 };
 
-// const normalizeCategory = (category) => {
-//   return category.replace(/-/g, " ").toLowerCase(); // ✅ `-`을 공백으로 변환하고 소문자로 변환
-// };
-
 const CategoryPage = () => {
-  // const { category } = useParams();
-  // const [products, setProducts] = useState([]);
+  const { category } = useParams();  // ✅ URL에서 category 파라미터 가져오기
+  const [products, setProducts] = useState([]);  // ✅ 상품 리스트 상태
+  const [loading, setLoading] = useState(true);  // ✅ 로딩 상태
+  const [error, setError] = useState(null);  // ✅ 에러 상태
 
-//   // ✅ URL에서 받은 category를 변환
-//   const normalizedCategory = normalizeCategory(category);
+  // ✅ URL에서 받은 category를 변환 (소문자로 변환하고 '-'을 공백으로 변경)
+  const normalizeCategory = (category) => category.replace(/-/g, " ").toLowerCase();
 
-//   // ✅ CATEGORIES 객체에서 해당하는 키 찾기
-//   const categoryKey = Object.entries(CATEGORIES).find(
-//     ([key, value]) => value.toLowerCase() === normalizedCategory
-//   )?.[0];
+  // ✅ CATEGORIES 객체에서 해당하는 키 찾기
+  const categoryKey = Object.entries(CATEGORIES).find(
+    ([key, value]) => value.toLowerCase() === normalizeCategory(category)
+  )?.[0];
 
-//   // ✅ 존재하지 않는 카테고리라면 404 페이지로 이동
-//   if (!categoryKey) {
-//     return <Navigate to="/not-found" />;
-//   }
+  // ✅ 존재하지 않는 카테고리라면 404 페이지로 이동
+  if (!categoryKey) {
+    return <Navigate to="/not-found" />;
+  }
 
-//   // ✅ 카테고리에 맞는 상품 데이터 불러오기
-//   useEffect(() => {
-//     fetch(`/api/products/category/${category}`)
-//       .then((res) => res.json())
-//       .then((data) => setProducts(data))
-//       .catch((err) => console.error("Error fetching products:", err));
-//   }, [category]);
+  // ✅ 상품 데이터 가져오기 (API 호출)
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/products/category/${categoryKey}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+        setError(err);
+        setLoading(false);
+      });
+  }, [categoryKey]);
 
-  // return (
+  return (
     <div>
-      {/* <h1>{CATEGORIES[categoryKey]}</h1> */}
-      {/* <p>{categoryDescriptions[categoryKey]}</p> */}
+      <h1>{CATEGORIES[categoryKey]}</h1>
+      <p>{categoryDescriptions[categoryKey]}</p>
 
-      {/* ✅ 카테고리에 해당하는 상품 리스트만 전달 */}
-      {/* <ProductList products={products} category={category} /> */}
+      {loading ? (
+        <p>상품을 불러오는 중...</p>
+      ) : error ? (
+        <p>상품을 불러오는 중 오류가 발생했습니다.</p>
+      ) : (
+        <ProductList products={products} category={category} />
+      )}
     </div>
-  // );
+  );
 };
 
 export default CategoryPage;

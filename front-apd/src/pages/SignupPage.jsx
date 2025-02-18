@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import axios from "axios"; // ✅ axios 사용 (fetch 제거)
@@ -26,6 +26,7 @@ const SignupPage = () => {
   const API_URL = "http://localhost:8080/api/user";
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
+
 
 
   const handlePhoneChange = (e) => {

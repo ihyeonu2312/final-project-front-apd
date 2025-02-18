@@ -26,6 +26,7 @@ export const useAuthStore = create((set) => ({
   // ✅ 회원가입 기능 (닉네임 포함)
   signup: async (newUser) => {
     try {
+
       const data = await signupRequest(newUser);
       localStorage.setItem("token", data.token);
       set({ token: data.token });
