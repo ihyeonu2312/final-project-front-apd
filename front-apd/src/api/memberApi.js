@@ -28,7 +28,13 @@ export const loginRequest = async (credentials) => {
 /* 🔹 회원가입 요청 */
 export const signupRequest = async (userData) => {
   try {
+    const consentToken = localStorage.getItem("consentToken"); // ✅ 저장된 동의 토큰 가져오기
+    if (!consentToken) throw new Error("개인정보 동의가 필요합니다."); // ❌ 동의 토큰이 없을 경우 에러 발생
+
     const response = await axios.post(`${API_URL}/auth/signup`, userData, {
+      headers: {
+        Authorization: `Bearer ${consentToken}`, // 🔥 동의 토큰 포함
+      },
       withCredentials: true,
     });
 
@@ -41,39 +47,46 @@ export const signupRequest = async (userData) => {
   }
 };
 
-/* 🔹 개인정보 수집 및 이용 동의 요청 */
+
 export const agreeToConsent = async () => {
   try {
-    const response = await axios.post(`${API_URL}/auth/consent`, {
-      consentAgreed: true,
-    });
-
-    localStorage.setItem("consentToken", response.data); // ✅ 동의 토큰 저장
-    return response.data;
-  } catch (error) {
-    throw new Error(
-      "개인정보 동의 요청 실패: " + (error.response?.data?.message || error.message)
+    // 로그인 여부와 관계없이 동의만 받기
+    const response = await axios.post(`${API_URL}/auth/consent`, 
+      { consentAgreed: true }, // 동의 여부
     );
+
+    // 동의 토큰을 로컬 스토리지에 저장
+    localStorage.setItem("consentToken", response.data); // 동의 토큰 저장
+    return response.data;  // 동의 토큰 반환
+  } catch (error) {
+    throw new Error("개인정보 동의 요청 실패: " + (error.response?.data?.message || error.message));
   }
 };
 
 /* 🔹 개인정보 동의 확인 (JWT 기반) */
 export const checkConsent = async () => {
   try {
-    const token = localStorage.getItem("consentToken");
-    if (!token) return false;
+    // ✅ 로그인된 사용자의 JWT 토큰 가져오기
+    let token = localStorage.getItem("token");
+
+    // ✅ 만약 JWT가 없다면, 회원가입 과정일 가능성이 있음 → consentToken 사용
+    if (!token) {
+      token = localStorage.getItem("consentToken"); // ✅ 동의 토큰 사용
+      if (!token) return false; // 둘 다 없으면 false 반환
+    }
 
     const response = await axios.get(`${API_URL}/auth/check-consent`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, // ✅ 적절한 토큰을 헤더에 추가
       },
     });
 
-    return response.data === "true"; // ✅ 동의 여부 반환
+    return response.data === "CONSENT_GRANTED";
   } catch (error) {
-    return false; // ❌ 실패 시 false 반환
+    return false;
   }
 };
+
 
 /* 🔹 사용자 프로필 조회 */
 export const fetchUserProfile = async () => {

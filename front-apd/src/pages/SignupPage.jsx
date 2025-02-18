@@ -1,6 +1,7 @@
 import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
+
 import axios from "axios"; // ✅ axios 사용 (fetch 제거)
 import "../styles/Auth.css";
 
@@ -150,7 +151,15 @@ const SignupPage = () => {
 
   // 📌 회원가입 폼 제출
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
+
+    const consentToken = localStorage.getItem("consentToken");
+    if (!consentToken) {
+      navigate("/consent");  // 동의 토큰이 없다면 동의 페이지로 강제 리다이렉트
+      return;
+    }
+  
 
     if (!isCodeVerified) {
       setError("이메일 인증을 완료해주세요.");
@@ -247,7 +256,17 @@ const handlePhoneCheck = async () => {
   }
 };
 
-  return (
+useEffect(() => {
+  // 동의 토큰 확인
+  const consentToken = localStorage.getItem("consentToken");
+  console.log(consentToken);
+  // 동의 토큰이 없다면 개인정보 동의 페이지로 리다이렉트
+  if (!consentToken) {
+    navigate("/consent");
+  }
+}, [navigate]);
+
+return (
     <div className="auth-container">
       <h2>회원가입</h2>
       {error && <p className="error-message">{error}</p>}
