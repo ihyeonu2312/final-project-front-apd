@@ -10,7 +10,6 @@ function App() {
     <Router>
       <Header />
       <main className="main-content">
-        
         <AppRoutes /> {/* ✅ 라우트 컴포넌트 추가 */}
       </main>
       <Footer />

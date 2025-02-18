@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { agreeToConsent } from "../api/memberApi"; // ✅ 동의 토큰 발급 API 추가
+import Cookies from "js-cookie";
 import "../styles/Consent.css";
 
 const ConsentPage = () => {
@@ -12,17 +13,17 @@ const ConsentPage = () => {
     setIsAgreed(e.target.checked);
   };
 
-  // ✅ "다음" 버튼 클릭 시 동의 토큰 발급 후 회원가입 페이지(`/signup`)로 이동
-  const handleNextClick = async () => {
-    try {
-      const token = await agreeToConsent(); // 🔥 동의 토큰 발급 요청
-      localStorage.setItem("consentToken", token); // ✅ 동의 토큰 저장
-      console.log("✅ 동의 토큰 저장 완료:", token);
+   // "다음" 버튼 클릭 시 동의 쿠키 설정
+   const handleNextClick = () => {
+    if (isAgreed) {
+      // 동의 쿠키 저장
+      Cookies.set("consent", "true", { expires: 365 });  // 365일 동안 유효
+      console.log("✅ 동의 쿠키 저장 완료");
 
-      navigate("/signup"); // ✅ 회원가입 페이지로 이동
-    } catch (error) {
-      console.error("❌ 동의 실패:", error);
-      alert("동의 처리 중 오류가 발생했습니다.");
+      // 회원가입 페이지로 이동
+      navigate("/signup");
+    } else {
+      alert("개인정보 동의에 체크해주세요.");
     }
   };
 
@@ -43,9 +44,9 @@ const ConsentPage = () => {
       </label>
 
       <div className="buttons">
-        <button 
-          onClick={handleNextClick} 
-          disabled={!isAgreed} 
+        <button
+          onClick={handleNextClick}
+          disabled={!isAgreed}
           className={isAgreed ? "enabled" : "disabled"}
         >
           다음

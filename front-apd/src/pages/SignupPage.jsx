@@ -1,6 +1,7 @@
 import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
+import PrivacyPolicy from "../components/PrivacyPolicy"; // PrivacyPolicy 컴포넌트 import
 
 import axios from "axios"; // ✅ axios 사용 (fetch 제거)
 import "../styles/Auth.css";
@@ -23,12 +24,16 @@ const SignupPage = () => {
   const [error, setError] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [privacyAgreement, setPrivacyAgreement] = useState(false); // 개인정보 동의 상태
 
   const API_URL = "http://localhost:8080/api/user";
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
-
+  // 개인정보 동의 체크박스 핸들러
+  const handlePrivacyAgreementChange = (e) => {
+    setPrivacyAgreement(e.target.checked);
+  };
 
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
@@ -146,6 +151,7 @@ const SignupPage = () => {
       top,
     }).open();
   };
+
   
   
 
@@ -154,12 +160,6 @@ const SignupPage = () => {
     
     e.preventDefault();
 
-    const consentToken = localStorage.getItem("consentToken");
-    if (!consentToken) {
-      navigate("/consent");  // 동의 토큰이 없다면 동의 페이지로 강제 리다이렉트
-      return;
-    }
-  
 
     if (!isCodeVerified) {
       setError("이메일 인증을 완료해주세요.");
@@ -184,6 +184,11 @@ const SignupPage = () => {
 
     if (!formData.address || formData.address.trim() === "") {
       setError("주소를 입력하세요.");
+      return;
+    }
+
+    if (!privacyAgreement) {  // 개인정보 동의 체크 여부 확인
+      setError("개인정보 동의가 필요합니다.");
       return;
     }
 
@@ -256,15 +261,6 @@ const handlePhoneCheck = async () => {
   }
 };
 
-useEffect(() => {
-  // 동의 토큰 확인
-  const consentToken = localStorage.getItem("consentToken");
-  console.log(consentToken);
-  // 동의 토큰이 없다면 개인정보 동의 페이지로 리다이렉트
-  if (!consentToken) {
-    navigate("/consent");
-  }
-}, [navigate]);
 
 return (
     <div className="auth-container">
@@ -377,6 +373,26 @@ return (
             required 
           />
         </div>
+
+         {/* 📌 개인정보 처리방침 동의 체크박스 */}
+         <div className="privacy-policy">
+  <div className="input-group">
+    <label>
+    개인정보 처리방침에 동의합니다.
+      <input 
+        type="checkbox" 
+        checked={privacyAgreement} 
+        onChange={handlePrivacyAgreementChange} 
+        required // 체크박스 필수 동의
+        />
+    </label>
+  </div>
+
+  {/* 개인정보 처리방침 내용 */}
+  <div className="privacy-policy-content">
+    <PrivacyPolicy />  {/* PrivacyPolicy 컴포넌트 포함 */}
+  </div>
+</div>
 
 
         <button type="submit" className="black-button">회원가입</button>

@@ -53,7 +53,7 @@ const LoginPage = () => {
 
       <p className="auth-text">
         계정이 없으신가요?{" "}
-        <button className="black-button" onClick={() => navigate("/signup/consent")}>
+        <button className="black-button" onClick={() => navigate("/signup")}>
           회원가입
         </button>
       </p>

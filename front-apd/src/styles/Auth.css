@@ -11,6 +11,8 @@
 }
 
 .auth-container h2 {
+text-align: center;
+
   margin-bottom: 15px;
   color: black; /* ✅ 제목 색상을 검정으로 */
 }
@@ -62,8 +64,72 @@
 .black-button:hover {
   background: #333;
 }
+/* ✅ 개인정보 처리방침 텍스트 */
+.privacy-policy {
+  margin-top: 20px;
+  font-size: 14px;
+  color: black;
+  text-align: left; /* 텍스트 왼쪽 정렬 */
+}
 
+/* ✅ 개인정보 처리방침 텍스트 제목 */
+.privacy-policy h3 {
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
+/* ✅ 개인정보 처리방침 동의 체크박스 스타일 */
+.privacy-policy .input-group {
+  margin-bottom: 10px;
+}
+
+.privacy-policy input[type="checkbox"] {
+  margin-right: 10px;
+  margin-top: -16px;
+}
+
+.privacy-policy label {
+  font-size: 14px;
+  color: black;
+}
+
+.privacy-policy p {
+  margin-left: 10px;
+
+  font-size: 12px;
+  color: #777;
+}
+
+/* 개인정보 처리방침 내용을 포함하는 컨테이너 */
+.privacy-policy-content {
+  max-height: 200px; /* 스크롤 영역의 최대 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
+  padding-right: 10px; /* 스크롤바 공간 확보 */
+  margin-top: 10px; /* 상단 여백 */
+  border: 1px solid #ddd; /* 경계선 추가 (선택 사항) */
+  border-radius: 5px; /* 경계선 둥글게 처리 */
+  background-color: #f9f9f9; /* 배경색 (선택 사항) */
+}
+
+.privacy-policy-content::-webkit-scrollbar {
+  width: 8px; /* 스크롤바의 너비 설정 */
+}
+
+.privacy-policy-content::-webkit-scrollbar-thumb {
+  background-color: #888; /* 스크롤바 색상 설정 */
+  border-radius: 5px;
+}
+
+.privacy-policy-content::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 스크롤바 hover 시 색상 설정 */
+}
+
+button:disabled {
+  background-color: #dcdcdc;
+  cursor: not-allowed;
+}
 
 /* ✅ 로그인 / 회원가입 이동 텍스트 */
 .auth-text {
