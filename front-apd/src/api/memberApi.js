@@ -28,8 +28,13 @@ export const signupRequest = async (userData) => {
   try {
     const response = await axios.post(`${API_URL}/auth/signup`, userData);
 
-    saveToken(response.data.token); // ✅ JWT 저장
-    return response.data;
+    // ✅ 회원가입 후 자동 로그인 요청
+    const loginResponse = await loginRequest({
+      email: userData.email,
+      password: userData.password,
+    });
+
+    return loginResponse; // 자동 로그인 후 받은 데이터 반환
   } catch (error) {
     throw new Error(
       "회원가입 실패: " + (error.response?.data?.message || error.message)
@@ -60,14 +65,22 @@ export const fetchUserProfile = async () => {
 /* 🔹 로그아웃 요청 */
 export const logoutRequest = async () => {
   try {
-    await axios.post(`${API_URL}/auth/logout`);
-    localStorage.removeItem("token"); // ✅ JWT 삭제
-  } catch (error) {
-    throw new Error(
-      "로그아웃 실패: " + (error.response?.data?.message || error.message)
+    const token = localStorage.getItem("token"); // ✅ 저장된 JWT 토큰 가져오기
+    await axios.post(
+      `${API_URL}/auth/logout`,
+      {}, // ✅ 빈 바디 (POST 요청이기 때문에 필요)
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ 변수명 통일!
+        },
+      }
     );
+    localStorage.removeItem("token"); // ✅ 삭제 시에도 동일한 키 사용
+  } catch (error) {
+    console.error("❌ 로그아웃 실패:", error.response?.data || error.message);
   }
 };
+
 
 /* 🔹 이메일 인증 요청 (인증 코드 발송) */
 export const sendEmailVerification = async (email) => {

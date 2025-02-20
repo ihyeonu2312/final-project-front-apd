@@ -1,0 +1,158 @@
+/* ✅ 마이페이지 컨테이너 */
+.mypage-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* ✅ 섹션 스타일 */
+.mypage-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ✅ 제목 스타일 */
+.mypage-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+/* ✅ 기본 텍스트 스타일 */
+.mypage-section p {
+  font-size: 1rem;
+  color: #333;
+}
+
+/* ✅ 버튼 기본 스타일 */
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ✅ 회원 탈퇴 버튼 스타일 */
+.delete-button {
+  background-color: #dc3545;
+  margin-top: 15px;
+}
+
+.delete-button:hover {
+  background-color: #b32d3a;
+}
+
+/* ✅ 주문 내역 리스트 스타일 */
+.mypage-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.mypage-section ul li {
+  background: #f8f9fa;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+/* ✅ 링크 스타일 */
+.mypage-section a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.mypage-section a:hover {
+  text-decoration: underline;
+}
+
+/* 🔹 📌 리뷰 페이지 (MyReviewsPage) 스타일 */
+.reviews-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reviews-container h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.review-item {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  background: #f8f9fa;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.review-item strong {
+  color: #333;
+  font-size: 1rem;
+}
+
+/* 🔹 📌 개인정보 수정 페이지 (EditProfilePage) 스타일 */
+.edit-profile-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.edit-profile-container h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.edit-profile-container label {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.edit-profile-container input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 🔹 반응형 스타일 */
+@media (max-width: 768px) {
+  .mypage-container,
+  .reviews-container,
+  .edit-profile-container {
+      max-width: 90%;
+      padding: 15px;
+  }
+
+  button {
+      width: 100%;
+      padding: 10px;
+  }
+}
