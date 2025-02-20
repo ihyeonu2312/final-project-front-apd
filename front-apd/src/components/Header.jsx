@@ -75,10 +75,10 @@ const Header = () => {
             {user ? (
               <>
                 <li><FontAwesomeIcon icon={faUser} className="nav-icon" />
-                <Link to="/mypage" className="user-nickname">{user.nickname}</Link>
+                <Link to="/user/mypage" className="user-nickname">{user.nickname}</Link>
                 </li>
                 <li>
-              <Link to="/cart">
+              <Link to="/user/cart">
                 <FontAwesomeIcon icon={faCartShopping} className="nav-icon" />
                 장바구니
               </Link>
@@ -99,7 +99,7 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-              <Link to="/cart">
+              <Link to="/user/cart">
                 <FontAwesomeIcon icon={faCartShopping} className="nav-icon" />
                 장바구니
               </Link>
@@ -119,18 +119,18 @@ const Header = () => {
             <span><FontAwesomeIcon icon={faBars} /> 모든카테고리</span>
             {showDropdown && (
               <ul className="dropdown-menu">
-                <li><Link to="/fashion">패션</Link></li>
-                <li><Link to="/beauty">뷰티</Link></li>
-                <li><Link to="/bags">가방</Link></li>
-                <li><Link to="/appliances">가전</Link></li>
-                <li><Link to="/home-interior">홈인테리어</Link></li>
-                <li><Link to="/sports">스포츠</Link></li>
-                <li><Link to="/jewelry">쥬얼리</Link></li>
+                <li><Link to="/category/fashion">패션</Link></li>
+                <li><Link to="/category/beauty">뷰티</Link></li>
+                <li><Link to="/category/bags">가방</Link></li>
+                <li><Link to="/category/appliances">가전</Link></li>
+                <li><Link to="/category/home-interior">홈인테리어</Link></li>
+                <li><Link to="/category/sports">스포츠</Link></li>
+                <li><Link to="/category/jewelry">쥬얼리</Link></li>
               </ul>
             )}
           </li>
-          <li><Link to="/fashion">패션</Link></li>
-          <li><Link to="/beauty">뷰티</Link></li>
+          <li><Link to="/category/fashion">패션</Link></li>
+          <li><Link to="/category/beauty">뷰티</Link></li>
           <li><Link to="/used">중고거래</Link></li>
           <li><Link to="/support">고객센터</Link></li>
         </ul>

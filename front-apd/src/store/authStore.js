@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { loginRequest, signupRequest, fetchUserProfile, logoutRequest } from "/src/api/memberApi.js"
+import axios from "axios";
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -11,6 +12,8 @@ export const useAuthStore = create((set) => ({
       const data = await loginRequest(credentials);
       localStorage.setItem("token", data.token);
       set({ token: data.token });
+
+      axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`; // ✅ 기본 헤더 설정 추가
 
       // 로그인 후 프로필 정보 가져오기
       const userProfile = await fetchUserProfile();
@@ -59,6 +62,7 @@ export const useAuthStore = create((set) => ({
       const token = localStorage.getItem("token");
       if (!token) return;
       
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       const userProfile = await fetchUserProfile();
       set({ user: userProfile });
     } catch (error) {

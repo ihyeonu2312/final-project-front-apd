@@ -15,8 +15,8 @@ function UserRoutes() {
     <Routes>
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/cart" element={<CartPage />} />
-      <Route path="/reviews" element={<MyReviewsPage />} />
-      <Route path="/edit" element={<MyEditPage />} />
+      <Route path="/mypage/reviews" element={<MyReviewsPage />} />
+      <Route path="/mypage/edit" element={<MyEditPage />} />
     </Routes>
   );
 }
