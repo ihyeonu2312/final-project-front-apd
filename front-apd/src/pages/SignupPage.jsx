@@ -30,6 +30,8 @@ const SignupPage = () => {
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
+  const [isSending, setIsSending] = useState(false); // ✅ 이메일 전송 중 상태 추가
+
   // 개인정보 동의 체크박스 핸들러
   const handlePrivacyAgreementChange = (e) => {
     setPrivacyAgreement(e.target.checked);
@@ -65,36 +67,39 @@ const SignupPage = () => {
     }
   };
 
-  // 📌 이메일 인증 요청
-  const handleEmailVerification = async () => {
-    if (!formData.email.includes("@")) {
-      setError("올바른 이메일 주소를 입력하세요.");
-      return;
-    }
-  
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/send-email",
-        { email: formData.email },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*", // CORS 문제 해결
-          },
-          withCredentials: true, // ✅ CORS 관련 설정 추가
-        }
-      );
-  
-      console.log("✅ 이메일 전송 성공:", response.data);
-      setEmailSent(true);
-      setError("");
-      alert("이메일로 인증 코드가 전송되었습니다.");
-    } catch (error) {
-      console.error("❌ 이메일 전송 실패:", error.response?.data || error.message);
-      setError("이메일 전송에 실패했습니다.");
-    }
-  };
-  
+
+// 📌 이메일 인증 요청
+const handleEmailVerification = async () => {
+  if (!formData.email.includes("@")) {
+    setError("올바른 이메일 주소를 입력하세요.");
+    return;
+  }
+
+  setIsSending(true); // ✅ 이메일 전송 시작 (버튼 비활성화)
+
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/auth/send-email",
+      { email: formData.email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }
+    );
+
+    console.log("✅ 이메일 전송 성공:", response.data);
+    setEmailSent(true);
+    setError("");
+    alert("이메일로 인증 코드가 전송되었습니다.");
+  } catch (error) {
+    console.error("❌ 이메일 전송 실패:", error.response?.data || error.message);
+    setError("이메일 전송에 실패했습니다.");
+  } finally {
+    setIsSending(false); // ✅ 이메일 전송 완료 후 버튼 다시 활성화
+  }
+};
 
   // 📌 인증 코드 검증
   const handleVerifyCode = async () => {
@@ -105,6 +110,7 @@ const SignupPage = () => {
 
       if (response.data === "이메일 인증이 완료되었습니다.") {
         setIsCodeVerified(true);
+        setError(""); // ✅ 인증 성공 시 기존 에러 메시지 초기화
         alert("이메일 인증이 완료되었습니다.");
       } else {
         setError("인증 코드가 올바르지 않습니다.");
@@ -196,6 +202,7 @@ const SignupPage = () => {
 
     try {
       await signup(formData);
+      
       alert("회원가입 성공! 메인 페이지로 이동합니다.");
       navigate("/");
     } catch (error) {
@@ -276,10 +283,16 @@ return (
         <div className="input-group">
           <label>이메일</label>
           <div className="email-auth">
-            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={handleChange} required />
-            <button type="button" className="black-button" onClick={handleEmailVerification} disabled={emailSent || isCodeVerified}>
-              {isCodeVerified ? "✅ 인증 완료" : "인증 요청"}
-            </button>
+            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={handleChange} required disabled={isSending || isCodeVerified}/>
+            <button type="button" className="black-button" onClick={handleEmailVerification} disabled={isSending || isCodeVerified}>
+            {isSending 
+    ? "전송 중..." 
+    : isCodeVerified 
+    ? "✅ 인증 완료" 
+    : emailSent 
+    ? "재전송" 
+    : "인증 요청"}
+</button>
           </div>
         </div>
 
