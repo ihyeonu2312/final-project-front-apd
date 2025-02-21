@@ -3,21 +3,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import axios from "axios";
 import "../styles/MyPage.css";
-
+import myQrImage from "../assets/myQr.png";
 
 const MyPage = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const [selectedMenu, setSelectedMenu] = useState("내정보");
   const [orders, setOrders] = useState([]); // 주문 내역
-  const [visibleOrders, setVisibleOrders] = useState(3); // 기본 3개 표시
+  const [isLoading, setIsLoading] = useState(true); // 🔥 isLoading 상태 추가
+
 
   useEffect(() => {
-    if (!user) {
+
+
+    if (user === null) {
+      alert("로그인이 필요합니다.");
+      console.log("🔄 사용자 정보가 없음, 로그인 페이지로 이동");
       navigate("/login");
       return;
     }
 
-    // 📌 주문 내역 불러오기
+  //  주문 내역 불러오기
     const fetchOrders = async () => {
       try {
         const response = await axios.get("http://localhost:8080/api/orders", {
@@ -32,61 +38,68 @@ const MyPage = () => {
     fetchOrders();
   }, [user, navigate]);
 
-  return (
-    <div className="container mt-5">
-      <h2 className="mb-4">마이페이지</h2>
+  const handleLogout = () => {
+    logout();
+    alert("로그아웃되었습니다.");
+    navigate("/");
+  };
 
-      {/* ✅ 회원 정보 카드 */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">회원 정보</h5>
-          <p className="card-text"><strong>닉네임:</strong> {user.nickname}</p>
-          <p className="card-text"><strong>이메일:</strong> {user.email}</p>
-          <button className="btn btn-primary" onClick={() => navigate("/user/mypage/edit")}>
-            개인정보 수정
-          </button>
-        </div>
+  return (
+    <div className="mypage-container">
+      {/* ✅ 사이드바 메뉴 */}
+      <div className="sidebar">
+        <ul>
+          <li className={selectedMenu === "내정보" ? "active" : ""} onClick={() => setSelectedMenu("내정보")}>내정보</li>
+          <li className={selectedMenu === "주문내역" ? "active" : ""} onClick={() => setSelectedMenu("주문내역")}>주문내역</li>
+          <li className={selectedMenu === "리뷰관리" ? "active" : ""} onClick={() => setSelectedMenu("리뷰관리")}>리뷰관리</li>
+          <li><Link to="/user/cart">장바구니</Link></li>
+          <li onClick={handleLogout}>로그아웃</li>
+          <li>회원탈퇴</li>
+          <li className="my-qr">
+            <span className="qr-text">AlPangDang Mobile App</span>
+            <span className="qr-text2">Search Anywhere, Anytime!</span>
+            <img src={myQrImage} alt="my-qr" />
+            <a className="qr-text3" href="www.appdownlink.com">앱 다운로드 클릭</a>
+          </li>
+        </ul>
+
       </div>
 
-      {/* ✅ 주문 내역 */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">주문 내역</h5>
-          {orders.length === 0 ? (
-            <p className="text-muted">주문 내역이 없습니다.</p>
-          ) : (
-            <>
-              <ul className="list-group">
-                {orders.slice(0, visibleOrders).map((order, index) => (
-                  <li key={index} className="list-group-item">
-                    {order.productName} - {order.date}
-                  </li>
+      {/* ✅ 오른쪽 콘텐츠 영역 */}
+      <div className="content">
+        {selectedMenu === "내정보" && (
+          <div>
+            <h2>내정보</h2>
+            <p><strong>닉네임:</strong> {user?.nickname}</p>
+            <p><strong>이메일:</strong> {user?.email}</p>
+            <p><strong>휴대폰 번호:</strong> {user?.phoneNumber}</p>
+            <p><strong>주소:</strong> {user?.address}</p>
+            <button onClick={() => navigate("/user/mypage/edit")}>개인정보 수정</button>
+          </div>
+        )}
+
+        {selectedMenu === "주문내역" && (
+          <div>
+            <h2>주문내역</h2>
+            {orders.length === 0 ? (
+              <p>주문 내역이 없습니다.</p>
+            ) : (
+              <ul>
+                {orders.map((order, index) => (
+                  <li key={index}>{order.productName} - {order.date}</li>
                 ))}
               </ul>
-              {visibleOrders < orders.length && (
-                <button className="btn btn-secondary mt-3" onClick={() => setVisibleOrders((prev) => prev + 5)}>
-                  더보기
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        )}
 
-      {/* ✅ 리뷰 관리 */}
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">리뷰 관리</h5>
-          <Link to="/user/mypage/reviews" className="btn btn-info">
-            내가 작성한 리뷰 보기
-          </Link>
-        </div>
+        {selectedMenu === "리뷰관리" && (
+          <div>
+            <h2>리뷰관리</h2>
+            <Link to="/user/mypage/reviews">내가 작성한 리뷰 보기</Link>
+          </div>
+        )}
       </div>
-
-      {/* ✅ 로그아웃 버튼 */}
-      <button className="btn btn-danger w-100" onClick={logout}>
-        로그아웃
-      </button>
     </div>
   );
 };

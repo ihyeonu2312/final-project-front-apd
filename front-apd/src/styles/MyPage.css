@@ -1,158 +1,164 @@
-/* ✅ 마이페이지 컨테이너 */
-.mypage-container {
-  max-width: 600px;
-  margin: 50px auto;
+ .mypage-container {
+  display: flex;
+  width: 100vw; /* ✅ 뷰포트 전체 너비 차지 */
+  max-width: 90%; /* ✅ 최대 너비 제한 해제 */
+  padding: 20px 0px;
+  min-height: 100vh; /* ✅ 최소 높이 유지 */
+  gap: 20px; /* ✅ `.sidebar`와 `.content` 사이 여백 */
+}
+
+.sidebar {
+  width: 250px; /* ✅ 사이드바 크기 고정 */
+  background: #f8f9fa;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  border-radius: 10px;
 }
 
-/* ✅ 섹션 스타일 */
-.mypage-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-}
-
-/* ✅ 제목 스타일 */
-.mypage-section h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-}
-
-/* ✅ 기본 텍스트 스타일 */
-.mypage-section p {
-  font-size: 1rem;
-  color: #333;
-}
-
-/* ✅ 버튼 기본 스타일 */
-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* ✅ 회원 탈퇴 버튼 스타일 */
-.delete-button {
-  background-color: #dc3545;
-  margin-top: 15px;
-}
-
-.delete-button:hover {
-  background-color: #b32d3a;
-}
-
-/* ✅ 주문 내역 리스트 스타일 */
-.mypage-section ul {
+/* ✅ 메뉴 크기 통일 */
+.sidebar ul {
   list-style: none;
   padding: 0;
 }
 
-.mypage-section ul li {
-  background: #f8f9fa;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 0.95rem;
-}
-
-/* ✅ 링크 스타일 */
-.mypage-section a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.mypage-section a:hover {
-  text-decoration: underline;
-}
-
-/* 🔹 📌 리뷰 페이지 (MyReviewsPage) 스타일 */
-.reviews-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.reviews-container h2 {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-}
-
-.review-item {
-  padding: 15px;
-  border-bottom: 1px solid #eee;
-  background: #f8f9fa;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.review-item strong {
-  color: #333;
-  font-size: 1rem;
-}
-
-/* 🔹 📌 개인정보 수정 페이지 (EditProfilePage) 스타일 */
-.edit-profile-container {
-  max-width: 500px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: left;
-}
-
-.edit-profile-container h2 {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-}
-
-.edit-profile-container label {
-  display: block;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.edit-profile-container input {
+.sidebar ul li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  height: 50px;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 🔹 반응형 스타일 */
-@media (max-width: 768px) {
-  .mypage-container,
-  .reviews-container,
-  .edit-profile-container {
-      max-width: 90%;
-      padding: 15px;
+.sidebar ul li.active {
+  background: #222;
+  color: white;
+}
+
+.sidebar ul li:hover {
+  background: #222;
+  color: white;
+}
+
+.sidebar ul li a {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✅ 콘텐츠 크기 창에 꽉 차도록 설정 */
+.content {
+  flex: 1; /* ✅ 남은 공간을 전부 차지 */
+  width: 100%; /* ✅ 전체 너비 차지 */
+  max-width: none; /* ✅ 너비 제한 해제 */
+  min-width: 600px; /* ✅ 최소 너비 설정 (너무 작아지지 않도록) */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 400px;
+  height: auto;
+  overflow: auto;
+}
+
+/* ✅ QR 코드가 포함된 li 스타일 */
+.sidebar ul li.my-qr {
+  margin-top: 70px;
+  height: auto; /* ✅ 높이 자동 조정 */
+  cursor: default; /* ✅ 클릭 가능하지 않도록 변경 */
+  display: flex;
+  flex-direction: column; /* ✅ 세로 정렬 */
+  align-items: center;
+  justify-content: center;
+  padding: 15px 0;
+  pointer-events: none;
+}
+
+.sidebar ul li.my-qr:hover {
+  background: white;
+  color: white;
+}
+
+/* ✅ QR 코드 이미지 스타일 */
+.sidebar ul li.my-qr img {
+  width: 80%; /* ✅ 크기 조정 */
+  max-width: 200px; /* ✅ 최대 크기 설정 */
+  display: block;
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+/* ✅ 앱 다운로드 텍스트 스타일 */
+.sidebar ul li.my-qr .qr-text {
+  font-size: 14px; /* ✅ 글자 크기 조정 */
+  font-weight: bold; /* ✅ 굵기 설정 */
+  color: #333; /* ✅ 텍스트 색상 */
+  margin-top: 8px; /* ✅ QR 코드와 간격 */
+  text-align: center; /* ✅ 중앙 정렬 */
+  pointer-events: auto; /* ✅ 텍스트는 클릭 가능하게 */
+  pointer-events: none;
+}
+.sidebar ul li.my-qr .qr-text2 {
+  font-size: 12px; /* ✅ 글자 크기 조정 */
+  font-weight: bold; /* ✅ 굵기 설정 */
+  color: #777; /* ✅ 텍스트 색상 */
+  text-align: center; /* ✅ 중앙 정렬 */
+  pointer-events: none; /* ✅ 텍스트는 클릭 가능하게 */
+}
+.sidebar ul li.my-qr .qr-text3 {
+  font-size: 12px; /* ✅ 글자 크기 조정 */
+  font-style: italic;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold; /* ✅ 굵기 설정 */
+  color: #333; /* ✅ 텍스트 색상 */
+  text-align: center; /* ✅ 중앙 정렬 */
+  pointer-events: none; /* ✅ 텍스트는 클릭 가능하게 */
+}
+
+
+
+/* ✅ 반응형 처리 */
+@media (max-width: 992px) {
+  .mypage-container {
+    flex-direction: column;
+    align-items: center;
   }
 
-  button {
-      width: 100%;
-      padding: 10px;
+  .sidebar {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+  }
+
+  .sidebar ul li {
+    width: 45%;
+    margin-bottom: 10px;
+  }
+
+  .content {
+    width: 100%; /* ✅ 모바일에서는 전체 너비 */
+    min-width: 300px; /* ✅ 최소 크기 유지 */
+    margin-top: 20px;
+  }
+  .sidebar ul li.my-qr {
+    display: none;
   }
 }

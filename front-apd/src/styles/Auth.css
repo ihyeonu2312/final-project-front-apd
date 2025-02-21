@@ -4,17 +4,18 @@
   margin: 100px auto;
   padding: 30px;
   width: 1000px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 10px; /* ✅ 기존보다 더 둥글게 */
   background: #fff;
   text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* ✅ 그림자 추가 (마이페이지와 통일) */
+  border: 1px solid #e0e0e0; /* ✅ 테두리 색상 추가 */
 }
 
 .auth-container h2 {
-text-align: center;
-
+  text-align: center;
   margin-bottom: 15px;
-  color: black; /* ✅ 제목 색상을 검정으로 */
+  color: black;
+  font-size: 22px;
 }
 
 /* ✅ 입력 필드 공통 스타일 */
@@ -38,41 +39,52 @@ text-align: center;
 
 .input-group input {
   width: calc(100% - 20px); /* ✅ 부모 padding 고려하여 100%에서 20px 빼기 */
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background: white;
   color: black;
-  display: block; /* ✅ 블록 요소로 변경 */
-  margin: 0 auto; /* ✅ 가운데 정렬 */
+  display: block;
+  margin: 0 auto;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1); /* ✅ 입력 필드 안쪽 그림자 */
 }
 
+.input-group input:focus {
+  border-color: #666;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15); /* ✅ 포커스 시 그림자 */
+}
 
 /* ✅ 공통 버튼 스타일 */
 .black-button {
-  width: 50%;  /* ✅ 기존 100%에서 90%로 조정 */
-  margin: 10px auto; /* ✅ 자동 가운데 정렬 */
-  padding: 10px;
+  width: 60%;  /* ✅ 기존보다 크기 조정 */
+  margin: 10px auto;
+  padding: 12px;
   background: black;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  display: block; /* ✅ 블록 요소로 변경하여 가운데 정렬 */
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15); /* ✅ 버튼 그림자 추가 */
 }
 
 .black-button:hover {
   background: #333;
+  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.25); /* ✅ hover 시 그림자 강조 */
 }
+
 /* ✅ 개인정보 처리방침 텍스트 */
 .privacy-policy {
   margin-top: 20px;
   font-size: 14px;
   color: black;
-  text-align: left; /* 텍스트 왼쪽 정렬 */
+  text-align: left;
 }
 
-/* ✅ 개인정보 처리방침 텍스트 제목 */
 .privacy-policy h3 {
   margin-left: 10px;
   font-size: 16px;
@@ -88,6 +100,7 @@ text-align: center;
 .privacy-policy input[type="checkbox"] {
   margin-right: 10px;
   margin-top: -16px;
+  box-shadow: none;
 }
 
 .privacy-policy label {
@@ -97,33 +110,32 @@ text-align: center;
 
 .privacy-policy p {
   margin-left: 10px;
-
   font-size: 12px;
   color: #777;
 }
 
-/* 개인정보 처리방침 내용을 포함하는 컨테이너 */
+/* ✅ 개인정보 처리방침 스크롤 영역 */
 .privacy-policy-content {
-  max-height: 200px; /* 스크롤 영역의 최대 높이 설정 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
-  padding-right: 10px; /* 스크롤바 공간 확보 */
-  margin-top: 10px; /* 상단 여백 */
-  border: 1px solid #ddd; /* 경계선 추가 (선택 사항) */
-  border-radius: 5px; /* 경계선 둥글게 처리 */
-  background-color: #f9f9f9; /* 배경색 (선택 사항) */
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #ffffff;
 }
 
 .privacy-policy-content::-webkit-scrollbar {
-  width: 8px; /* 스크롤바의 너비 설정 */
+  width: 8px;
 }
 
 .privacy-policy-content::-webkit-scrollbar-thumb {
-  background-color: #888; /* 스크롤바 색상 설정 */
+  background-color: #999;
   border-radius: 5px;
 }
 
 .privacy-policy-content::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* 스크롤바 hover 시 색상 설정 */
+  background-color: #555;
 }
 
 button:disabled {
@@ -138,11 +150,29 @@ button:disabled {
   font-size: 14px;
 }
 
-/* ✅ 오류 메시지 스타일 추가 */
+/* ✅ 오류 메시지 스타일 */
 .error-message {
-  color: red; /* 🔴 오류 메시지를 빨간색으로 변경 */
+  color: red;
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 10px;
-  text-align: center; /* ✅ 중앙 정렬 */
+  text-align: center;
+}
+
+/* ✅ 로그인 & 회원가입 카드 형태 스타일 */
+.auth-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* ✅ 마이페이지와 통일된 그림자 */
+  border: 1px solid #e0e0e0;
+}
+
+/* ✅ 로그인/회원가입 페이지 전체 영역 정렬 */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f5f5f5;
 }

@@ -1,5 +1,6 @@
 // App.js 또는 App.jsx
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/authStore";
 import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -14,14 +15,15 @@ import NotFound from "./pages/NotFoundPage";
 console.log("✅ App 컴포넌트 파일 로드됨!");
 
 function App() {
+  const { user } = useAuthStore();
   console.log("✅ App 컴포넌트 렌더링 시작!");
   return (
     <Router>
       <Header />
       <main className="main-content">
         <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/login" element={user ? <Navigate replace to="/" /> : <LoginPage />} />
+        <Route path="/signup" element={user ? <Navigate replace to="/" /> : <SignupPage />} />
         
         <Route path="/*" element={<MainRoutes />} />
 

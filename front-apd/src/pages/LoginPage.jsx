@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태관리 추가
 import "../styles/Auth.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();

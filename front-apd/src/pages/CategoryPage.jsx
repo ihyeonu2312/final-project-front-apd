@@ -45,11 +45,11 @@ const CategoryPage = () => {
 
   console.log("✅ 변환된 categoryKey:", categoryKey);
 
-  // ✅ 존재하지 않는 카테고리라면 NotFound로 이동
-  if (!categoryKey) {
-    console.warn("❌ 올바르지 않은 categoryKey, NotFoundPage로 이동합니다.");
-    return <Navigate to="/not-found" />;
-  }
+  // // ✅ 존재하지 않는 카테고리라면 NotFound로 이동
+  // if (!categoryKey) {
+  //   console.warn("❌ 올바르지 않은 categoryKey, NotFoundPage로 이동합니다.");
+  //   return <Navigate to="/not-found" />;
+  // }
 
   useEffect(() => {
     if (!categoryKey) return; // ✅ categoryKey가 없으면 API 요청 방지
