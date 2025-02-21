@@ -6,7 +6,7 @@ import PrivacyPolicy from "../components/PrivacyPolicy"; // PrivacyPolicy 컴포
 import axios from "axios"; // ✅ axios 사용 (fetch 제거)
 import "../styles/Auth.css";
 
-const SignupPage = () => {
+const Signup = () => {
   const navigate = useNavigate();
   const signup = useAuthStore((state) => state.signup); // ✅ Zustand 회원가입 함수 가져오기
   const [formData, setFormData] = useState({
@@ -419,4 +419,4 @@ return (
   );
 };
 
-export default SignupPage;
+export default Signup;

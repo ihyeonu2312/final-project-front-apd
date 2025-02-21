@@ -1,15 +1,14 @@
-// App.js 또는 App.jsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/Login";
+import SignupPage from "./pages/Signup";
 import MainRoutes from "./routes/MainRoutes";
 import UserRoutes from "./routes/UserRoutes";
-import CategoryPage from "./pages/CategoryPage";
-import NotFound from "./pages/NotFoundPage";
+import CategoryPage from "./pages/Category";
+import NotFound from "./pages/NotFound";
 
 
 console.log("✅ App 컴포넌트 파일 로드됨!");

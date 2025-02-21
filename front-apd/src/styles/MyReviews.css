@@ -1,0 +1,64 @@
+
+ /* ✅ 리뷰 리스트 스타일 */
+ .review-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* ✅ 개별 리뷰 아이템 */
+.review-item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 리뷰 상품 정보 */
+.review-product {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.review-product-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+/* ✅ 리뷰 사진 크기 조절 (최대 너비 조정) */
+.review-image-large {
+  width: 100%; /* ✅ 부모 요소 크기에 맞춤 */
+  max-width: 400px; /* ✅ 기존 600px에서 400px로 줄이기 */
+  height: auto; /* ✅ 비율 유지 */
+  border-radius: 10px;
+  margin-top: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: block; /* ✅ 중앙 정렬 */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.review-product h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.review-text {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+/* ✅ 리뷰 평점 스타일 */
+.review-rating {
+  font-weight: bold;
+  font-size: 16px;
+  color: #ffcc00;
+}

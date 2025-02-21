@@ -17,7 +17,7 @@ const categoryDescriptions = {
 };
 
 
-const CategoryPage = () => {
+const Category = () => {
   console.log("✅ CategoryPage 컴포넌트 렌더링 시작!");
 
   const { category } = useParams();
@@ -107,4 +107,4 @@ const CategoryPage = () => {
   );
 };
 
-export default CategoryPage;
+export default Category;

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import MainPage from "../pages/MainPage";
-import UsedPage from "../pages/UsedPage";
-import SupportPage from "../pages/SupportPage";
+import MainPage from "../pages/Main";
+import UsedPage from "../pages/Used";
+import SupportPage from "../pages/Support";
 
 
 console.log("✅ AppRoutes 컴포넌트 파일 로드됨!");

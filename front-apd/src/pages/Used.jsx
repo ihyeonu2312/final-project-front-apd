@@ -1,6 +1,6 @@
 import React from "react";
 
-const UsedPage = () => {
+const Used = () => {
   return (
     <div>
       <h1>중고상품 페이지</h1>
@@ -9,4 +9,4 @@ const UsedPage = () => {
   );
 };
 
-export default UsedPage;
+export default Used;

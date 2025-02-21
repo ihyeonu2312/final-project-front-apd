@@ -1,0 +1,212 @@
+/* ✅ 고객센터 컨테이너 (넓게 확장) */
+.support-container {
+  width: 90vw; /* ✅ 전체 화면의 90% 너비 */
+  max-width: 1000px; /* ✅ 최대 너비 제한 */
+  margin: 0 auto;
+  padding: 20 0px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+/* ✅ 탭 메뉴와 1:1 문의하기를 가로 정렬 */
+.support-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px; /* 🔹 탭 메뉴와 간격 조정 */
+  margin-bottom: 20px;
+}
+
+/* ✅ 제목 스타일 */
+.support-container h1 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* ✅ 1:1 문의하기 텍스트 + 아이콘 (버튼 스타일 제거) */
+.support-inquiry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  /* 🔻 버튼 스타일 제거 */
+  padding: 0;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
+  transition: color 0.3s; /* 🔹 색상 변화만 남김 */
+}
+
+.support-inquiry:hover {
+  color: #555;
+}
+
+
+/* ✅ 아이콘 스타일 */
+.support-icon {
+  font-size: 22px;
+}
+
+.support-button:hover {
+  background: #333;
+}
+
+/* ✅ 탭 메뉴 스타일 */
+.tab-menu {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.tab-menu button {
+  flex: 1;
+  max-width: 300px;
+  padding: 12px;
+  font-size: 16px;
+  background: white;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  border-radius: 8px;
+  font-weight: bold;
+  color: black; /* ✅ 비활성화된 버튼의 글씨 색 검정으로 유지 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* ✅ 기본 그림자 효과 */
+}
+
+/* ✅ 활성화된 탭 */
+.tab-menu button.active {
+  background: black;
+  color: white; /* ✅ 활성화된 탭 버튼만 글씨 색 흰색 */
+  border: 1px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ✅ 호버 시 색상 변경 */
+.tab-menu button:hover {
+  background: #f0f0f0;
+  color: black;
+  border: 1px solid #ddd; /* 🔹 기존 비활성화 버튼 테두리 유지 */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ 클릭 시 색 반전 효과 제거 */
+.tab-menu button:active {
+  box-shadow: none;
+}
+
+/* ✅ 문의 & FAQ 목록 */
+.support-list {
+  list-style: none;
+  padding: 0;
+}
+
+/* ✅ 개별 문의 & FAQ 아이템 */
+.support-item {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ 질문 헤더 (제목 + 화살표 버튼) */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.support-item h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* ✅ 화살표 버튼 */
+.toggle-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+}
+
+.toggle-button:hover {
+  color: black;
+}
+
+/* ✅ 문의 상세 내용 */
+.question-details {
+  padding: 10px;
+  border-left: 3px solid #ddd;
+  margin-top: 10px;
+}
+
+/* ✅ 내 문의 */
+.question-content {
+  font-size: 14px;
+  color: black;
+  margin-bottom: 5px;
+}
+
+/* ✅ 운영자 답변 */
+.answer {
+  font-size: 14px;
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* ✅ 반응형 처리 */
+@media (max-width: 992px) {
+  .support-container {
+    width: 95vw; /* ✅ 화면이 작아질 때 너비 조정 */
+    padding: 20px;
+  }
+
+  .tab-menu {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tab-menu button {
+    max-width: none;
+    width: 100%;
+  }
+}
+/* ✅ 반응형 - 화면 작아지면 세로 정렬 */
+@media (max-width: 768px) {
+  .support-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  }
+@media (max-width: 600px) {
+  .support-container {
+    width: 100%; /* ✅ 작은 화면에서는 전체 너비 */
+    padding: 15px;
+  }
+  .support-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .support-button {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .support-item {
+    padding: 10px;
+  }
+
+  .question-header h3 {
+    font-size: 16px;
+  }
+}

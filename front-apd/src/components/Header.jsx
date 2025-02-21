@@ -75,7 +75,7 @@ const Header = () => {
             {user ? (
               <>
                 <li><FontAwesomeIcon icon={faUser} className="nav-icon" />
-                <Link to="/user/mypage" className="user-nickname">{user.nickname}</Link>
+                <Link to="/user/my-info" className="user-nickname">{user.nickname}</Link>
                 </li>
                 <li>
               <Link to="/user/cart">

@@ -126,7 +126,6 @@
 }
 
 
-
 /* ✅ 반응형 처리 */
 @media (max-width: 992px) {
   .mypage-container {
@@ -161,4 +160,5 @@
   .sidebar ul li.my-qr {
     display: none;
   }
+
 }
