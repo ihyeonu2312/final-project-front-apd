@@ -176,3 +176,18 @@ button:disabled {
   height: 100vh;
   background: #f5f5f5;
 }
+.kakao-button {
+  width: 60%;  /* ✅ 기존보다 크기 조정 */
+  margin: 10px auto;
+  padding: 12px;
+  background-color: #fee500;
+  border: none;
+  color: #3c1e1e;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.kakao-button:hover {
+  background-color: #fada0f;
+}

@@ -9,6 +9,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const KAKAO_CLIENT_ID = "4610c131c628a71164ca55417237824b"; // 🔹 여기에 실제 클라이언트 ID 입력
+    const REDIRECT_URI = "http://localhost:8080/api/auth/kakao/callback"; // 🔹 백엔드 리다이렉트 URI
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -21,6 +24,15 @@ const LoginPage = () => {
       alert("로그인 실패: " + error.message);
     }
   };
+
+   // ✅ 카카오 로그인 핸들러
+   const handleKakaoLogin = () => {
+    
+
+    // ✅ 카카오 로그인 URL로 이동
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  };
+
 
   return (
     <div className="auth-container">
@@ -50,6 +62,11 @@ const LoginPage = () => {
           로그인
         </button>
       </form>
+
+        {/* ✅ 카카오 로그인 버튼 추가 */}
+      <button className="kakao-button" onClick={handleKakaoLogin}>
+        카카오 로그인
+      </button>
 
       <p className="auth-text">
         계정이 없으신가요?{" "}

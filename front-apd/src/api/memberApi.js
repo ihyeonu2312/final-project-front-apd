@@ -23,6 +23,19 @@ export const loginRequest = async (credentials) => {
   }
 };
 
+/* 🔹 카카오 로그인 요청 */
+export const kakaoLogin = async (code) => {
+  try {
+    const response = await axios.get(`${API_URL}/auth/kakao/callback?code=${code}`, {
+      withCredentials: true, // 쿠키 허용 (필요한 경우)
+    });
+
+    localStorage.setItem("token", response.data.token);
+    return response.data;
+  } catch (error) {
+    throw new Error("카카오 로그인 실패: " + (error.response?.data?.message || error.message));
+  }
+};
 /* 🔹 회원가입 요청 */
 export const signupRequest = async (userData) => {
   try {
