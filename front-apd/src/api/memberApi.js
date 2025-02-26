@@ -26,13 +26,22 @@ export const loginRequest = async (credentials) => {
 /* 🔹 카카오 로그인 요청 */
 export const kakaoLogin = async (code) => {
   try {
-    const response = await axios.get(`${API_URL}/auth/kakao/callback?code=${code}`, {
-      withCredentials: true, // 쿠키 허용 (필요한 경우)
-    });
+    console.log("🚀 카카오 로그인 요청 시작, 코드:", code);
 
-    localStorage.setItem("token", response.data.token);
-    return response.data;
+    const response = await axios.get(`${API_URL}/auth/kakao/callback?code=${code}`);
+
+    console.log("🔥 백엔드 응답:", response.data); // ✅ 응답 로그 추가
+    console.log("🔥 받은 JWT 토큰:", response.data?.token); // ✅ 토큰 확인
+
+    if (response.data && response.data.token) {
+      localStorage.setItem("token", response.data.token);
+      return response.data;
+    } else {
+      console.error("❌ JWT 토큰이 응답에 없습니다.");
+      throw new Error("JWT 토큰이 응답에 없습니다.");
+    }
   } catch (error) {
+    console.error("🔥 카카오 로그인 API 요청 실패:", error);
     throw new Error("카카오 로그인 실패: " + (error.response?.data?.message || error.message));
   }
 };
@@ -61,14 +70,17 @@ export const fetchUserProfile = async () => {
     const token = localStorage.getItem("token"); // ✅ 저장된 JWT 토큰 가져오기
     if (!token) throw new Error("토큰이 존재하지 않습니다.");
 
+    console.log("🔍 프로필 요청 - Authorization 헤더:", `Bearer ${token}`); // ✅ 디버깅용 로그 추가
+
     const response = await axios.get(`${API_URL}/user/profile`, {
       headers: {
-        Authorization: `Bearer ${token}`, // 🔥 JWT 포함
+        Authorization: `Bearer ${token}`, // ✅ JWT 포함
       },
     });
 
     return response.data;
   } catch (error) {
+    console.error("❌ 회원 정보 조회 실패:", error);
     throw new Error(
       "회원 정보 조회 실패: " + (error.response?.data?.message || error.message)
     );

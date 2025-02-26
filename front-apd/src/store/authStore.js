@@ -48,6 +48,14 @@ export const useAuthStore = create((set) => ({
     }
   },
 
+  // ✅ 카카오 로그인 시 사용자 정보 저장 (카카오 전용)
+  setUser: (user, token) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    set({ user, token });
+  },
+
   // ✅ 로그아웃 기능
   logout: async () => {
     try {
