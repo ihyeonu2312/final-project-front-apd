@@ -1,0 +1,13 @@
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.no-products {
+  text-align: center;
+  grid-column: span 5;
+  color: #888;
+  font-size: 18px;
+}

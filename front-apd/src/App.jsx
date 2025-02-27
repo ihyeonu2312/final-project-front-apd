@@ -9,6 +9,7 @@ import MainRoutes from "./routes/MainRoutes";
 import UserRoutes from "./routes/UserRoutes";
 import CategoryPage from "./pages/Category";
 import NotFound from "./pages/NotFound";
+import TestCategory1 from "./pages/TestCategory1";
 
 
 console.log("✅ App 컴포넌트 파일 로드됨!");
@@ -27,8 +28,8 @@ function App() {
         <Route path="/*" element={<MainRoutes />} />
 
           <Route path="/user/*" element={<UserRoutes />} />
-
-          <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/test" element={<TestCategory1 />} />
+          <Route path="/category/:slug" element={<CategoryPage />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>

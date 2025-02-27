@@ -1,31 +1,23 @@
-import React from "react";
+import ProductCard from "./ProductCard";
 
-const ProductList = ({ products, category }) => {
-    console.log("✅ ProductList 렌더링됨!"); 
-    console.log("✅ 전달된 products:", products); 
-    console.log("✅ 전달된 category:", category);
+import "./ProductList.css";
 
-    if (!products || products.length === 0) {
-        return <p>상품이 없습니다.</p>;
-    }
+const dummyProducts = Array.from({ length: 20 }, (_, index) => ({
+  id: index + 1,
+  image: "https://via.placeholder.com/150",
+  title: `상품 ${index + 1}`,
+  price: (index + 1) * 5000,
+  location: ["서울", "부산", "대구", "광주", "인천"][index % 5],
+}));
 
-    return (
-        <div>
-            <h2>{category} 상품 목록</h2>
-            <ul>
-                {products.map((product) => (
-                    <li key={product.productId}>
-                        <h3>{product.name}</h3>
-                        <p>가격: {product.price.toLocaleString()}원</p>
-                        <p>설명: {product.description}</p>
-                        {product.imageUrl && (
-                            <img src={product.imageUrl} alt={product.name} width="100" />
-                        )}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-};
-
-export default ProductList;
+export default function ProductList({ products = dummyProducts }) {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-4">
+      {products.length > 0 ? (
+        products.map((product) => <ProductCard key={product.id} {...product} />)
+      ) : (
+        <p className="text-center col-span-full text-gray-500">상품이 없습니다.</p>
+      )}
+    </div>
+  );
+}

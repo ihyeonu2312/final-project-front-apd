@@ -6,6 +6,7 @@ import { faMagnifyingGlass, faQrcode, faUser, faCartShopping, faBars } from "@fo
 import "./header.css";
 import logo from "../assets/logo.png";
 import qrCodeImage from "../assets/qrcode.png";
+import CategoryDropdown from "./CategoryDropdown";
 
 const Header = () => {
   const [showQR, setShowQR] = useState(false);
@@ -113,7 +114,9 @@ const Header = () => {
 
       <div className="category-menu">
         <ul>
-          <li className="dropdown"
+          <CategoryDropdown />
+
+          {/* <li className="dropdown"
             onMouseEnter={() => setShowDropdown(true)}
             onMouseLeave={() => setShowDropdown(false)}>
             <span><FontAwesomeIcon icon={faBars} /> 모든카테고리</span>
@@ -128,7 +131,7 @@ const Header = () => {
                 <li><Link to="/category/jewelry">쥬얼리</Link></li>
               </ul>
             )}
-          </li>
+          </li> */}
           <li><Link to="/category/fashion">패션</Link></li>
           <li><Link to="/category/beauty">뷰티</Link></li>
           <li><Link to="/used">중고거래</Link></li>
