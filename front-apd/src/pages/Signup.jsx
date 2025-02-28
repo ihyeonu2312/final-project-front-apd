@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import PrivacyPolicy from "../components/PrivacyPolicy"; // PrivacyPolicy 컴포넌트 import
-
+import { sendEmailVerification, verifyEmail } from "../api/memberApi"; // 
 import axios from "axios"; // ✅ axios 사용 (fetch 제거)
 import "../styles/Auth.css";
 
@@ -68,57 +68,38 @@ const Signup = () => {
   };
 
 
-// 📌 이메일 인증 요청
-const handleEmailVerification = async () => {
+ // 📌 이메일 인증 요청 (auth.js의 함수 사용)
+ const handleEmailVerification = async () => {
   if (!formData.email.includes("@")) {
     setError("올바른 이메일 주소를 입력하세요.");
     return;
   }
 
-  setIsSending(true); // ✅ 이메일 전송 시작 (버튼 비활성화)
+  setIsSending(true);
 
   try {
-    const response = await axios.post(
-      "http://localhost:8080/api/auth/send-email",
-      { email: formData.email },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-
-    console.log("✅ 이메일 전송 성공:", response.data);
+    await sendEmailVerification(formData.email);
     setEmailSent(true);
     setError("");
     alert("이메일로 인증 코드가 전송되었습니다.");
   } catch (error) {
-    console.error("❌ 이메일 전송 실패:", error.response?.data || error.message);
-    setError("이메일 전송에 실패했습니다.");
+    setError(error.message);
   } finally {
-    setIsSending(false); // ✅ 이메일 전송 완료 후 버튼 다시 활성화
+    setIsSending(false);
   }
 };
 
-  // 📌 인증 코드 검증
-  const handleVerifyCode = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/auth/verify-email", {
-        params: { token: formData.authCode }, // 서버에서 토큰 기반 검증
-      });
-
-      if (response.data === "이메일 인증이 완료되었습니다.") {
-        setIsCodeVerified(true);
-        setError(""); // ✅ 인증 성공 시 기존 에러 메시지 초기화
-        alert("이메일 인증이 완료되었습니다.");
-      } else {
-        setError("인증 코드가 올바르지 않습니다.");
-      }
-    } catch (error) {
-      setError("이메일 인증에 실패했습니다.");
-    }
-  };
+// 📌 인증 코드 검증 (auth.js의 함수 사용)
+const handleVerifyCode = async () => {
+  try {
+    await verifyEmail(formData.authCode);
+    setIsCodeVerified(true);
+    setError("");
+    alert("이메일 인증이 완료되었습니다.");
+  } catch (error) {
+    setError("인증 코드가 올바르지 않습니다.");
+  }
+};
 
   const handleAddressSearch = () => {
     if (!window.daum || !window.daum.Postcode) {
@@ -283,16 +264,16 @@ return (
         <div className="input-group">
           <label>이메일</label>
           <div className="email-auth">
-            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={handleChange} required disabled={isSending || isCodeVerified}/>
+            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={() => {}} required disabled={isSending || isCodeVerified}/>
             <button type="button" className="black-button" onClick={handleEmailVerification} disabled={isSending || isCodeVerified}>
-            {isSending 
-    ? "전송 중..." 
-    : isCodeVerified 
-    ? "✅ 인증 완료" 
-    : emailSent 
-    ? "재전송" 
-    : "인증 요청"}
-</button>
+              {isSending
+                ? "전송 중..."
+                : isCodeVerified
+                ? "✅ 인증 완료"
+                : emailSent
+                ? "재전송"
+                : "인증 요청"}
+            </button>
           </div>
         </div>
 

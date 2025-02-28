@@ -106,16 +106,22 @@ export const logoutRequest = async () => {
   }
 };
 
-
 /* 🔹 이메일 인증 요청 (인증 코드 발송) */
 export const sendEmailVerification = async (email) => {
   try {
-    const response = await axios.post(`${API_URL}/auth/send-email`, { email });
+    const response = await axios.post(
+      `${API_URL}/auth/send-email`,
+      { email },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+    console.log("✅ 이메일 전송 성공:", response.data);
     return response.data;
   } catch (error) {
-    throw new Error(
-      "이메일 인증 요청 실패: " + (error.response?.data?.message || error.message)
-    );
+    console.error("❌ 이메일 전송 실패:", error.response?.data || error.message);
+    throw new Error("이메일 전송에 실패했습니다.");
   }
 };
 
@@ -128,11 +134,11 @@ export const verifyEmail = async (token) => {
 
     return response.data;
   } catch (error) {
-    throw new Error(
-      "이메일 인증 실패: " + (error.response?.data?.message || error.message)
-    );
+    console.error("❌ 이메일 인증 실패:", error.response?.data || error.message);
+    throw new Error("이메일 인증에 실패했습니다.");
   }
 };
+
 
 // membercontroller
 /* 🔹 닉네임 중복 확인 */

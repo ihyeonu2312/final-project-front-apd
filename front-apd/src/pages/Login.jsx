@@ -68,6 +68,13 @@ const LoginPage = () => {
       </button>
 
       <p className="auth-text">
+        비밀번호를 잊으셨나요?{" "}
+        <span className="auth-link" onClick={() => navigate("/forgot-password")}>
+          비밀번호 찾기
+        </span>
+      </p>
+
+      <p className="auth-text">
         계정이 없으신가요?{" "}
         <button className="black-button" onClick={() => navigate("/signup")}>
           회원가입
