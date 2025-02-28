@@ -264,7 +264,7 @@ return (
         <div className="input-group">
           <label>이메일</label>
           <div className="email-auth">
-            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={() => {}} required disabled={isSending || isCodeVerified}/>
+            <input type="email" name="email" placeholder="이메일 입력" value={formData.email} onChange={handleChange} required disabled={isSending || isCodeVerified}/>
             <button type="button" className="black-button" onClick={handleEmailVerification} disabled={isSending || isCodeVerified}>
               {isSending
                 ? "전송 중..."
@@ -370,23 +370,23 @@ return (
 
          {/* 📌 개인정보 처리방침 동의 체크박스 */}
          <div className="privacy-policy">
-  <div className="input-group">
-    <label>
-    개인정보 처리방침에 동의합니다.
-      <input 
-        type="checkbox" 
-        checked={privacyAgreement} 
-        onChange={handlePrivacyAgreementChange} 
-        required // 체크박스 필수 동의
-        />
-    </label>
-  </div>
+          <div className="input-group">
+            <label>
+            개인정보 처리방침에 동의합니다.
+              <input 
+                type="checkbox" 
+                checked={privacyAgreement} 
+                onChange={handlePrivacyAgreementChange} 
+                required // 체크박스 필수 동의
+                />
+            </label>
+          </div>
 
-  {/* 개인정보 처리방침 내용 */}
-  <div className="privacy-policy-content">
-    <PrivacyPolicy />  {/* PrivacyPolicy 컴포넌트 포함 */}
-  </div>
-</div>
+          {/* 개인정보 처리방침 내용 */}
+          <div className="privacy-policy-content">
+            <PrivacyPolicy />  {/* PrivacyPolicy 컴포넌트 포함 */}
+          </div>
+        </div>
 
 
         <button type="submit" className="black-button">회원가입</button>

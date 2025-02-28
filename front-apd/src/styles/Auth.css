@@ -150,6 +150,9 @@ button:disabled {
   font-size: 14px;
 }
 
+.auth-link {
+  cursor: pointer;
+}
 /* ✅ 오류 메시지 스타일 */
 .error-message {
   color: red;

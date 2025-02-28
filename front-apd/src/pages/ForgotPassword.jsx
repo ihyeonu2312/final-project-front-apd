@@ -101,9 +101,9 @@ const ForgotPassword = () => {
         </div>
       )}
 
-      <button className="black-button" onClick={() => navigate("/login")}>
-        로그인으로 돌아가기
-      </button>
+      <span className="auth-link" onClick={() => navigate("/login")}>
+                로그인으로 돌아가기
+              </span>
     </div>
   );
 };

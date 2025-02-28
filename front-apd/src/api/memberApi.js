@@ -128,7 +128,7 @@ export const sendEmailVerification = async (email) => {
 /* 🔹 이메일 인증 코드 확인 */
 export const verifyEmail = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/auth/verify-email`, {
+    const response = await axios.get(`${API_URL}auth/verify-email`, {
       params: { token },
     });
 
