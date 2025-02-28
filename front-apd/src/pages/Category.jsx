@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import { fetchCategories } from "../api/categoryApi";
 import { convertToSlug } from "../utils"; // ✅ URL 변환 함수
 
+import "../components/ProductCard";
+import "../components/ProductList";
+
 const Category = () => {
   const { slug } = useParams(); // URL에서 slug 가져오기
   const [category, setCategory] = useState(null);

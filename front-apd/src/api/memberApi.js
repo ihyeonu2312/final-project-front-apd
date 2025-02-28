@@ -128,7 +128,7 @@ export const sendEmailVerification = async (email) => {
 /* 🔹 이메일 인증 코드 확인 */
 export const verifyEmail = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}auth/verify-email`, {
+    const response = await axios.get(`${API_URL}/auth/verify-email`, {
       params: { token },
     });
 
@@ -138,6 +138,20 @@ export const verifyEmail = async (token) => {
     throw new Error("이메일 인증에 실패했습니다.");
   }
 };
+
+/* 🔹 이메일 존재 여부 확인 API */
+export const checkEmailExists = async (email) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/check-email`, {
+      params: { email },
+    });
+    return response.data; // "EXISTS" 또는 "NOT_EXISTS"
+  } catch (error) {
+    console.error("❌ 이메일 존재 확인 실패:", error.response?.data || error.message);
+    throw new Error("가입되지 않은 이메일입니다.");
+  }
+};
+
 
 
 // membercontroller
@@ -154,6 +168,24 @@ export const checkNicknameExists = async (nickname) => {
     );
   }
 };
+
+
+
+export const resetPassword = async (email, newPassword) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/auth/reset-password`,
+      { email, newPassword }, // ✅ 이메일도 함께 전송
+      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 변경 실패:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+
 
 /* 🔹 전화번호 중복 확인 */
 export const checkPhoneNumberExists = async (phoneNumber) => {

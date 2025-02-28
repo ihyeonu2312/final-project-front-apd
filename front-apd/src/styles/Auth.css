@@ -162,6 +162,10 @@ button:disabled {
   text-align: center;
 }
 
+.timer {
+  font-size: 14px;
+}
+
 /* ✅ 로그인 & 회원가입 카드 형태 스타일 */
 .auth-card {
   background: white;

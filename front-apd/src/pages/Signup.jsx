@@ -1,9 +1,10 @@
-import React, { useState, useEffect  } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
-import PrivacyPolicy from "../components/PrivacyPolicy"; // PrivacyPolicy 컴포넌트 import
-import { sendEmailVerification, verifyEmail } from "../api/memberApi"; // 
-import axios from "axios"; // ✅ axios 사용 (fetch 제거)
+import PrivacyPolicy from "../components/PrivacyPolicy"; // 개인정보 처리방침 컴포넌트
+import { sendEmailVerification, verifyEmail } from "../api/memberApi";
+import axios from "axios"; // ✅ axios 사용
+import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
 import "../styles/Auth.css";
 
 const Signup = () => {
@@ -30,7 +31,7 @@ const Signup = () => {
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
-  const [isSending, setIsSending] = useState(false); // ✅ 이메일 전송 중 상태 추가
+  const { timeLeft, startTimer, resetTimer, isActive } = useEmailTimer(10);
 
   // 개인정보 동의 체크박스 핸들러
   const handlePrivacyAgreementChange = (e) => {
@@ -69,33 +70,44 @@ const Signup = () => {
 
 
  // 📌 이메일 인증 요청 (auth.js의 함수 사용)
- const handleEmailVerification = async () => {
-  if (!formData.email.includes("@")) {
-    setError("올바른 이메일 주소를 입력하세요.");
-    return;
-  }
+  const [isSending, setIsSending] = useState(false);
 
-  setIsSending(true);
-
-  try {
-    await sendEmailVerification(formData.email);
-    setEmailSent(true);
-    setError("");
-    alert("이메일로 인증 코드가 전송되었습니다.");
-  } catch (error) {
-    setError(error.message);
-  } finally {
-    setIsSending(false);
-  }
-};
+  const handleEmailVerification = async () => {
+    if (!formData.email.includes("@")) {
+      setError("올바른 이메일 주소를 입력하세요.");
+      return;
+    }
+  
+    setIsSending(true);
+  
+    try {
+      await sendEmailVerification(formData.email);
+      setEmailSent(true);
+      setError("");
+      alert("이메일로 인증 코드가 전송되었습니다.");
+      
+      startTimer(); // ✅ 타이머 시작
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsSending(false);
+    }
+  };
 
 // 📌 인증 코드 검증 (auth.js의 함수 사용)
 const handleVerifyCode = async () => {
+  if (timeLeft <= 0) {
+    setError("인증 코드가 만료되었습니다. 다시 요청해주세요.");
+    return;
+  }
+
   try {
     await verifyEmail(formData.authCode);
     setIsCodeVerified(true);
     setError("");
     alert("이메일 인증이 완료되었습니다.");
+
+    resetTimer(); // ✅ 인증 성공 시 타이머 초기화
   } catch (error) {
     setError("인증 코드가 올바르지 않습니다.");
   }
@@ -286,6 +298,14 @@ return (
               <button type="button" className="black-button" onClick={handleVerifyCode}>확인</button>
             </div>
           </div>
+        )}
+
+        {emailSent && !isCodeVerified && isActive && (
+          <p className="timer">인증 코드 만료까지 남은 시간: {Math.floor(timeLeft / 60)}분 {timeLeft % 60}초</p>
+        )}
+
+        {timeLeft <= 0 && emailSent && !isCodeVerified && (
+          <p className="error-message">인증 코드가 만료되었습니다. 다시 요청해주세요.</p>
         )}
 
         <div className="input-group">

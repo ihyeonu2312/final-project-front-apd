@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
 import MainRoutes from "./routes/MainRoutes";
 import UserRoutes from "./routes/UserRoutes";
 import CategoryPage from "./pages/Category";
@@ -28,12 +27,11 @@ function App() {
         <Route path="/signup" element={user ? <Navigate replace to="/" /> : <SignupPage />} />
         
         <Route path="/forgot-password" element={user ? <Navigate replace to="/" /> : <ForgotPassword />} />
-  <Route path="/reset-password" element={user ? <Navigate replace to="/" /> : <ResetPassword />} />
 
         <Route path="/*" element={<MainRoutes />} />
 
           <Route path="/user/*" element={<UserRoutes />} />
-          <Route path="/test" element={<TestCategory1 />} />
+          <Route path="/category/test" element={<TestCategory1 />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           
           <Route path="*" element={<NotFound />} />

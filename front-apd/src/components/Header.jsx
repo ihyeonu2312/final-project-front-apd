@@ -133,7 +133,7 @@ const Header = () => {
             )}
           </li> */}
           <li><Link to="/category/fashion">패션</Link></li>
-          <li><Link to="/category/beauty">뷰티</Link></li>
+          <li><Link to="/category/test">test</Link></li>
           <li><Link to="/used">중고거래</Link></li>
           <li><Link to="/support">고객센터</Link></li>
         </ul>
