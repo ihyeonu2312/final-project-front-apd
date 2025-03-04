@@ -1,7 +1,6 @@
 // AppRoutes.jsx 또는 index.js (라우트 파일)
 import { Routes, Route } from "react-router-dom";
 import MyInfo from "../pages/MyInfo";
-import MyEditPage from "../pages/MyEdit";
 import MyOrders from "../pages/MyOrders";
 import MyReviewsPage from "../pages/MyReviews";
 import CartPage from "../pages/Cart";
@@ -16,7 +15,6 @@ function UserRoutes() {
   return (
     <Routes>
       <Route path="/my-info" element={<MyInfo />} />
-      <Route path="/my-info/edit" element={<MyEditPage />} />
       <Route path="/my-orders" element={<MyOrders />} />
       <Route path="/my-reviews" element={<MyReviewsPage />} />
       <Route path="/cart" element={<CartPage />} />

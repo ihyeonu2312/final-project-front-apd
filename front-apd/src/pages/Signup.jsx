@@ -31,7 +31,7 @@ const Signup = () => {
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
   const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
-  const { timeLeft, startTimer, resetTimer, isActive } = useEmailTimer(10);
+  const { timeLeft, startTimer, resetTimer, isActive } = useEmailTimer(180);
 
   // 개인정보 동의 체크박스 핸들러
   const handlePrivacyAgreementChange = (e) => {

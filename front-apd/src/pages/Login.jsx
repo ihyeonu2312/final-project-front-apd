@@ -69,7 +69,7 @@ const LoginPage = () => {
 
       <p className="auth-text">
         비밀번호를 잊으셨나요?{" "}
-        <span className="auth-link" onClick={() => navigate("/forgot-password")}>
+        <span className="auth-link" onClick={() => navigate("/reset-password")}>
           비밀번호 찾기
         </span>
       </p>

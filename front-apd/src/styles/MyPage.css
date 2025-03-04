@@ -125,7 +125,6 @@
   pointer-events: none; /* ✅ 텍스트는 클릭 가능하게 */
 }
 
-
 /* ✅ 반응형 처리 */
 @media (max-width: 992px) {
   .mypage-container {

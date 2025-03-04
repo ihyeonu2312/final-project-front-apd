@@ -60,7 +60,7 @@
   width: 60%;  /* ✅ 기존보다 크기 조정 */
   margin: 10px auto;
   padding: 12px;
-  background: black;
+  background: #222;
   color: white;
   border: none;
   border-radius: 8px;

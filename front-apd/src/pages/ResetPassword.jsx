@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore"; // ✅ Zustand 사용
 import { sendEmailVerification, verifyEmail, resetPassword, checkEmailExists } from "../api/memberApi";
 import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 공통 타이머 훅 적용
 import "../styles/Auth.css";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore(); // ✅ 로그인한 사용자 정보 가져오기
   const [email, setEmail] = useState("");
   const [authCode, setAuthCode] = useState("");
   const [error, setError] = useState("");
@@ -19,6 +21,13 @@ const ForgotPassword = () => {
   // ✅ 타이머 훅 사용 (3분 타이머)
   const { timeLeft, startTimer, resetTimer, isActive } = useEmailTimer(180);
 
+  // ✅ 로그인한 사용자의 이메일을 자동 입력
+  useEffect(() => {
+    if (user?.email) {
+      setEmail(user.email);
+    }
+  }, [user]);
+
   // 📌 이메일 인증 요청
   const handleEmailVerification = async () => {
     if (!email.includes("@")) {
@@ -29,11 +38,13 @@ const ForgotPassword = () => {
     setIsSending(true);
 
     try {
-      // 🔹 이메일 가입 여부 확인
-      const emailExists = await checkEmailExists(email);
-      if (emailExists !== "EXISTS") {
-        setError("가입되지 않은 이메일입니다.");
-        return;
+      // 🔹 이메일 가입 여부 확인 (로그인 사용자는 확인 불필요)
+      if (!user) {
+        const emailExists = await checkEmailExists(email);
+        if (emailExists !== "EXISTS") {
+          setError("가입되지 않은 이메일입니다.");
+          return;
+        }
       }
 
       // 이메일이 존재하면 인증 코드 발송
@@ -80,16 +91,17 @@ const ForgotPassword = () => {
       alert("비밀번호가 성공적으로 변경되었습니다.");
       navigate("/login");
     } catch (error) {
-      setError(error.response?.status === 403 
-        ? "이메일 인증이 완료되지 않았습니다. 이메일 인증 후 다시 시도해주세요." 
-        : "비밀번호 변경 실패: " + (error.response?.data?.message || error.message)
+      setError(
+        error.response?.status === 403
+          ? "이메일 인증이 완료되지 않았습니다. 이메일 인증 후 다시 시도해주세요."
+          : "비밀번호 변경 실패: " + (error.response?.data?.message || error.message)
       );
     }
   };
 
   return (
     <div className="auth-container">
-      {!showResetPassword && <h2>비밀번호 찾기</h2>}
+      {!showResetPassword && <h2>비밀번호 재설정</h2>}
       {error && <p className="error-message">{error}</p>}
 
       {!showResetPassword ? (
@@ -104,7 +116,7 @@ const ForgotPassword = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={isSending || isCodeVerified}
+                disabled={!!user || isSending || isCodeVerified}
               />
               <button
                 type="button"
@@ -135,14 +147,18 @@ const ForgotPassword = () => {
                   onChange={(e) => setAuthCode(e.target.value)}
                   required
                 />
-                <button type="button" className="black-button" onClick={handleVerifyCode}>확인</button>
+                <button type="button" className="black-button" onClick={handleVerifyCode}>
+                  확인
+                </button>
               </div>
             </div>
           )}
 
           {/* 📌 타이머 표시 */}
           {emailSent && !isCodeVerified && isActive && (
-            <p className="timer">인증 코드 만료까지 남은 시간: {Math.floor(timeLeft / 60)}분 {timeLeft % 60}초</p>
+            <p className="timer">
+              인증 코드 만료까지 남은 시간: {Math.floor(timeLeft / 60)}분 {timeLeft % 60}초
+            </p>
           )}
 
           {/* 📌 인증 코드 만료 안내 */}
@@ -174,17 +190,19 @@ const ForgotPassword = () => {
               required
             />
           </div>
-          <button className="black-button" onClick={handleResetPassword}>비밀번호 변경</button>
+          <button className="black-button" onClick={handleResetPassword}>
+            비밀번호 변경
+          </button>
         </>
       )}
 
       {!showResetPassword && (
-        <span className="auth-link" onClick={() => navigate("/login")}>
-          로그인으로 돌아가기
+        <span className="auth-link" onClick={() => navigate(user ? "/user/my-info" : "/login")}>
+          이전 페이지로
         </span>
       )}
     </div>
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

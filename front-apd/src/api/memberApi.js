@@ -168,9 +168,27 @@ export const checkNicknameExists = async (nickname) => {
     );
   }
 };
+/* 🔹 회원 정보 수정 요청 */
+export const updateUserInfo = async (userData) => {
+  try {
+    const token = localStorage.getItem("token"); // ✅ JWT 토큰 가져오기
+    if (!token) throw new Error("토큰이 존재하지 않습니다.");
 
+    const response = await axios.put(`${API_URL}/user/update`, userData, {
+      headers: {
+        Authorization: `Bearer ${token}`, // ✅ 인증 토큰 포함
+        "Content-Type": "application/json",
+      },
+    });
 
+    return response.data;
+  } catch (error) {
+    console.error("❌ 회원 정보 수정 실패:", error.response?.data || error.message);
+    throw new Error("회원 정보 수정 실패: " + (error.response?.data?.message || error.message));
+  }
+};
 
+// 비번 재설정
 export const resetPassword = async (email, newPassword) => {
   try {
     const response = await axios.post(
