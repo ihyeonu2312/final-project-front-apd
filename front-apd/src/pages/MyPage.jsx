@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/authStore";
 import axios from "axios";
 import "../styles/MyPage.css";
 import myQrImage from "../assets/myQr.png";
+import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
 
 const MyPage = () => {
   const { user, logout } = useAuthStore();

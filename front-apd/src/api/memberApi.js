@@ -139,48 +139,19 @@ export const verifyEmail = async (token) => {
   }
 };
 
-/* 🔹 이메일 존재 여부 확인 API */
-export const checkEmailExists = async (email) => {
-  try {
-    const response = await axios.get(`${API_URL}/user/check-email`, {
-      params: { email },
-    });
-    return response.data; // "EXISTS" 또는 "NOT_EXISTS"
-  } catch (error) {
-    console.error("❌ 이메일 존재 확인 실패:", error.response?.data || error.message);
-    throw new Error("가입되지 않은 이메일입니다.");
-  }
-};
-
-
-
-// membercontroller
-/* 🔹 닉네임 중복 확인 */
-export const checkNicknameExists = async (nickname) => {
-  try {
-    const response = await axios.get(`${API_URL}/user/check-nickname`, {
-      params: { nickname },
-    });
-    return response.data; // "EXISTS" 또는 "AVAILABLE"
-  } catch (error) {
-    throw new Error(
-      "닉네임 중복 확인 실패: " + (error.response?.data?.message || error.message)
-    );
-  }
-};
 /* 🔹 회원 정보 수정 요청 */
 export const updateUserInfo = async (userData) => {
   try {
     const token = localStorage.getItem("token"); // ✅ JWT 토큰 가져오기
     if (!token) throw new Error("토큰이 존재하지 않습니다.");
-
+    
     const response = await axios.put(`${API_URL}/user/update`, userData, {
       headers: {
         Authorization: `Bearer ${token}`, // ✅ 인증 토큰 포함
         "Content-Type": "application/json",
       },
     });
-
+    
     return response.data;
   } catch (error) {
     console.error("❌ 회원 정보 수정 실패:", error.response?.data || error.message);
@@ -203,18 +174,40 @@ export const resetPassword = async (email, newPassword) => {
   }
 };
 
+/* 🔹 이메일 중복 확인 API */
+export const checkEmailExists = async (email) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/check-email`, {
+      params: { email },
+    });
+    return response.data === "EXISTS"; // ✅ 존재하면 true, 없으면 false 반환
+  } catch (error) {
+    console.error("❌ 이메일 중복 확인 실패:", error.response?.data || error.message);
+    throw new Error("이메일 중복 확인 실패");
+  }
+};
 
 
-/* 🔹 전화번호 중복 확인 */
+/* 🔹 닉네임 중복 확인 (API 요청) */
+export const checkNicknameExists = async (nickname) => {
+  try {
+    const response = await axios.get(`${API_URL}/user/check-nickname`, {
+      params: { nickname },
+    });
+    return response.data === "AVAILABLE"; // true or false 반환
+  } catch (error) {
+    throw new Error("닉네임 중복 확인 실패: " + (error.response?.data?.message || error.message));
+  }
+};
+
+/* 🔹 휴대폰 번호 중복 확인 (API 요청) */
 export const checkPhoneNumberExists = async (phoneNumber) => {
   try {
     const response = await axios.get(`${API_URL}/user/check-phone`, {
       params: { phoneNumber },
     });
-    return response.data; // "EXISTS" 또는 "AVAILABLE"
+    return response.data === "AVAILABLE"; // true or false 반환
   } catch (error) {
-    throw new Error(
-      "전화번호 중복 확인 실패: " + (error.response?.data?.message || error.message)
-    );
+    throw new Error("휴대폰 번호 중복 확인 실패: " + (error.response?.data?.message || error.message));
   }
 };

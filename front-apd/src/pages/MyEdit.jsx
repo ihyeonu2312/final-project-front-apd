@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import MyPageSidebar from "../components/MyPageSidebar";
-import { sendEmailVerification, verifyEmail } from "../api/memberApi";
+import { checkNicknameExists, checkPhoneNumberExists, sendEmailVerification, verifyEmail, checkEmailExists, updateUserInfo } from "../api/memberApi";
 import axios from "axios";
 import "../styles/MyPage.css";
 import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
@@ -133,12 +133,11 @@ const MyEdit = () => {
       return;
     }
     try {
-      const response = await axios.get(`${API_URL}/check-nickname`, {
-        params: { nickname: formData.nickname },
-      });
-      setNicknameAvailable(response.data === "AVAILABLE");
+      const isAvailable = await checkNicknameExists(formData.nickname);
+      setNicknameAvailable(isAvailable);
+      setError("");
     } catch (error) {
-      setError("닉네임 중복 확인 실패");
+      setError(error.message);
     }
   };
 
@@ -150,12 +149,11 @@ const MyEdit = () => {
       return;
     }
     try {
-      const response = await axios.get(`${API_URL}/check-phone`, {
-        params: { phoneNumber: formData.phoneNumber },
-      });
-      setPhoneAvailable(response.data === "AVAILABLE");
+      const isAvailable = await checkPhoneNumberExists(formData.phoneNumber);
+      setPhoneAvailable(isAvailable);
+      setError("");
     } catch (error) {
-      setError("휴대폰 번호 중복 확인 실패");
+      setError(error.message);
     }
   };
 

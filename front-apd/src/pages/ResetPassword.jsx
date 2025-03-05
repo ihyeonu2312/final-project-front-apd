@@ -38,14 +38,15 @@ const ResetPassword = () => {
     setIsSending(true);
 
     try {
-      // 🔹 이메일 가입 여부 확인 (로그인 사용자는 확인 불필요)
-      if (!user) {
-        const emailExists = await checkEmailExists(email);
-        if (emailExists !== "EXISTS") {
-          setError("가입되지 않은 이메일입니다.");
-          return;
-        }
-      }
+     // 🔹 이메일 가입 여부 확인 (로그인 사용자는 확인 불필요)
+if (!user) {
+  const emailExists = await checkEmailExists(email); // ✅ true = 사용 가능, false = 이미 존재
+
+  if (!emailExists) { // ✅ 존재하지 않는다면 에러 반환
+    setError("가입되지 않은 이메일입니다.");
+    return;
+  }
+}
 
       // 이메일이 존재하면 인증 코드 발송
       await sendEmailVerification(email);

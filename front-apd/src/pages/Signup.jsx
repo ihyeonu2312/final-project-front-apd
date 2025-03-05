@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import PrivacyPolicy from "../components/PrivacyPolicy"; // 개인정보 처리방침 컴포넌트
-import { sendEmailVerification, verifyEmail } from "../api/memberApi";
+import { sendEmailVerification, verifyEmail, checkNicknameExists, checkPhoneNumberExists } from "../api/memberApi";
 import axios from "axios"; // ✅ axios 사용
 import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
 import "../styles/Auth.css";
@@ -25,6 +25,7 @@ const Signup = () => {
   const [error, setError] = useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [isCodeVerified, setIsCodeVerified] = useState(false);
+  const [isSending, setIsSending] = useState(false); // 📌 이메일 인증 요청 (auth.js의 함수 사용)
   const [privacyAgreement, setPrivacyAgreement] = useState(false); // 개인정보 동의 상태
 
   const API_URL = "http://localhost:8080/api/user";
@@ -69,8 +70,7 @@ const Signup = () => {
   };
 
 
- // 📌 이메일 인증 요청 (auth.js의 함수 사용)
-  const [isSending, setIsSending] = useState(false);
+
 
   const handleEmailVerification = async () => {
     if (!formData.email.includes("@")) {
@@ -215,8 +215,8 @@ const handleVerifyCode = async () => {
   };
 
 
- // 📌 닉네임 중복 확인
- const handleNicknameCheck = async () => {
+// 📌 닉네임 중복 확인
+const handleNicknameCheck = async () => {
   if (!formData.nickname) {
     setError("닉네임을 입력하세요.");
     return;
@@ -224,40 +224,38 @@ const handleVerifyCode = async () => {
 
   try {
     console.log("📡 닉네임 중복 확인 요청:", formData.nickname);
-    const response = await axios.get(`${API_URL}/check-nickname`, {
-      params: { nickname: formData.nickname }
-    });
-
-    console.log("🔍 닉네임 중복 확인 응답:", response.data);
-    setNicknameAvailable(response.data === "AVAILABLE");
+    const isAvailable = await checkNicknameExists(formData.nickname);
+    setNicknameAvailable(isAvailable);
+    setError(""); // ✅ 에러 메시지 초기화
   } catch (error) {
     console.error("❌ 닉네임 중복 확인 실패:", error);
-    setError("닉네임 중복 확인 실패");
+    setError(error.message);
   }
 };
 
+// 📌 휴대폰 번호 중복 확인
 const handlePhoneCheck = async () => {
   const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
-  
-  // ✅ 올바른 형식이 아니면 중복 확인 요청을 보내지 않고 에러 메시지 표시
+
+  // ✅ 올바른 형식이 아니면 중복 확인 요청을 보내지 않음
   if (!phoneRegex.test(formData.phoneNumber)) {
-    setPhoneAvailable(null); // ✅ 상태 초기화
+    setPhoneAvailable(null);
     setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
     return;
   }
 
   try {
     console.log("📡 휴대폰 번호 중복 확인 요청:", formData.phoneNumber);
-    const response = await axios.get(`${API_URL}/check-phone`, {
-      params: { phoneNumber: formData.phoneNumber }
-    });
-
-    console.log("🔍 휴대폰 번호 중복 확인 응답:", response.data);
-    setPhoneAvailable(response.data === "AVAILABLE");
+    
+    const isAvailable = await checkPhoneNumberExists(formData.phoneNumber);
+    
+    console.log("🔍 휴대폰 번호 중복 확인 응답:", isAvailable);
+    setPhoneAvailable(isAvailable);
     setError(""); // ✅ 성공 시 기존 에러 메시지 초기화
   } catch (error) {
     console.error("❌ 휴대폰 번호 중복 확인 실패:", error);
-    setError("휴대폰 번호 중복 확인 실패");
+    setPhoneAvailable(null);
+    setError(error.message);
   }
 };
 
