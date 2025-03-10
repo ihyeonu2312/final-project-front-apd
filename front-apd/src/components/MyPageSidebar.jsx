@@ -24,7 +24,7 @@ const MyPageSidebar = () => {
         <li className={isActive("/user/my-info")} onClick={() => navigate("/user/my-info")}>내정보</li>
         <li className={isActive("/user/my-orders")} onClick={() => navigate("/user/my-orders")}>주문내역</li>
         <li className={isActive("/user/my-reviews")} onClick={() => navigate("/user/my-reviews")}>리뷰관리</li>
-        <li><Link to="/user/cart">장바구니</Link></li>
+        <li className={isActive("/user/cart")} onClick={() => navigate("/user/cart")}>장바구니</li>
         <li onClick={handleLogout}>로그아웃</li>
         <li className={isActive("/user/delete-account")} onClick={() => navigate("/user/delete-account")}>회원탈퇴</li>
         <li className="my-qr">

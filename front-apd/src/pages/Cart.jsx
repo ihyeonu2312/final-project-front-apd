@@ -1,96 +1,73 @@
 import React, { useState } from "react";
-import "../styles/Cart.css"; // 기존 CSS 사용
-import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
+import MyPageSidebar from "../components/MyPageSidebar"; // ✅ 기존 사이드바 사용
+import "../styles/MyPage.css"; // ✅ 기존 마이페이지 스타일 유지
+import "../styles/Cart.css"; 
 
 const Cart = () => {
-  const dummyUser = {
-    _id: "user123",
-    username: "testUser",
+  const navigate = useNavigate();
+
+  // ✅ 더미 장바구니 데이터
+  const [cartItems, setCartItems] = useState([
+    { id: 1, name: "Apple iPhone 15 Pro", price: 1499000, quantity: 1, imageUrl: "https://placehold.co/100x100" },
+    { id: 2, name: "Samsung Galaxy S23 Ultra", price: 1299000, quantity: 2, imageUrl: "https://placehold.co/100x100" },
+    { id: 3, name: "Sony WH-1000XM5 헤드폰", price: 399000, quantity: 1, imageUrl: "https://placehold.co/100x100" },
+  ]);
+
+  // ✅ 수량 변경 (로컬 상태 업데이트)
+  const handleQuantityChange = (itemId, quantity) => {
+    if (quantity < 1) return;
+    setCartItems((prev) =>
+      prev.map((item) => (item.id === itemId ? { ...item, quantity } : item))
+    );
   };
 
-  const dummyCarts = [
-    {
-      productId: uuidv4(),
-      productTitle: "중고 맥북 프로 13인치",
-      product_image: "https://via.placeholder.com/150",
-      size: "13-inch",
-      quantity: 1,
-      price: 1200000,
-    },
-    {
-      productId: uuidv4(),
-      productTitle: "아이패드 프로 11인치",
-      product_image: "https://via.placeholder.com/150",
-      size: "11-inch",
-      quantity: 2,
-      price: 900000,
-    },
-  ];
-
-  const [carts, setCarts] = useState(dummyCarts);
-
-  const handleRemove = (userId, productId) => {
-    console.log(`User ${userId} is removing product ${productId}`);
-    setCarts(carts.filter((item) => item.productId !== productId));
+  // ✅ 장바구니에서 상품 삭제
+  const handleRemoveItem = (itemId) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
   };
 
-  let total = 0;
-  carts.forEach((product) => {
-    total += product.price * product.quantity;
-  });
+  // ✅ 구매 버튼 클릭 시
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert("장바구니가 비어 있습니다.");
+      return;
+    }
+    navigate("/checkout");
+  };
 
   return (
-    <div className="cart-container">
-      <div className="cart-wrapper">
-        <h1 className="cart-title">장바구니</h1>
-        <div className="cart-top">
-          <button className="cart-top-button">CONTINUE SHOPPING</button>
-          <div className="cart-top-texts">
-            <span className="cart-top-text">Shopping Bag</span>
-            <span className="cart-top-text">Your Wishlist</span>
-          </div>
-          <button className="cart-top-button filled">CHECKOUT NOW</button>
+    <div className="mypage-container">
+      <MyPageSidebar /> {/* ✅ 공통 사이드바 사용 */}
+      <div className="content">
+        <h2>장바구니</h2>
+        
+        {cartItems.length === 0 ? (
+          <p>장바구니가 비어 있습니다.</p>
+        ) : (
+<ul className="cart-list">
+  {cartItems.map((item) => (
+    <li key={item.id} className="cart-item">
+      <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+      <div className="cart-item-details">
+        <h3>{item.name}</h3>
+        <p>{item.price.toLocaleString()}원</p>
+      </div>
+      <div className="cart-actions"> {/* ✅ 수량 버튼 & 삭제 버튼을 묶어서 오른쪽으로 이동 */}
+        <div className="quantity-control">
+          <button onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-</button>
+          <span>{item.quantity}</span>
+          <button onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+</button>
         </div>
-        <div className="cart-bottom">
-          <div className="cart-info">
-            {carts.map((item) => (
-              <div key={item.productId} className="cart-product">
-                <div className="cart-product-detail">
-                  <img src={item.product_image} alt="이미지" className="cart-image" />
-                  <div className="cart-details">
-                    <span className="cart-product-name">{item.productTitle}</span>
-                    <span className="cart-product-size">SIZE : {item.size}</span>
-                  </div>
-                </div>
-                <div className="cart-price-detail">
-                  <div className="cart-amount-container">
-                    <span className="cart-product-amount">{item.quantity}</span>
-                  </div>
-                  <div className="cart-product-price">{item.price.toLocaleString()}원</div>
-                </div>
-                <button className="cart-remove-button" onClick={() => handleRemove(dummyUser._id, item.productId)}>
-                  삭제
-                </button>
-              </div>
-            ))}
-            <hr className="cart-hr" />
-          </div>
-          <div className="cart-summary">
-            <h1 className="cart-summary-title">주문 요약</h1>
-            <div className="cart-summary-item">
-              <span className="cart-summary-item-text">합 계</span>
-              <span className="cart-summary-item-price">{total.toLocaleString()} 원</span>
-            </div>
-            <div className="cart-summary-item">
-              <span className="cart-summary-item-text">배송비</span>
-              <span className="cart-summary-item-price">3,000원</span>
-            </div>
-            <div className="cart-summary-item total">
-              <span className="cart-summary-item-text">총 합계</span>
-              <span className="cart-summary-item-price">{(total + 3000).toLocaleString()} 원</span>
-            </div>
-          </div>
-        </div>
+        <button className="remove-button" onClick={() => handleRemoveItem(item.id)}>삭제</button>
+      </div>
+    </li>
+  ))}
+</ul>
+
+        )}
+        
+        <button className="checkout-button" onClick={handleCheckout}>구매하기</button>
       </div>
     </div>
   );
