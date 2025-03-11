@@ -1,88 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import ProductCard from "./ProductCard";
-import "./ProductList.css";
 
-const dummyProducts = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  image: "https://placehold.co/250x250",
-  title: [
-    "삼성 갤럭시 S23 울트라",
-    "애플 맥북 프로 16인치",
-    "LG OLED 55인치 TV",
-    "나이키 에어포스 1 화이트",
-    "구찌 GG 마몬트 숄더백",
-  ][index % 5],
-  price: (index + 1) * 5000,
-  rating: (Math.random() * 5).toFixed(1), // 0부터 5까지의 랜덤 별점
-}));
-
-export default function ProductList({ products = dummyProducts }) {
-  const [currentProducts, setCurrentProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const loadMoreRef = useRef(null);
-
-  const productsPerPage = 20;
+export default function ProductList() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchMoreProducts = () => {
-      setLoading(true);
-      setTimeout(() => {
-        const newProducts = products.slice(
-          (page - 1) * productsPerPage,
-          page * productsPerPage
-        );
-        setCurrentProducts((prev) => [...prev, ...newProducts]);
+    axios
+      .get("http://localhost:8080/api/products") // 백엔드 API 호출
+      .then((response) => {
+        setProducts(response.data);
         setLoading(false);
+      })
+      .catch((error) => {
+        console.error("상품 데이터를 가져오는 중 오류 발생:", error);
+        setLoading(false);
+      });
+  }, []);
 
-        if (currentProducts.length + newProducts.length >= products.length) {
-          setHasMore(false);
-        }
-      }, 2000);
-    };
-
-    fetchMoreProducts();
-  }, [page]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !loading && hasMore) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      },
-      {
-        rootMargin: "100px",
-      }
-    );
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current);
-    }
-
-    return () => {
-      if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current);
-      }
-    };
-  }, [loading, hasMore]);
+  if (loading) return <p>상품을 불러오는 중...</p>;
 
   return (
     <div className="product-list">
-      {currentProducts.length > 0 ? (
-        currentProducts.map((product) => (
-          <ProductCard key={product.id} {...product} />
-        ))
-      ) : (
-        <p className="no-products">상품이 없습니다.</p>
-      )}
-
-      {loading && <p className="loading">Loading...</p>}
-
-      <div ref={loadMoreRef} style={{ height: "20px" }}></div>
-
-      {!hasMore && <p className="no-more">더 이상 상품이 없습니다.</p>}
+      {products.map((product) => (
+        <ProductCard
+          key={product.productId}
+          id={product.productId}
+          image={product.thumbnailImageUrl}
+          title={product.name}
+          price={product.price}
+          rating={product.rating}  // ✅ 별점 표시할 수 있도록 추가
+        />
+      ))}
     </div>
   );
 }
