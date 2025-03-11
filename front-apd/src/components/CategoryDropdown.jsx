@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { fetchCategories } from "../api/categoryApi"; // ✅ 실제 API 호출 추가
+import { fetchCategories } from "../api/categoryApi"; // ✅ API 추가
+import { convertToSlug } from "../utils"; // ✅ URL 변환
 
 const CategoryDropdown = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,7 +13,6 @@ const CategoryDropdown = () => {
     const getCategories = async () => {
       try {
         const data = await fetchCategories(); // ✅ API 호출
-        console.log("📌 [DEBUG] 가져온 카테고리 데이터:", data); // ✅ 응답 확인
         setCategories(data);
       } catch (error) {
         console.error("카테고리 불러오기 실패:", error);
@@ -34,8 +34,8 @@ const CategoryDropdown = () => {
       {showDropdown && (
         <ul className="dropdown-menu">
           {categories.map((category) => (
-            <li key={category.categoryId}> {/* ✅ 필드명을 categoryId로 변경 */}
-              <Link to={category.url}>
+            <li key={category.categoryId}>
+              <Link to={`/category/${convertToSlug(category.categoryName)}`}>
                 {category.categoryName}
               </Link>
             </li>
