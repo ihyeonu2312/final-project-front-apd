@@ -22,7 +22,6 @@ const MyEdit = () => {
 
   const [error, setError] = useState("");
   const [nicknameAvailable, setNicknameAvailable] = useState(null);
-  const [phoneAvailable, setPhoneAvailable] = useState(null);
 
     const [emailSent, setEmailSent] = useState(false);
     const [isCodeVerified, setIsCodeVerified] = useState(false);
@@ -45,7 +44,6 @@ const MyEdit = () => {
     }
   }, [user]);
 
-  const API_URL = "http://localhost:8080/api/user";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +52,14 @@ const MyEdit = () => {
       [name]: value,
     }));
 
-    if (name === "nickname") setNicknameAvailable(null);
+    // 🔹 닉네임 변경 시 중복 확인 상태 초기화 (단, 기존 닉네임과 같으면 예외)
+  if (name === "nickname") {
+    if (value === user.nickname) {
+      setNicknameAvailable(true); // 기존 닉네임이면 자동 통과
+    } else {
+      setNicknameAvailable(null); // 변경된 닉네임이면 중복 확인 필요
+    }
+  }
 
      // 🔹 이메일이 변경되면 이메일 인증 상태 초기화
   if (name === "email" && value !== user.email) {
@@ -138,15 +143,21 @@ const MyEdit = () => {
       setError("닉네임을 입력하세요.");
       return;
     }
+  
     try {
       const isAvailable = await checkNicknameExists(formData.nickname);
       setNicknameAvailable(isAvailable);
-      setError("");
+  
+      if (isAvailable) {
+        setError(""); // ✅ 사용 가능하면 에러 제거
+        alert("✅ 사용 가능한 닉네임입니다.");
+      } else {
+        setError("❌ 이미 사용 중인 닉네임입니다.");
+      }
     } catch (error) {
-      setError(error.message);
+      setError("닉네임 중복 확인 실패: " + error.message);
     }
   };
-
 
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
@@ -159,12 +170,24 @@ const MyEdit = () => {
       phoneNumber: formattedValue,
     }));
   
-    setPhoneAvailable(null);
-  };
-
+ // 🔹 전화번호 형식 검증 추가
+ const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+ if (!phoneRegex.test(formattedValue)) {
+   setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
+ } else {
+   setError(""); // 형식이 맞으면 에러 메시지 제거
+ }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+
+      // 🔹 전화번호 형식 검증 추가
+  const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
+  if (!phoneRegex.test(formData.phoneNumber)) {
+    setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
+    return; // 🔹 잘못된 형식이면 저장 진행 안 함
+  }
     // 🔹 이메일 변경 시 중복 확인 및 인증 요구
     if (formData.email !== user.email) {
       const emailExists = await checkEmailExists(formData.email);
@@ -179,10 +202,17 @@ const MyEdit = () => {
       }
     }
   
-    if (nicknameAvailable === false) {
-      setError("닉네임 중복 확인을 완료하세요.");
-      return;
-    }
+ // 🔹 닉네임 변경 시 중복 확인 여부 검사 (기존 닉네임이면 검사 생략)
+ if (formData.nickname !== user.nickname) {
+  if (nicknameAvailable === null) {
+    setError("닉네임 중복 확인을 완료하세요.");
+    return;
+  }
+  if (nicknameAvailable === false) {
+    setError("이미 사용 중인 닉네임입니다.");
+    return;
+  }
+}
   
     setError(""); // 기존 에러 메시지 초기화
   
