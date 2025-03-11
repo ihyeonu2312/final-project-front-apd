@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/categories"; // 카테고리 API 기본 URL
+const API_BASE_URL = "http://localhost:8080/api/categories"; // ✅ 카테고리 API 기본 URL
 
 // ✅ Axios 인스턴스 생성
 const categoryApi = axios.create({
@@ -10,25 +10,40 @@ const categoryApi = axios.create({
   },
 });
 
-// ✅ 모든 카테고리 가져오기
+// ✅ 모든 카테고리 가져오기 (상품 목록 제외)
 export const fetchCategories = async () => {
   try {
     const response = await axios.get(API_BASE_URL);
-    console.log("카테고리 응답:", response.data); // ✅ 응답 확인용 로그 추가
-    return response.data;
+    console.log("📌 [DEBUG] 카테고리 API 응답:", response.data); // ✅ 응답 확인
+    return response.data.map(category => ({
+      categoryId: category.categoryId,
+      categoryName: category.categoryName,
+      url: category.url || `/category/${category.categoryId}` // ✅ URL 없으면 기본값 설정
+    }));
   } catch (error) {
     console.error("카테고리 데이터를 불러오는 중 오류 발생:", error);
     return [];
   }
 };
 
-// ✅ 특정 카테고리 가져오기 (ID 기반)
+// ✅ 특정 카테고리 가져오기 (ID 기반, 상품 목록 제외)
 export const fetchCategoryById = async (categoryId) => {
   try {
     const response = await categoryApi.get(`/${categoryId}`);
     return response.data;
   } catch (error) {
     console.error(`카테고리 ${categoryId} 가져오기 오류:`, error);
+    throw error;
+  }
+};
+
+// ✅ 특정 카테고리 가져오기 (상품 포함)
+export const fetchCategoryWithProducts = async (categoryId) => {
+  try {
+    const response = await categoryApi.get(`/${categoryId}/products`);
+    return response.data;
+  } catch (error) {
+    console.error(`카테고리 ${categoryId} (상품 포함) 가져오기 오류:`, error);
     throw error;
   }
 };
