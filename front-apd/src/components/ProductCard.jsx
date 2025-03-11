@@ -44,6 +44,7 @@ export default function ProductCard({ id, thumbnailImageUrl, title, price, ratin
         {rating > 0 && (
           <div className="rating-container">
             <span className="rating-text">{rating.toFixed(1)}</span>
+            {renderStars(rating)} {/* ✅ 별점 렌더링 추가 */}
           </div>
         )}
       </div>

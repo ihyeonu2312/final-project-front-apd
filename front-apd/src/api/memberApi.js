@@ -139,6 +139,21 @@ export const verifyEmail = async (token) => {
   }
 };
 
+
+// 비번 재설정
+export const resetPassword = async (email, newPassword) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/auth/reset-password`,
+      { email, newPassword }, // ✅ 이메일도 함께 전송
+      { headers: { "Content-Type": "application/json" }, withCredentials: true }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("비밀번호 변경 실패:", error.response?.data || error.message);
+    throw error;
+  }
+};
 /* 🔹 회원 정보 수정 요청 */
 export const updateUserInfo = async (userData) => {
   try {
@@ -156,21 +171,6 @@ export const updateUserInfo = async (userData) => {
   } catch (error) {
     console.error("❌ 회원 정보 수정 실패:", error.response?.data || error.message);
     throw new Error("회원 정보 수정 실패: " + (error.response?.data?.message || error.message));
-  }
-};
-
-// 비번 재설정
-export const resetPassword = async (email, newPassword) => {
-  try {
-    const response = await axios.post(
-      `${API_URL}/auth/reset-password`,
-      { email, newPassword }, // ✅ 이메일도 함께 전송
-      { headers: { "Content-Type": "application/json" }, withCredentials: true }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("비밀번호 변경 실패:", error.response?.data || error.message);
-    throw error;
   }
 };
 
@@ -201,13 +201,13 @@ export const checkNicknameExists = async (nickname) => {
 };
 
 /* 🔹 휴대폰 번호 중복 확인 (API 요청) */
-export const checkPhoneNumberExists = async (phoneNumber) => {
-  try {
-    const response = await axios.get(`${API_URL}/user/check-phone`, {
-      params: { phoneNumber },
-    });
-    return response.data === "AVAILABLE"; // true or false 반환
-  } catch (error) {
-    throw new Error("휴대폰 번호 중복 확인 실패: " + (error.response?.data?.message || error.message));
-  }
-};
+// export const checkPhoneNumberExists = async (phoneNumber) => {
+//   try {
+//     const response = await axios.get(`${API_URL}/user/check-phone`, {
+//       params: { phoneNumber },
+//     });
+//     return response.data === "AVAILABLE"; // true or false 반환
+//   } catch (error) {
+//     throw new Error("휴대폰 번호 중복 확인 실패: " + (error.response?.data?.message || error.message));
+//   }
+// };

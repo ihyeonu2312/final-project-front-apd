@@ -4,8 +4,8 @@ import { fetchCategories } from "../api/categoryApi";
 import { fetchProductsByCategory } from "../api/productApi"; // ✅ 상품 API 추가
 import { convertToSlug } from "../utils"; // ✅ URL 변환 함수
 
-import "../components/ProductCard";
-import "../components/ProductList";
+// import "../components/ProductCard";
+// import "../components/ProductList";
 
 const Category = () => {
   const { slug } = useParams(); // URL에서 slug 가져오기
@@ -54,7 +54,7 @@ const Category = () => {
         {products.length > 0 ? (
           products.map((product) => (
             <div key={product.productId} className="product-card">
-              <img src={product.imageUrl || "https://placehold.co/150"} alt={product.name} />
+              <img src={product.thumbnailImageUrl || "https://placehold.co/150"} alt={product.name} />
               <h3>{product.name}</h3>
               <p>{product.price.toLocaleString()}원</p>
             </div>
