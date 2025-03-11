@@ -3,12 +3,12 @@ import { faStar as faStarSolid, faStarHalfStroke } from "@fortawesome/free-solid
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-export default function ProductCard({ id, image, title, price, rating }) {
+export default function ProductCard({ id, thumbnailImageUrl, title, price, rating }) {
   const navigate = useNavigate();
-  const defaultImage = "https://placehold.co/300x300";
+  const defaultImage = "https://placehold.co/300x300"; // 기본 이미지
 
   const renderStars = (rating) => {
-    if (rating < 0.1) return null;
+    if (!rating || rating < 0.1) return null;
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 >= 0.5;
     const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
@@ -30,9 +30,10 @@ export default function ProductCard({ id, image, title, price, rating }) {
     <div className="product-card" onClick={() => navigate(`/product/${id}`)}>
       <div className="product-image-container">
         <img
-          src={image && image.trim() ? image : defaultImage}
+          src={thumbnailImageUrl && thumbnailImageUrl.trim() ? thumbnailImageUrl : defaultImage} // ✅ thumbnailImageUrl 사용
           alt={title}
           className="product-image"
+          onError={(e) => (e.target.src = defaultImage)} // ✅ 이미지 로드 실패 시 기본 이미지로 변경
         />
       </div>
 
@@ -42,7 +43,6 @@ export default function ProductCard({ id, image, title, price, rating }) {
 
         {rating > 0 && (
           <div className="rating-container">
-            <div>{renderStars(rating)}</div>
             <span className="rating-text">{rating.toFixed(1)}</span>
           </div>
         )}

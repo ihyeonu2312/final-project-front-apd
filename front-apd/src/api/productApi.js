@@ -10,7 +10,7 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
-/* 🔹 Axios 요청 인터셉터 */
+/* 🔹 Axios 요청 인터셉터: 모든 요청에 JWT 토큰 추가 */
 api.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -22,31 +22,19 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// /* 🔹 카테고리별 상품 목록 가져오기 */
-// export const fetchProductsByCategory = async (categoryKey) => {
-//   try {
-//     const response = await api.get(`/products/category/${encodeURIComponent(categoryKey)}`);
-//     console.log("✅ API 응답 데이터 (productApi.js):", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("❌ API 요청 실패 (productApi.js):", error);
-//     throw error;
-//   }
-// };
-
-// ✅ 특정 카테고리의 상품 가져오기
+/* ✅ 특정 카테고리의 상품 가져오기 (JWT 포함) */
 export const fetchProductsByCategory = async (categoryId) => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/products/category/${categoryId}`);
-      console.log("📌 [DEBUG] 특정 카테고리의 상품 데이터:", response.data);
-      return response.data;
-    } catch (error) {
-      console.error(`카테고리 ${categoryId}의 상품 불러오기 실패:`, error);
-      return [];
-    }
-  };
+  try {
+    const response = await api.get(`/products/category/${categoryId}`);
+    console.log("📌 [DEBUG] 특정 카테고리의 상품 데이터:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(`❌ 카테고리 ${categoryId}의 상품 불러오기 실패:`, error);
+    return [];
+  }
+};
 
-// 3. 상품 추가 (관리자 전용)
+/* ✅ 상품 추가 (관리자 전용) */
 export const addProduct = async (productData) => {
   try {
     const response = await api.post("/products", productData);
@@ -57,7 +45,7 @@ export const addProduct = async (productData) => {
   }
 };
 
-// 4. 상품 수정 (관리자 전용)
+/* ✅ 상품 수정 (관리자 전용) */
 export const updateProduct = async (productId, productData) => {
   try {
     const response = await api.put(`/products/${productId}`, productData);
@@ -68,7 +56,7 @@ export const updateProduct = async (productId, productData) => {
   }
 };
 
-// 5. 상품 삭제 (관리자 전용)
+/* ✅ 상품 삭제 (관리자 전용) */
 export const deleteProduct = async (productId) => {
   try {
     const response = await api.delete(`/products/${productId}`);
@@ -78,3 +66,5 @@ export const deleteProduct = async (productId) => {
     throw error;
   }
 };
+
+export default api;
