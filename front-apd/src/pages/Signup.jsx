@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import PrivacyPolicy from "../components/PrivacyPolicy"; // 개인정보 처리방침 컴포넌트
-import { sendEmailVerification, verifyEmail, checkNicknameExists, checkPhoneNumberExists } from "../api/memberApi";
-import axios from "axios"; // ✅ axios 사용
+import { sendEmailVerification, verifyEmail, checkNicknameExists } from "../api/memberApi";
 import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
 import "../styles/Auth.css";
 
@@ -28,9 +27,7 @@ const Signup = () => {
   const [isSending, setIsSending] = useState(false); // 📌 이메일 인증 요청 (auth.js의 함수 사용)
   const [privacyAgreement, setPrivacyAgreement] = useState(false); // 개인정보 동의 상태
 
-  const API_URL = "http://localhost:8080/api/user";
   const [nicknameAvailable, setNicknameAvailable] = useState(null); // 닉네임 사용 가능 여부
-  const [phoneAvailable, setPhoneAvailable] = useState(null); // 휴대폰 번호 사용 가능 여부
 
   const { timeLeft, startTimer, resetTimer, isActive } = useEmailTimer(180);
 
@@ -50,8 +47,6 @@ const Signup = () => {
       phoneNumber: formattedValue,
     }));
   
-    // ✅ 전화번호 입력 값이 변경되면 중복 확인 상태 초기화
-    setPhoneAvailable(null);
   };
 
   // 📌 입력 필드 변경 핸들러
@@ -170,14 +165,14 @@ const handleVerifyCode = async () => {
       return;
     }
 
-    if (nicknameAvailable !== true || phoneAvailable !== true) {
-      setError("닉네임과 휴대폰 번호 중복 확인을 먼저 진행해주세요.");
+    if (nicknameAvailable !== true ) {
+      setError("닉네임 중복 확인을 먼저 진행해주세요.");
       return;
     }
 
     const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
     if (!phoneRegex.test(formData.phoneNumber)) {
-      setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
+      setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 01X-XXXX-XXXX)");
       return;
     }
 
@@ -233,31 +228,7 @@ const handleNicknameCheck = async () => {
   }
 };
 
-// 📌 휴대폰 번호 중복 확인
-const handlePhoneCheck = async () => {
-  const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
 
-  // ✅ 올바른 형식이 아니면 중복 확인 요청을 보내지 않음
-  if (!phoneRegex.test(formData.phoneNumber)) {
-    setPhoneAvailable(null);
-    setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
-    return;
-  }
-
-  try {
-    console.log("📡 휴대폰 번호 중복 확인 요청:", formData.phoneNumber);
-    
-    const isAvailable = await checkPhoneNumberExists(formData.phoneNumber);
-    
-    console.log("🔍 휴대폰 번호 중복 확인 응답:", isAvailable);
-    setPhoneAvailable(isAvailable);
-    setError(""); // ✅ 성공 시 기존 에러 메시지 초기화
-  } catch (error) {
-    console.error("❌ 휴대폰 번호 중복 확인 실패:", error);
-    setPhoneAvailable(null);
-    setError(error.message);
-  }
-};
 
 
 return (
@@ -342,7 +313,6 @@ return (
       {/* 📌 휴대폰 번호 입력 + 중복 확인 버튼 */}
       <div className="input-group">
           <label>휴대폰 번호<span> *숫자만 입력 가능</span></label>
-          <div className="phone-auth">
             <input 
               type="tel" 
               name="phoneNumber" 
@@ -352,15 +322,6 @@ return (
               maxLength="13" 
               required 
             />
-            <button type="button" className="black-button" onClick={handlePhoneCheck}>
-              중복 확인
-            </button>
-          </div>
-          {phoneAvailable !== null && (
-            <p className={phoneAvailable ? "success-message" : "error-message"}>
-              {phoneAvailable ? "✅ 사용 가능한 휴대폰 번호입니다." : "❌ 이미 사용 중인 휴대폰 번호입니다."}
-            </p>
-          )}
         </div>
          {/* 📌 주소 입력 필드 + 검색 버튼 */}
          <div className="input-group">

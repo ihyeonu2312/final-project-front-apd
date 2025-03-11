@@ -56,6 +56,15 @@ export const useAuthStore = create((set) => ({
     set({ user, token });
   },
 
+    // ✅ 회원 정보 업데이트 기능 추가
+    updateUser: (updatedUserData) => {
+      set((state) => {
+        const newUser = { ...state.user, ...updatedUserData }; // 🔹 기존 데이터 유지하며 업데이트
+        localStorage.setItem("user", JSON.stringify(newUser)); // ✅ localStorage 업데이트
+        return { user: newUser };
+      });
+    },
+
   // ✅ 로그아웃 기능
   logout: async () => {
     try {

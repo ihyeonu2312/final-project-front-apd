@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import MyPageSidebar from "../components/MyPageSidebar";
-import { checkNicknameExists, checkPhoneNumberExists, sendEmailVerification, verifyEmail, checkEmailExists, updateUserInfo } from "../api/memberApi";
-import axios from "axios";
+import { checkNicknameExists, sendEmailVerification, verifyEmail, checkEmailExists, updateUserInfo } from "../api/memberApi";
 import "../styles/MyPage.css";
 import useEmailTimer from "../hooks/useEmailTimer"; // ✅ 타이머 훅 사용
+
 
 // 인풋창 데이터가 해당 유저의 정보와 같을 시 기본값 적용하기
 const MyEdit = () => {
@@ -55,6 +55,12 @@ const MyEdit = () => {
     }));
 
     if (name === "nickname") setNicknameAvailable(null);
+
+     // 🔹 이메일이 변경되면 이메일 인증 상태 초기화
+  if (name === "email" && value !== user.email) {
+    setIsCodeVerified(false); // ✅ 인증 상태 초기화
+    setEmailSent(false); // ✅ 이메일 전송 상태도 초기화
+  }
   };
 
     const handleEmailVerification = async () => {
@@ -141,21 +147,6 @@ const MyEdit = () => {
     }
   };
 
-  const handlePhoneCheck = async () => {
-    const phoneRegex = /^01[0-9]-\d{3,4}-\d{4}$/;
-    if (!phoneRegex.test(formData.phoneNumber)) {
-      setPhoneAvailable(null);
-      setError("올바른 휴대폰 번호 형식이 아닙니다. (예: 010-1234-5678)");
-      return;
-    }
-    try {
-      const isAvailable = await checkPhoneNumberExists(formData.phoneNumber);
-      setPhoneAvailable(isAvailable);
-      setError("");
-    } catch (error) {
-      setError(error.message);
-    }
-  };
 
   const handlePhoneChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, "");
@@ -168,30 +159,50 @@ const MyEdit = () => {
       phoneNumber: formattedValue,
     }));
   
-    // ✅ 전화번호 입력 값이 변경되면 중복 확인 상태 초기화
     setPhoneAvailable(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (nicknameAvailable === false || phoneAvailable === false) {
-      setError("닉네임과 휴대폰 번호 중복 확인을 완료하세요.");
+  
+    // 🔹 이메일 변경 시 중복 확인 및 인증 요구
+    if (formData.email !== user.email) {
+      const emailExists = await checkEmailExists(formData.email);
+      if (emailExists) {
+        setError("이미 사용 중인 이메일입니다.");
+        return;
+      }
+  
+      if (!isCodeVerified) {
+        setError("이메일 인증을 완료해주세요.");
+        return;
+      }
+    }
+  
+    if (nicknameAvailable === false) {
+      setError("닉네임 중복 확인을 완료하세요.");
       return;
     }
-    setError("");
+  
+    setError(""); // 기존 에러 메시지 초기화
+  
     try {
-      await axios.put(`${API_URL}/update`, formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      updateUser(formData);
-      alert("회원 정보가 수정되었습니다.");
-      navigate("/");
+      const response = await updateUserInfo(formData); // 🔹 API 호출
+  
+      if (response) { // 🔹 응답이 true이면 성공 처리
+        updateUser(formData);
+        alert("회원 정보가 성공적으로 수정되었습니다.");
+        navigate("/user/my-info"); // ✅ 마이페이지로 이동
+      } else {
+        throw new Error("회원 정보 수정 실패: 알 수 없는 오류"); // 🔹 false일 경우 예외 처리
+      }
     } catch (error) {
-      setError(
-        "회원 정보 수정 실패: " + (error.response?.data?.message || "서버 오류")
-      );
+      setError("회원 정보 수정 실패: " + (error.message || "서버 오류"));
     }
   };
+  
+  
+  
 
   return (
     <div className="mypage-container">
@@ -203,6 +214,7 @@ const MyEdit = () => {
           <div className="input-group">
             <label>이름</label>
             <input type="text" name="name" value={formData.name} onChange={handleChange} required/>
+            
           </div>
           <div className="input-group">
   <label>이메일</label>
@@ -214,17 +226,17 @@ const MyEdit = () => {
       value={formData.email}
       onChange={handleChange}
       required
-      disabled={isSending || isCodeVerified} // ✅ 전송 중이거나 인증 완료되면 비활성화
+      disabled={isSending || isCodeVerified}
     />
     <button
       type="button"
       className="black-button"
       onClick={handleEmailVerification}
-      disabled={isSending || isCodeVerified}
+      disabled={formData.email === user.email || isSending || isCodeVerified} // ✅ 기존 이메일이면 인증 불필요
     >
       {isSending
         ? "전송 중..."
-        : isCodeVerified
+        : formData.email === user.email || isCodeVerified
         ? "✅ 인증 완료"
         : emailSent
         ? "재전송"
@@ -232,6 +244,7 @@ const MyEdit = () => {
     </button>
   </div>
 </div>
+
 
 {/* 📌 인증 코드 입력 */}
 {emailSent && !isCodeVerified && (
@@ -282,25 +295,15 @@ const MyEdit = () => {
       {/* 📌 휴대폰 번호 입력 + 중복 확인 버튼 */}
       <div className="input-group">
           <label>휴대폰 번호<span> *숫자만 입력 가능</span></label>
-          <div className="phone-auth">
             <input 
               type="tel" 
               name="phoneNumber" 
               placeholder="휴대폰 번호 입력" 
               value={formData.phoneNumber} 
               onChange={handlePhoneChange} 
-              maxLength="13" 
+              maxLength="13"
               required 
             />
-            <button type="button" className="black-button" onClick={handlePhoneCheck}>
-              중복 확인
-            </button>
-          </div>
-          {phoneAvailable !== null && (
-            <p className={phoneAvailable ? "success-message" : "error-message"}>
-              {phoneAvailable ? "✅ 사용 가능한 휴대폰 번호입니다." : "❌ 이미 사용 중인 휴대폰 번호입니다."}
-            </p>
-          )}
         </div>
           <div className="input-group">
             <label>주소</label>
