@@ -1,0 +1,39 @@
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5개씩 한 줄에 배치 */
+  gap: 16px; /* 카드 간격 */
+  padding: 16px;
+}
+
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  max-width: 150px;
+  border-radius: 4px;
+}
+
+@media (max-width: 1024px) {
+  .product-list {
+    grid-template-columns: repeat(3, 1fr); /* 화면이 작아지면 3개씩 */
+  }
+}
+
+@media (max-width: 768px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 */
+  }
+}
+
+@media (max-width: 480px) {
+  .product-list {
+    grid-template-columns: repeat(1, 1fr); /* 모바일에서는 1개씩 */
+  }
+}
