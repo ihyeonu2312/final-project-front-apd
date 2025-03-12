@@ -1,17 +1,53 @@
 const ProductCard = ({ product }) => {
   return (
     <div className="product-card">
+      {/* 상품 이미지 */}
       <img
         src={product.thumbnailImageUrl || "https://placehold.co/150"}
         alt={product.name}
       />
+
+      {/* 상품명 */}
       <h3>{product.name}</h3>
-      <p>{product.price.toLocaleString()}원</p>
+
+      {/* 가격 표시 (할인 가격이 있으면 적용) */}
+      {product.discountPrice ? (
+        <p>
+          <span style={{ textDecoration: "line-through", color: "gray" }}>
+            {product.price.toLocaleString()}원
+          </span>{" "}
+          → <b>{product.discountPrice.toLocaleString()}원</b> (할인 적용)
+        </p>
+      ) : (
+        <p>{product.price.toLocaleString()}원</p>
+      )}
+
+      {/* ⭐ 평점 */}
+      <p>⭐ {product.rating?.toFixed(1) || "0.0"}</p>
+
+      {/* 재고 여부 */}
+      <p style={{ color: product.stockQuantity > 0 ? "green" : "red" }}>
+        {product.stockQuantity > 0 ? `재고 있음 (${product.stockQuantity}개 남음)` : "품절"}
+      </p>
+
+      {/* 옵션 목록 (최대 2개만 미리보기) -----  상세에서 적용할것
+      {product.options?.length > 0 && (
+        <p>
+          옵션: {product.options.slice(0, 2).map(opt => opt.name).join(", ")}
+          {product.options.length > 2 && " ..."}
+        </p>
+      )} */}
+
+      {/* 상세 페이지 이동 버튼 */}
+      <a href={product.detailUrl} target="_blank" rel="noopener noreferrer">
+        상세 보기
+      </a>
     </div>
   );
 };
 
 export default ProductCard;
+
 
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faStar as faStarSolid, faStarHalfStroke } from "@fortawesome/free-solid-svg-icons";

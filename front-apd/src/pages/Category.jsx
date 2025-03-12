@@ -11,9 +11,11 @@ const Category = () => {
   const [products, setProducts] = useState([]); // 전체 상품 리스트
   const [displayedProducts, setDisplayedProducts] = useState([]); // 화면에 보이는 상품 리스트
   const [hasMore, setHasMore] = useState(true); // 더 불러올 상품이 있는지 여부
+  const [loading, setLoading] = useState(true); // ✅ 로딩 상태 추가
 
   useEffect(() => {
     const getCategoryData = async () => {
+      setLoading(true); // ✅ 로딩 시작
       try {
         const categories = await fetchCategories();
         console.log("📌 [DEBUG] 모든 카테고리:", categories);
@@ -27,9 +29,9 @@ const Category = () => {
           console.log("📌 [DEBUG] 선택된 카테고리:", matchedCategory);
 
           const productsData = await fetchProductsByCategory(matchedCategory.categoryId);
+
+          // ✅ 상태 업데이트를 한 번에 수행하여 깜빡이는 문제 방지
           setProducts(productsData);
-          
-          // ✅ 카테고리 바뀌면 상태 초기화
           setDisplayedProducts(productsData.slice(0, 40));
           setHasMore(productsData.length > 40);
         } else {
@@ -37,13 +39,10 @@ const Category = () => {
         }
       } catch (error) {
         console.error("카테고리 데이터를 불러오는 중 오류 발생:", error);
+      } finally {
+        setLoading(false); // ✅ 로딩 완료
       }
     };
-
-    // ✅ 카테고리 바뀔 때 상태 리셋
-    setProducts([]);
-    setDisplayedProducts([]);
-    setHasMore(true);
 
     getCategoryData();
   }, [slug]);
@@ -83,11 +82,16 @@ const Category = () => {
   return (
     <div>
       <h2>{category.categoryName} 카테고리</h2>
-      <p>이곳에 {category.categoryName} 관련 상품을 표시할 예정</p>
-      
-      <ProductList products={displayedProducts} />
 
-      {!hasMore && <p style={{ textAlign: "center", marginTop: "20px" }}>더 이상 상품이 없습니다.</p>}
+      {/* ✅ 로딩 상태 표시 */}
+      {loading ? (
+        <p style={{ textAlign: "center", marginTop: "20px" }}>상품 로딩 중...</p>
+      ) : (
+        <>
+          <ProductList products={displayedProducts} />
+          {!hasMore && <p style={{ textAlign: "center", marginTop: "20px" }}>더 이상 상품이 없습니다.</p>}
+        </>
+      )}
     </div>
   );
 };
