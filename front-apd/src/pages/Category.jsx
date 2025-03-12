@@ -4,6 +4,7 @@ import { fetchCategories } from "../api/categoryApi";
 import { fetchProductsByCategory } from "../api/productApi";
 import { convertToSlug } from "../utils";
 import ProductList from "../components/ProductList";
+import "../styles/Product.css";
 
 const Category = () => {
   const { slug } = useParams();
@@ -81,8 +82,9 @@ const Category = () => {
 
   return (
     <div>
-      <h2>{category.categoryName} 카테고리</h2>
-
+      <br/><br/>
+      <h2 className="categoryName">{category.categoryName} 카테고리</h2>
+      <br/>
       {/* ✅ 로딩 상태 표시 */}
       {loading ? (
         <p style={{ textAlign: "center", marginTop: "20px" }}>상품 로딩 중...</p>
