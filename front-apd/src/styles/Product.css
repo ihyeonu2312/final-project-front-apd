@@ -98,6 +98,36 @@
   color: rgb(226, 226, 226);
 }
 
+/* 정렬 컨테이너 */
+.sort-container {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+/* 기본 텍스트 스타일 */
+.sort-text {
+  color: #666;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+/* 클릭하면 굵게 + 밑줄 추가 */
+.sort-text.active {
+  font-weight: bold;
+  color: #222;
+  border-bottom: 1px solid #222;
+}
+
+/* 마우스 호버 효과 */
+.sort-text:hover {
+  color: #000;
+}
+
+
+
 
 @media (max-width: 1024px) {
   .product-list {

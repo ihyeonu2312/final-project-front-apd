@@ -13,6 +13,29 @@ const Category = () => {
   const [displayedProducts, setDisplayedProducts] = useState([]); // 화면에 보이는 상품 리스트
   const [hasMore, setHasMore] = useState(true); // 더 불러올 상품이 있는지 여부
   const [loading, setLoading] = useState(true); // ✅ 로딩 상태 추가
+  const [sortOption, setSortOption] = useState("default"); // ✅ 정렬 상태 추가
+
+  // ✅ 정렬 함수 
+  const sortProducts = (option, productsToSort) => {
+    let sortedProducts = [...productsToSort];
+  
+    if (option === "priceLow") {
+      sortedProducts.sort((a, b) => a.price - b.price); // 가격 낮은 순
+    } else if (option === "priceHigh") {
+      sortedProducts.sort((a, b) => b.price - a.price); // 가격 높은 순
+    } else if (option === "rating") {
+      sortedProducts.sort((a, b) => b.rating - a.rating); // 평점 높은 순
+    } else if (option === "discountHigh") {
+      sortedProducts.sort((a, b) => {
+        const discountA = ((a.originalPrice - a.price) / a.originalPrice) * 100 || 0;
+        const discountB = ((b.originalPrice - b.price) / b.originalPrice) * 100 || 0;
+        return discountB - discountA; // 할인율 높은 순
+      });
+    }
+  
+    setDisplayedProducts(sortedProducts.slice(0, 40)); // 정렬된 상품 리스트 업데이트
+  };
+  
 
   useEffect(() => {
     const getCategoryData = async () => {
@@ -33,7 +56,7 @@ const Category = () => {
 
           // ✅ 상태 업데이트를 한 번에 수행하여 깜빡이는 문제 방지
           setProducts(productsData);
-          setDisplayedProducts(productsData.slice(0, 40));
+          sortProducts(sortOption, productsData); // ✅ 처음 로딩 시 정렬 적용
           setHasMore(productsData.length > 40);
         } else {
           console.warn("❌ 매칭되는 카테고리가 없습니다.");
@@ -47,6 +70,11 @@ const Category = () => {
 
     getCategoryData();
   }, [slug]);
+  
+  // ✅ 정렬 옵션이 변경될 때 `displayedProducts` 업데이트
+  useEffect(() => {
+    sortProducts(sortOption, products);
+  }, [sortOption, products]);
 
   // ✅ 무한 스크롤 이벤트 핸들러
   useEffect(() => {
@@ -82,9 +110,32 @@ const Category = () => {
 
   return (
     <div>
-      <br/><br/>
+      <br /><br />
       <h2 className="categoryName">{category.categoryName} 카테고리</h2>
-      <br/>
+      <br />
+
+      {/* ✅ 정렬 UI 추가 */}
+      <div className="sort-container">
+  {[
+    { value: "default", label: "최신순" },
+    { value: "priceLow", label: "낮은가격순" },
+    { value: "priceHigh", label: "높은가격순" },
+    { value: "rating", label: "평점높은순" },
+    { value: "discountHigh", label: "높은할인율" }
+  ].map((sort, index) => (
+    <span
+      key={sort.value}
+      className={`sort-text ${sortOption === sort.value ? "active" : ""}`}
+      onClick={() => setSortOption(sort.value)}
+    >
+      {sort.label}
+    </span>
+  ))}
+</div>
+
+
+
+
       {/* ✅ 로딩 상태 표시 */}
       {loading ? (
         <p style={{ textAlign: "center", marginTop: "20px" }}>상품 로딩 중...</p>
