@@ -1,4 +1,9 @@
 const ProductCard = ({ product }) => {
+  // 원가(정가) 및 상품 가격 설정
+  const originalPrice = product.originalPrice; // 원가 (할인 전 가격)
+  const finalPrice = product.price; // 상품가 (할인 적용된 가격)
+  const hasDiscount = originalPrice > finalPrice; // 할인 여부
+
   return (
     <div className="product-card">
       {/* 상품 이미지 */}
@@ -8,20 +13,18 @@ const ProductCard = ({ product }) => {
         className="product-image"
       />
 
-      {/* 상품명 (길면 `...` 처리) */}
+      {/* 상품명 */}
       <h3 className="product-title">{product.name}</h3>
 
-      {/* 가격 표시 (할인 가격이 있으면 적용) */}
-      {product.discountPrice ? (
-        <p>
-          <b>₩{product.discountPrice.toLocaleString()} </b>
+      {/* 가격 표시 */}
+      <p>
+        {hasDiscount && (
           <span className="original-price">
-          ₩{product.price.toLocaleString()}
-          </span>{" "}
-        </p>
-      ) : (
-        <p>₩{product.price.toLocaleString()}</p>
-      )}
+            <s>{originalPrice.toLocaleString()}원</s>
+          </span>
+        )}
+        <b className="discounted-price">{finalPrice.toLocaleString()}원</b>
+      </p>
 
       {/* ⭐ 평점 */}
       <p>⭐ {product.rating?.toFixed(1) || "0.0"}</p>
