@@ -48,13 +48,23 @@
 
 .original-price {
   text-decoration: line-through;
-  font-size: 15px;
+  margin-left: 5px;
+  font-size: 13.5px;
   color: gray;
 }
 
-.original-price b {
-  color: rgb(255, 0, 0);
+.discounted-price {
+  color: black; /* 빨간색 (할인된 가격) */
 }
+.discount-rate {
+  color: rgb(255, 0, 0); /* 빨간색 (할인된 가격) */
+}
+
+.normal-price {
+  color: black; /* 검정색 (할인 없음) */
+}
+
+
 
 .stock-status {
   font-weight: bold;
