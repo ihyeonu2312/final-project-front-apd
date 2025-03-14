@@ -1,52 +1,83 @@
-import React from 'react';
-import { deleteCartItem, updateCartItemQuantity } from '../../api/cartApi';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const CartItem = ({ item, setCartItems }) => {
+const CartPage = () => {
+  const [cart, setCart] = useState(null);
 
-    // ✅ 아이템 삭제
-    const handleDelete = async () => {
-        try {
-            await deleteCartItem(item.cartItemId);
-            setCartItems((prev) => prev.filter((cartItem) => cartItem.cartItemId !== item.cartItemId));
-        } catch (error) {
-            console.error('장바구니 항목 삭제 중 오류 발생:', error);
-        }
-    };
+  // ✅ 장바구니 조회 (GET)
+  useEffect(() => {
+    axios.get("http://localhost:8080/cart", { withCredentials: true })
+      .then(res => setCart(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
-    // ✅ 수량 변경
-    const handleQuantityChange = async (quantity) => {
-        if (quantity < 1) return;
-        try {
-            await updateCartItemQuantity(item.cartItemId, quantity);
-            setCartItems((prev) => 
-                prev.map((cartItem) =>
-                    cartItem.cartItemId === item.cartItemId
-                        ? { ...cartItem, quantity }
-                        : cartItem
-                )
-            );
-        } catch (error) {
-            console.error('수량 변경 중 오류 발생:', error);
-        }
-    };
+  // ✅ 장바구니에 상품 추가 (POST)
+  const handleAddToCart = (productId) => {
+    axios.post("http://localhost:8080/cart/add", { productId, quantity: 1 }, { withCredentials: true })
+      .then(res => {
+        alert("상품이 장바구니에 추가되었습니다.");
+        setCart(res.data); // 장바구니 상태 업데이트
+      })
+      .catch(err => console.error(err));
+  };
 
-    return (
-        <div className="cart-item">
-            <img src={item.imageUrl} alt={item.name} />
-            <div className="item-info">
-                <h4>{item.name}</h4>
-                <p>가격: {item.price.toLocaleString()}원</p>
-                <div className="quantity-controls">
-                    <button onClick={() => handleQuantityChange(item.quantity - 1)}>-</button>
-                    <span>{item.quantity}</span>
-                    <button onClick={() => handleQuantityChange(item.quantity + 1)}>+</button>
-                </div>
-                <button className="delete-btn" onClick={handleDelete}>
-                    삭제
-                </button>
-            </div>
-        </div>
-    );
+  // ✅ 장바구니에서 상품 삭제 (DELETE)
+  const handleRemoveFromCart = (productId) => {
+    axios.delete(`http://localhost:8080/cart/${productId}`, { withCredentials: true })
+      .then(() => {
+        alert("상품이 장바구니에서 삭제되었습니다.");
+        setCart(prevCart => ({
+          ...prevCart,
+          items: prevCart.items.filter(item => item.productId !== productId)
+        }));
+      })
+      .catch(err => console.error(err));
+  };
+
+  // ✅ 장바구니 비우기 (DELETE)
+  const handleClearCart = () => {
+    axios.delete("http://localhost:8080/cart/clear", { withCredentials: true })
+      .then(() => {
+        alert("장바구니가 비워졌습니다.");
+        setCart(null);
+      })
+      .catch(err => console.error(err));
+  };
+
+  // ✅ 장바구니에서 상품 수량 변경 (PATCH)
+  const handleUpdateQuantity = (productId, quantity) => {
+    axios.patch("http://localhost:8080/cart/update", { productId, quantity }, { withCredentials: true })
+      .then(() => {
+        alert("상품 수량이 변경되었습니다.");
+        setCart(prevCart => ({
+          ...prevCart,
+          items: prevCart.items.map(item =>
+            item.productId === productId ? { ...item, quantity } : item
+          )
+        }));
+      })
+      .catch(err => console.error(err));
+  };
+
+  return (
+    <div>
+      <h1>🛒 장바구니</h1>
+      {cart ? (
+        <ul>
+          {cart.items.map(item => (
+            <li key={item.productId}>
+              {item.productName} - {item.quantity}개
+              <button onClick={() => handleUpdateQuantity(item.productId, item.quantity + 1)}>➕</button>
+              <button onClick={() => handleUpdateQuantity(item.productId, item.quantity - 1)}>➖</button>
+              <button onClick={() => handleRemoveFromCart(item.productId)}>❌ 삭제</button>
+            </li>
+          ))}
+        </ul>
+      ) : <p>장바구니가 비어있습니다.</p>}
+
+      <button onClick={handleClearCart}>🗑 장바구니 비우기</button>
+    </div>
+  );
 };
 
-export default CartItem;
+export default CartPage;

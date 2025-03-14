@@ -1,47 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import CartItem from './CartItem';
-import { fetchCartItems } from '../../api/cartApi';
-import './CartList.css';
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const CartList = () => {
-    const [cartItems, setCartItems] = useState([]);
+const CartPage = () => {
+  const [cart, setCart] = useState(null);
 
-    // ✅ 장바구니 데이터 불러오기
-    useEffect(() => {
-        const loadCartItems = async () => {
-            try {
-                const items = await fetchCartItems();
-                setCartItems(items);
-            } catch (error) {
-                console.error('장바구니 데이터를 불러오는 중 오류 발생:', error);
-            }
-        };
-        loadCartItems();
-    }, []);
+  useEffect(() => {
+    axios.get("http://localhost:8080/cart", { withCredentials: true })
+      .then(res => setCart(res.data))
+      .catch(err => console.error(err));
+  }, []);
 
-    // ✅ 장바구니 합계 계산
-    const calculateTotalPrice = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-    };
-
-    return (
-        <div className="cart-list">
-            <h2>장바구니</h2>
-            <div className="cart-items">
-                {cartItems.map((item) => (
-                    <CartItem 
-                        key={item.cartItemId} 
-                        item={item} 
-                        setCartItems={setCartItems} 
-                    />
-                ))}
-            </div>
-            <div className="cart-summary">
-                <h3>총 합계: {calculateTotalPrice().toLocaleString()}원</h3>
-                <button className="checkout-btn">결제하기</button>
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <h1>🛒 장바구니</h1>
+      {cart ? (
+        <ul>
+          {cart.items.map(item => (
+            <li key={item.productId}>
+              {item.productName} - {item.quantity}개
+            </li>
+          ))}
+        </ul>
+      ) : <p>장바구니가 비어있습니다.</p>}
+    </div>
+  );
 };
 
-export default CartList;
+export default CartPage;
