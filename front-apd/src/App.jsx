@@ -11,6 +11,7 @@ import UserRoutes from "./routes/UserRoutes";
 import CategoryPage from "./pages/Category";
 import NotFound from "./pages/NotFound";
 import TestCategory1 from "./pages/TestCategory1";
+import OrderHistoryPage from "./pages/OrderHistoryPage";
 
 
 console.log("✅ App 컴포넌트 파일 로드됨!");
@@ -33,7 +34,7 @@ function App() {
           <Route path="/user/*" element={<UserRoutes />} />
           <Route path="/category/test" element={<TestCategory1 />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
-          
+          <Route path="/orders" element={<OrderHistoryPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
