@@ -19,13 +19,21 @@ const ProductCard = ({ product }) => {
         src={product.thumbnailImageUrl || "https://placehold.co/150"}
         alt={product.name}
         className="product-image"
+        onClick={() => window.open(product.detailUrl, "_blank", "noopener,noreferrer")}
       />
 
       {/* 상품명 */}
-      <h3 className="product-title">{product.name}</h3>
+      <h3
+  className="product-title"
+  onClick={() => window.open(product.detailUrl, "_blank", "noopener,noreferrer")}
+  style={{ cursor: "pointer" }}>
+  {product.name}
+</h3>
+
+
 
       {/* 가격 표시 */}
-      <p>
+      <p className="price">
     <b className={hasDiscount ? "discounted-price" : "normal-price"}>
       ₩{finalPrice.toLocaleString()}
     </b>
@@ -41,7 +49,7 @@ const ProductCard = ({ product }) => {
 
 
       {/* ⭐ 평점 */}
-      <p>⭐ {product.rating?.toFixed(1) || "0.0"}</p>
+      <p className="rating">⭐ {product.rating?.toFixed(1) || "0.0"}</p>
 
       {/* 재고 여부 */}
       <p
@@ -53,7 +61,7 @@ const ProductCard = ({ product }) => {
       : "in-stock"
   }`}
 >
-{product.stockQuantity <= 10 && (
+{product.stockQuantity <= 9 && (
   <p className={`stock-status ${product.stockQuantity === 0 ? "out-of-stock" : "low-stock"}`}>
     {product.stockQuantity === 0
       ? "❌ 품절"
@@ -63,10 +71,6 @@ const ProductCard = ({ product }) => {
 
 </p>
 
-      {/* 상세 페이지 이동 버튼 */}
-      <a href={product.detailUrl} target="_blank" rel="noopener noreferrer" className="detail-link">
-        상세 보기
-      </a>
     </div>
   );
 };

@@ -132,8 +132,8 @@ const Header = () => {
               </ul>
             )}
           </li> */}
-          <li><Link to="/category/fashion">패션</Link></li>
-          <li><Link to="/category/test">test</Link></li>
+          <li><Link to="/category/패션의류-잡화">패션의류/잡화</Link></li>
+          <li><Link to="/category/생활용품">생활용품</Link></li>
           <li><Link to="/used">중고거래</Link></li>
           <li><Link to="/support">고객센터</Link></li>
         </ul>
