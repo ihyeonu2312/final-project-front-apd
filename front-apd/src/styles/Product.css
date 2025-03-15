@@ -24,7 +24,7 @@
 
 
 .product-image {
-  width: 150px;
+  width: 70%;
   height: 150px; /* ✅ 고정된 높이 */
   object-fit: cover; /* ✅ 비율을 유지하면서 꽉 채우기 */
   border-radius: 4px;
