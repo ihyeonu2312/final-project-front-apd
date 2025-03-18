@@ -9,8 +9,9 @@ import ResetPassword from "./pages/ResetPassword";
 import MainRoutes from "./routes/MainRoutes";
 import UserRoutes from "./routes/UserRoutes";
 import CategoryPage from "./pages/Category";
-import NotFound from "./pages/NotFound";
 import TestCategory1 from "./pages/TestCategory1";
+import SearchResult from "./pages/SearchResult"; // 🔍 검색 결과 페이지 추가
+import NotFound from "./pages/NotFound";
 
 
 console.log("✅ App 컴포넌트 파일 로드됨!");
@@ -33,7 +34,7 @@ function App() {
           <Route path="/user/*" element={<UserRoutes />} />
           <Route path="/category/test" element={<TestCategory1 />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
-          
+          <Route path="/search" element={<SearchResult />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

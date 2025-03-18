@@ -21,7 +21,7 @@ const Header = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim() !== "") {
-      alert(`🔍 검색어: ${searchQuery}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
     }
   };
 
@@ -40,17 +40,19 @@ const Header = () => {
         </Link>
 
         {/* ✅ 검색창 */}
-        <form className="search-form" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="검색어를 입력하세요..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit">
-            <FontAwesomeIcon icon={faMagnifyingGlass} />
-          </button>
-        </form>
+{/* ✅ 검색창 */}
+<form className="search-form" onSubmit={handleSearch}>
+  <input
+    type="text"
+    placeholder="검색어를 입력하세요..."
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />
+  <button type="submit">
+    <FontAwesomeIcon icon={faMagnifyingGlass} />
+  </button>
+</form>
+
 
         {/* ✅ 네비게이션 메뉴 */}
         <nav className="nav">

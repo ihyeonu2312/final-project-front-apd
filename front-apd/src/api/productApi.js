@@ -34,6 +34,18 @@ export const fetchProductsByCategory = async (categoryId) => {
   }
 };
 
+export const fetchProducts = async () => {
+  try {
+    const response = await api.get("/products"); // ✅ 모든 상품 가져오기
+    return response.data;
+  } catch (error) {
+    console.error("❌ 상품 불러오기 실패:", error);
+    return [];
+  }
+};
+
+
+
 /* ✅ 상품 추가 (관리자 전용) */
 export const addProduct = async (productData) => {
   try {
