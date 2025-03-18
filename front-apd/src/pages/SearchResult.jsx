@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchProducts } from "../api/api"; // ✅ 전체 상품 가져오는 API
+import { fetchProducts } from "../api/productApi"; // ✅ 전체 상품 가져오는 API
 import ProductList from "../components/ProductList";
 
 const SearchResult = () => {

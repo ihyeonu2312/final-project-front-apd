@@ -17,3 +17,29 @@ export const deleteCartItem = async (cartItemId) => {
 export const updateCartItemQuantity = async (cartItemId, quantity) => {
     await axios.put(`${API_BASE_URL}/item/${cartItemId}`, { quantity });
 };
+
+// ✅ 장바구니에 상품 추가 (새로운 API)
+export const addToCart = async (productId, quantity = 1) => {
+    try {
+        const token = localStorage.getItem("token"); // ✅ JWT 가져오기
+        if (!token) {
+            console.error("❌ JWT 토큰이 없습니다. 로그인 필요!");
+            return;
+        }
+
+        const response = await axios.post(
+            `${API_BASE_URL}/add`,
+            { productId, quantity },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
+            }
+        );
+        
+        console.log("✅ 장바구니 추가 성공:", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("❌ 장바구니 추가 실패:", error);
+        throw error;
+    }
+};
