@@ -12,10 +12,23 @@ const Cart = () => {
 
   // ✅ 장바구니 데이터 불러오기 (JWT 토큰 포함)
   const fetchCart = () => {
-    axios.get("http://localhost:8080/cart", { withCredentials: true })
+    const token = localStorage.getItem("token"); // ✅ 저장된 JWT 가져오기
+    if (!token) {
+      console.error("JWT 토큰 없음, 로그인 필요");
+      return;
+    }
+  
+    axios.get("http://localhost:8080/cart", {
+        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 포함
+        withCredentials: true,
+      })
       .then(res => {
-        console.log(res.data); // 응답 데이터 확인
-        setCartItems(res.data.items);
+        console.log("✅ 장바구니 응답 데이터:", res.data);
+    
+        if (!res.data || Object.keys(res.data).length === 0) {
+            console.warn("⚠️ 빈 응답 또는 null 데이터");
+        }
+        setCartItems(res.data.items || res.data.cartItems || res.data); // 구조에 따라 수정 필요
         setLoading(false);
       })
       .catch(err => {
@@ -23,6 +36,7 @@ const Cart = () => {
         setLoading(false);
       });
   };
+  
 
   useEffect(() => {
     fetchCart(); // 페이지 로드 시 장바구니 데이터 가져오기
@@ -30,10 +44,14 @@ const Cart = () => {
 
   // ✅ 장바구니에서 상품 삭제
   const handleRemoveItem = (productId) => {
-    axios.delete(`http://localhost:8080/cart/remove/${productId}`, { withCredentials: true })
+    const token = localStorage.getItem("token");
+    axios.delete(`http://localhost:8080/cart/remove/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 추가
+        withCredentials: true,
+      })
       .then(() => {
         alert("상품이 장바구니에서 삭제되었습니다.");
-        fetchCart(); // ✅ 삭제 후 최신 데이터 불러오기
+        fetchCart();
       })
       .catch(err => console.error("상품 삭제 실패:", err));
   };
@@ -41,11 +59,19 @@ const Cart = () => {
   // ✅ 상품 수량 변경
   const handleQuantityChange = (productId, quantity) => {
     if (quantity < 1) return;
-    
-    axios.patch(`http://localhost:8080/cart/update`, { productId, quantity }, { withCredentials: true })
-      .then(() => fetchCart())  // ✅ 변경 후 최신 데이터 불러오기
-      .catch(err => console.error("수량 변경 실패:", err));
+  
+    const token = localStorage.getItem("token");
+    axios.patch(`http://localhost:8080/cart/update`, 
+      { productId, quantity },
+      {
+        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 추가
+        withCredentials: true,
+      }
+    )
+    .then(() => fetchCart())
+    .catch(err => console.error("수량 변경 실패:", err));
   };
+  
 
   // ✅ 구매 버튼 클릭 시
   const handleCheckout = () => {
