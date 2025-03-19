@@ -35,41 +35,31 @@ const ProductCard = ({ product }) => {
       </h3>
 
       {/* 가격 표시 */}
-      <p className="price">
-        <b className={hasDiscount ? "discounted-price" : "normal-price"}>
-          ₩{finalPrice.toLocaleString()}
-        </b>
-        {hasDiscount && (
-          <>
-            <span className="original-price">
-              <s>₩{originalPrice.toLocaleString()}</s>
-            </span>
-            <span className="discount-rate"> (-{discountRate}%)</span> {/* 할인율 표시 */}
-          </>
-        )}
-      </p>
+      <p className="product-card-price">
+  <b className={hasDiscount ? "discounted-price" : "normal-price"}>
+    ₩{finalPrice.toLocaleString()}
+  </b>
+  {hasDiscount && (
+    <>
+      <span className="original-price">
+        <s>₩{originalPrice.toLocaleString()}</s>
+      </span>
+      <span className="discount-rate"> (-{discountRate}%)</span>
+    </>
+  )}
+</p>
 
       {/* ⭐ 평점 */}
       <p className="rating">⭐ {product.rating?.toFixed(1) || "0.0"}</p>
 
       {/* 재고 여부 */}
-      <p
-        className={`stock-status ${
-          product.stockQuantity === 0
-            ? "out-of-stock"
-            : product.stockQuantity <= 10
-            ? "low-stock"
-            : "in-stock"
-        }`}
-      >
-        {product.stockQuantity <= 9 && (
-          <p className={`stock-status ${product.stockQuantity === 0 ? "out-of-stock" : "low-stock"}`}>
-            {product.stockQuantity === 0
-              ? "❌ 품절"
-              : `⚠️ 품절 임박 (${product.stockQuantity}개 남음)`}
-          </p>
-        )}
-      </p>
+      <p className={`stock-status ${product.stockQuantity === 0 ? "out-of-stock" : product.stockQuantity <= 10 ? "low-stock" : "in-stock"}`}>
+  {product.stockQuantity <= 9 && (
+    <p className={`stock-status ${product.stockQuantity === 0 ? "out-of-stock" : "low-stock"}`}>
+      {product.stockQuantity === 0 ? "❌ 품절" : `⚠️ 품절 임박 (${product.stockQuantity}개 남음)`}
+    </p>
+  )}
+</p>
     </div>
   );
 };

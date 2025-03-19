@@ -51,21 +51,19 @@
   
 }
 
-.original-price {
-  
-  text-decoration: line-through;
-  margin-left: 5px;
+.product-card .original-price {
   font-size: 13.5px;
+  text-decoration: line-through;
   color: gray;
-  
+  margin-left: 5px;
 }
 
 
 .discounted-price {
   color: black; /* 빨간색 (할인된 가격) */
 }
-.discount-rate {
-  color: rgb(255, 0, 0); /* 빨간색 (할인된 가격) */
+.product-card .discount-rate {
+  color: red;
 }
 
 .normal-price {
@@ -74,17 +72,15 @@
 
 
 
-.stock-status {
+.product-card .stock-status {
   font-weight: bold;
 }
 
-.low-stock {
-  margin-top: -8px;
+.product-card .low-stock {
   color: orange; /* ✅ 품절 임박 (1~9개) */
 }
 
-.out-of-stock {
-  margin-top: -8px;
+.product-card .out-of-stock {
   color: red; /* ✅ 품절 (0개) */
 }
 
