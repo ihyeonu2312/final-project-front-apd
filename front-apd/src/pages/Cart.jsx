@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,9 +14,16 @@ const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const memberId = localStorage.getItem("memberId");
 
   // ✅ 장바구니 데이터 불러오기
   const loadCart = async () => {
+    if (!memberId) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
+
     try {
       const data = await fetchCartItems();
       console.log("🛒 [DEBUG] 장바구니 데이터:", data); // ✅ 응답 데이터 확인
@@ -41,10 +49,10 @@ const Cart = () => {
 
   const handleRemoveItem = async (productId) => {
     const memberId = localStorage.getItem("memberId"); // 로컬 스토리지에서 memberId 가져오기
-    if (!memberId) {
-        console.error("❌ 회원 ID 없음. 로그인 필요!");
-        return;
-    }
+    // if (!memberId) {
+    //     console.error("❌ 회원 ID 없음. 로그인 필요!");
+    //     return;
+    // }
     try {
         await deleteCartItem(memberId, productId);
         alert("상품이 장바구니에서 삭제되었습니다.");
@@ -67,12 +75,32 @@ const Cart = () => {
   };
 
   // ✅ 구매 버튼 클릭 시
-  const handleCheckout = () => {
+  const handleCheckout = async() => {
+    if (!memberId) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     if (cartItems.length === 0) {
       alert("장바구니가 비어 있습니다.");
       return;
     }
-    navigate("/checkout");
+
+    console.log("✅ 주문 생성 요청 시작");
+
+    try {
+      const response = await axios.post("http://localhost:8080/api/orders/create", { memberId }, { withCredentials: true });
+
+      console.log("✅ 주문 생성 성공:", response.data);
+
+      if (response.status === 200) {
+        alert("주문이 성공적으로 생성되었습니다!");
+        navigate("/orders"); // ✅ 주문 내역 페이지로 이동
+      }
+    } catch (error) {
+      console.error("❌ 주문 생성 실패:", error.response?.data || error);
+      alert("주문 생성 중 오류가 발생했습니다.");
+    }
   };
 
   return (
