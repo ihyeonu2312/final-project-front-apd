@@ -18,6 +18,7 @@ const Cart = () => {
   const loadCart = async () => {
     try {
       const data = await fetchCartItems();
+      console.log("🛒 [DEBUG] 장바구니 데이터:", data); // ✅ 응답 데이터 확인
       setCartItems(
         (data.items || data.cartItems || data || []).map((item) => ({
           productId: item.productId || 0,
