@@ -1,77 +1,69 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import {
+  fetchCartItems,
+  deleteCartItem,
+  updateCartItemQuantity,
+} from "../api/cartApi";
 import MyPageSidebar from "../components/MyPageSidebar";
-import "../styles/MyPage.css"; 
-import "../styles/Cart.css"; 
+import "../styles/MyPage.css";
+import "../styles/Cart.css";
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [loading, setLoading] = useState(true);
 
-  // ✅ 장바구니 데이터 불러오기 (JWT 토큰 포함)
-  const fetchCart = () => {
-    const token = localStorage.getItem("token"); // ✅ 저장된 JWT 가져오기
-    if (!token) {
-      console.error("JWT 토큰 없음, 로그인 필요");
-      return;
+  // ✅ 장바구니 데이터 불러오기
+  const loadCart = async () => {
+    try {
+      const data = await fetchCartItems();
+      setCartItems(
+        (data.items || data.cartItems || data || []).map((item) => ({
+          productId: item.productId || 0,
+          productName: item.productName || "이름 없음",
+          price: item.price ?? 0,
+          quantity: item.quantity ?? 1,
+          imageUrl: item.imageUrl || "https://via.placeholder.com/150",
+        }))
+      );
+    } catch (error) {
+      console.error("장바구니 조회 실패:", error);
+    } finally {
+      setLoading(false);
     }
-  
-    axios.get("http://localhost:8080/cart", {
-        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 포함
-        withCredentials: true,
-      })
-      .then(res => {
-        console.log("✅ 장바구니 응답 데이터:", res.data);
-    
-        if (!res.data || Object.keys(res.data).length === 0) {
-            console.warn("⚠️ 빈 응답 또는 null 데이터");
-        }
-        setCartItems(res.data.items || res.data.cartItems || res.data); // 구조에 따라 수정 필요
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("장바구니 조회 실패:", err);
-        setLoading(false);
-      });
   };
-  
 
   useEffect(() => {
-    fetchCart(); // 페이지 로드 시 장바구니 데이터 가져오기
+    loadCart();
   }, []);
 
-  // ✅ 장바구니에서 상품 삭제
-  const handleRemoveItem = (productId) => {
-    const token = localStorage.getItem("token");
-    axios.delete(`http://localhost:8080/cart/remove/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 추가
-        withCredentials: true,
-      })
-      .then(() => {
+  const handleRemoveItem = async (productId) => {
+    const memberId = localStorage.getItem("memberId"); // 로컬 스토리지에서 memberId 가져오기
+    if (!memberId) {
+        console.error("❌ 회원 ID 없음. 로그인 필요!");
+        return;
+    }
+    try {
+        await deleteCartItem(memberId, productId);
         alert("상품이 장바구니에서 삭제되었습니다.");
-        fetchCart();
-      })
-      .catch(err => console.error("상품 삭제 실패:", err));
-  };
+        loadCart();
+    } catch (error) {
+        console.error("상품 삭제 실패:", error);
+    }
+};
+
 
   // ✅ 상품 수량 변경
-  const handleQuantityChange = (productId, quantity) => {
+  const handleQuantityChange = async (productId, quantity) => {
     if (quantity < 1) return;
-  
-    const token = localStorage.getItem("token");
-    axios.patch(`http://localhost:8080/cart/update`, 
-      { productId, quantity },
-      {
-        headers: { Authorization: `Bearer ${token}` }, // ✅ JWT 추가
-        withCredentials: true,
-      }
-    )
-    .then(() => fetchCart())
-    .catch(err => console.error("수량 변경 실패:", err));
+    try {
+      await updateCartItemQuantity(productId, quantity);
+      loadCart();
+    } catch (error) {
+      console.error("수량 변경 실패:", error);
+    }
   };
-  
 
   // ✅ 구매 버튼 클릭 시
   const handleCheckout = () => {
@@ -84,10 +76,9 @@ const Cart = () => {
 
   return (
     <div className="mypage-container">
-      <MyPageSidebar /> {/* ✅ 공통 사이드바 사용 */}
+      <MyPageSidebar />
       <div className="content">
         <h2>장바구니</h2>
-        
         {loading ? (
           <p>로딩 중...</p>
         ) : cartItems.length === 0 ? (
@@ -113,7 +104,6 @@ const Cart = () => {
             ))}
           </ul>
         )}
-        
         <button className="checkout-button" onClick={handleCheckout}>구매하기</button>
       </div>
     </div>

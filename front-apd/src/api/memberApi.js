@@ -14,7 +14,18 @@ export const loginRequest = async (credentials) => {
   try {
     const response = await axios.post(`${API_URL}/auth/login`, credentials);
 
-    saveToken(response.data.token); // ✅ JWT 저장
+    console.log("🔍 로그인 API 응답:", response.data); // ✅ 응답 확인
+
+    // ✅ JWT 토큰 저장
+    saveToken(response.data.token);
+
+    // ✅ memberId 저장
+    if (response.data.memberId) {
+      localStorage.setItem("memberId", response.data.memberId);
+    } else {
+      console.warn("⚠️ memberId가 로그인 응답에 없습니다.");
+    }
+
     return response.data;
   } catch (error) {
     throw new Error(
@@ -22,6 +33,7 @@ export const loginRequest = async (credentials) => {
     );
   }
 };
+
 
 /* 🔹 카카오 로그인 요청 */
 export const kakaoLogin = async (code) => {

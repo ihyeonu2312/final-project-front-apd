@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/cart'; // ✅ 수정
+const API_BASE_URL = 'http://localhost:8080/api/cart'; // ✅ 수정
 
 // ✅ 장바구니 항목 불러오기
 export const fetchCartItems = async () => {
@@ -12,20 +12,31 @@ export const fetchCartItems = async () => {
 };
 
 // ✅ 장바구니 아이템 삭제
-export const deleteCartItem = async (productId) => { // `cartItemId` -> `productId` 변경
+export const deleteCartItem = async (memberId, productId) => {
     const token = localStorage.getItem("token");
-    await axios.delete(`${API_BASE_URL}/${productId}/remove`, {
+    await axios.delete(`${API_BASE_URL}/${memberId}/remove/${productId}`, {  
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
     });
 };
 
+
 // ✅ 장바구니 아이템 수량 변경
 export const updateCartItemQuantity = async (productId, quantity) => {
     const token = localStorage.getItem("token");
-    await axios.patch(`${API_BASE_URL}/${productId}/update`, { quantity }, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true,
+    const memberId = localStorage.getItem("memberId");
+
+    if (!memberId) {
+        console.error("❌ 회원 ID가 없습니다. 로그인 필요!");
+        return;
+    }
+
+    await axios.patch(`${API_BASE_URL}/update`, { memberId, productId, quantity }, { // ✅ URL 변경
+        headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        withCredentials: true, // ✅ CORS 문제 방지
     });
 };
 

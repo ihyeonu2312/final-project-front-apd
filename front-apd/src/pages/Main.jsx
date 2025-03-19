@@ -1,6 +1,8 @@
 import React from "react";
 
 const MainPage = () => {
+  console.log("🔍 저장된 memberId:", localStorage.getItem("memberId"));
+
   return (
     <div className="main-container">
       <h1>메인 페이지</h1>
