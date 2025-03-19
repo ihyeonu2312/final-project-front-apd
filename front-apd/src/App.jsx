@@ -11,7 +11,6 @@ import UserRoutes from "./routes/UserRoutes";
 import CategoryPage from "./pages/Category";
 import TestCategory1 from "./pages/TestCategory1";
 import SearchResult from "./pages/SearchResult"; // 🔍 검색 결과 페이지 추가
-import OrderHistoryPage from "./pages/OrderHistoryPage";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 
@@ -37,7 +36,6 @@ function App() {
           <Route path="/category/test" element={<TestCategory1 />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/search" element={<SearchResult />} />
-          <Route path="/orders" element={<OrderHistoryPage />} />
           <Route path="/product/:productId" element={<ProductDetail />} /> 
           <Route path="*" element={<NotFound />} />
         </Routes>

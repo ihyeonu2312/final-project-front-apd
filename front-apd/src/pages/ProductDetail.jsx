@@ -36,7 +36,7 @@ const ProductDetail = () => {
     try {
       await addToCart(product.productId, quantity);
       alert("✅ 장바구니에 추가되었습니다!");
-      navigate("/cart");
+      navigate("/user/cart");
     } catch (error) {
       alert("❌ 장바구니 추가 실패!");
     }

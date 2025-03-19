@@ -95,7 +95,7 @@ const Cart = () => {
 
       if (response.status === 200) {
         alert("주문이 성공적으로 생성되었습니다!");
-        navigate("/orders"); // ✅ 주문 내역 페이지로 이동
+        navigate("/user/my-orders"); // ✅ 주문 내역 페이지로 이동
       }
     } catch (error) {
       console.error("❌ 주문 생성 실패:", error.response?.data || error);
