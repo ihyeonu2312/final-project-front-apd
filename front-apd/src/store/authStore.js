@@ -13,10 +13,12 @@ export const useAuthStore = create((set) => ({
       
       // ✅ 토큰 & 유저 정보 저장
       localStorage.setItem("token", data.token);
+      localStorage.setItem("memberId", data.memberId); // ✅ memberId 저장
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       
       // ✅ 로그인 후 프로필 정보 가져오기
       const userProfile = await fetchUserProfile();
+      userProfile.memberId = data.memberId;
       localStorage.setItem("user", JSON.stringify(userProfile)); // ✅ 유저 정보 저장
       set({ user: userProfile, token: data.token });
 
@@ -85,6 +87,7 @@ export const useAuthStore = create((set) => ({
     try {
       const token = localStorage.getItem("token");
       const storedUser = localStorage.getItem("user");
+      const storedMemberId = localStorage.getItem("memberId");
 
       if (!token) return;
 
@@ -94,6 +97,12 @@ export const useAuthStore = create((set) => ({
         set({ user: JSON.parse(storedUser), token });
       } else {
         const userProfile = await fetchUserProfile();
+
+        console.log("🛠 불러온 프로필 데이터:", userProfile); // 🔍 프로필 데이터 확인
+            // ✅ memberId 추가
+            if (storedMemberId) {
+                userProfile.memberId = storedMemberId;
+            }
         localStorage.setItem("user", JSON.stringify(userProfile)); // ✅ 유저 정보 저장
         set({ user: userProfile, token });
       }
@@ -101,6 +110,7 @@ export const useAuthStore = create((set) => ({
       console.error("프로필 불러오기 실패:", error);
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      localStorage.removeItem("memberId"); // ✅ memberId도 삭제
       set({ user: null, token: null });
     }
   }
