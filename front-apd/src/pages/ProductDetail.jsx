@@ -89,6 +89,9 @@ const ProductDetail = () => {
           <button className="add-to-cart" onClick={handleAddToCart}>
             장바구니 추가
           </button>
+          <button className="buy-now" >
+            구매하기
+          </button>
         </div>
 
         {/* 리뷰 섹션 */}
