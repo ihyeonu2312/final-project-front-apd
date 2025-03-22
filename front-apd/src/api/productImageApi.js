@@ -12,3 +12,15 @@ export const getProductImages = async (productId) => {
     return [];
   }
 };
+
+// ✅ 특정 상품의 상세 이미지 목록 가져오기
+export const getProductDetailImages = async (productId) => {
+  try {
+    // 🔧 'images' 제거! (백엔드와 맞게)
+    const response = await axios.get(`${API_BASE_URL}/${productId}/detail-images`);
+    return response.data;
+  } catch (error) {
+    console.error("🚨 상품 상세 이미지 데이터를 불러오는 데 실패했습니다:", error);
+    return [];
+  }
+};

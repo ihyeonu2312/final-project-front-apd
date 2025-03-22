@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { fetchProductById } from "../api/productApi"; // ✅ 상품 정보 가져오기
 import { addToCart } from "../api/cartApi"; // ✅ 장바구니 추가 API
 import ProductImageGallery from "../components/ProductImageGallery"; // ✅ 추가
+import ProductDetailImageGallery from "../components/ProductDetailImageGallery";
+
 import "../styles/ProductDetail.css";
 
 const ProductDetail = () => {
@@ -46,73 +48,89 @@ const ProductDetail = () => {
   if (!product) return <p>❌ 상품을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="product-detail-container">
-      {/* 상품 이미지 갤러리 적용 */}
-      <div className="product-image-section">
-        <ProductImageGallery productId={product.productId} />
+    <div className="product-detail-container px-6 py-10 space-y-10">
+  
+      {/* ✅ 상단: 대표 이미지 + 상품 정보 */}
+      <div className="flex flex-col md:flex-row gap-10">
+        
+        {/* 대표 이미지 */}
+        <div className="flex-1">
+          <ProductImageGallery productId={product.productId} />
+        </div>
+  
+        {/* 상품 정보 */}
+        <div className="w-full md:w-96 space-y-4">
+          <h2 className="text-2xl font-bold">{product.name}</h2>
+  
+          <p className="product-detail-price text-xl">
+            <b>₩{product.price.toLocaleString()}</b>
+            {product.originalPrice > product.price && (
+              <>
+                <span className="original-price text-gray-500 ml-2">
+                  <s>₩{product.originalPrice.toLocaleString()}</s>
+                </span>
+                <span className="discount-rate1 text-red-500 ml-1">
+                  (-{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%)
+                </span>
+              </>
+            )}
+          </p>
+  
+          <p className="stock-status">
+            {product.stockQuantity === 0
+              ? "❌ 품절"
+              : `📦 재고 있음 (${product.stockQuantity}개 남음)`}
+          </p>
+  
+          <div className="quantity-selector flex items-center gap-2">
+            <label>수량:</label>
+            <input
+              type="number"
+              min="1"
+              max={product.stockQuantity}
+              value={quantity}
+              onChange={(e) =>
+                setQuantity(Math.min(Math.max(1, Number(e.target.value)), product.stockQuantity))
+              }
+              className="border rounded w-20 text-center"
+            />
+          </div>
+  
+          <div className="button-group flex gap-4 mt-4">
+            <button className="add-to-cart px-4 py-2 bg-black text-white rounded" onClick={handleAddToCart}>
+              장바구니 추가
+            </button>
+            <button className="buy-now px-4 py-2 border rounded">
+              구매하기
+            </button>
+          </div>
+  
+          <div className="reviews mt-6">
+            <h3 className="text-lg font-semibold">상품 리뷰</h3>
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
+                <div key={index} className="review border-t py-2">
+                  <p>
+                    <strong>{review.user}</strong>: {review.comment}
+                  </p>
+                  <p>⭐ {review.rating}/5</p>
+                </div>
+              ))
+            ) : (
+              <p>아직 리뷰가 없습니다.</p>
+            )}
+          </div>
+        </div>
       </div>
-
-      {/* 제품 정보 영역 */}
-      <div className="product-info-section">
-        <h2>{product.name}</h2>
-        <p className="product-detail-price">
-          <b>₩{product.price.toLocaleString()}</b>
-          {product.originalPrice > product.price && (
-            <>
-              <span className="original-price">
-                <s>₩{product.originalPrice.toLocaleString()}</s>
-              </span>
-              <span className="discount-rate1">
-                (-{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%)
-              </span>
-            </>
-          )}
-        </p>
-
-        <p className="stock-status">
-          {product.stockQuantity === 0 ? "❌ 품절" : `📦 재고 있음 (${product.stockQuantity}개 남음)`}
-        </p>
-
-        <div className="quantity-selector">
-          <label>수량: </label>
-          <input
-            type="number"
-            min="1"
-            max={product.stockQuantity}
-            value={quantity}
-            onChange={(e) => setQuantity(Math.min(Math.max(1, e.target.value), product.stockQuantity))}
-          />
-        </div>
-
-        {/* 버튼 영역 */}
-        <div className="button-group">
-          <button className="add-to-cart" onClick={handleAddToCart}>
-            장바구니 추가
-          </button>
-          <button className="buy-now" >
-            구매하기
-          </button>
-        </div>
-
-        {/* 리뷰 섹션 */}
-        <div className="reviews">
-          <h3>상품 리뷰</h3>
-          {reviews.length > 0 ? (
-            reviews.map((review, index) => (
-              <div key={index} className="review">
-                <p>
-                  <strong>{review.user}</strong>: {review.comment}
-                </p>
-                <p>⭐ {review.rating}/5</p>
-              </div>
-            ))
-          ) : (
-            <p>아직 리뷰가 없습니다.</p>
-          )}
-        </div>
+  
+      {/* ✅ 하단: 상세 이미지 갤러리 */}
+      <div className="product-detail-images">
+        <ProductDetailImageGallery productId={product.productId} />
       </div>
+  
     </div>
   );
+  
 };
 
 export default ProductDetail;
