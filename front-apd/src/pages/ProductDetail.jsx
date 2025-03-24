@@ -4,8 +4,11 @@ import { fetchProductById } from "../api/productApi"; // ✅ 상품 정보 가�
 import { addToCart } from "../api/cartApi"; // ✅ 장바구니 추가 API
 import ProductImageGallery from "../components/ProductImageGallery"; // ✅ 추가
 import ProductDetailImageGallery from "../components/ProductDetailImageGallery";
+import ReviewList from "../components/ReviewList";
 
 import "../styles/ProductDetail.css";
+
+
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -106,20 +109,8 @@ const ProductDetail = () => {
           </div>
   
           <div className="reviews mt-6">
-            <h3 className="text-lg font-semibold">상품 리뷰</h3>
-            {reviews.length > 0 ? (
-              reviews.map((review, index) => (
-                <div key={index} className="review border-t py-2">
-                  <p>
-                    <strong>{review.user}</strong>: {review.comment}
-                  </p>
-                  <p>⭐ {review.rating}/5</p>
-                </div>
-              ))
-            ) : (
-              <p>아직 리뷰가 없습니다.</p>
-            )}
-          </div>
+  <ReviewList productId={product.productId} />
+</div>
         </div>
       </div>
   
