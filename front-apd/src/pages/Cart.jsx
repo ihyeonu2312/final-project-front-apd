@@ -9,14 +9,17 @@ import {
 import MyPageSidebar from "../components/MyPageSidebar";
 import "../styles/MyPage.css";
 import "../styles/Cart.css";
+import OrderConfirmModal from "../components/OrderConfirmModal"; // ✅ 모달 임포트
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false); // ✅ 추가
+  const [preparedOrderId, setPreparedOrderId] = useState(null);    // ✅ 추가
   const memberId = localStorage.getItem("memberId");
 
-  // ✅ 장바구니 데이터 불러오기
+  // ✅ 장바구니 불러오기
   const loadCart = async () => {
     if (!memberId) {
       alert("로그인이 필요합니다.");
@@ -26,7 +29,7 @@ const Cart = () => {
 
     try {
       const data = await fetchCartItems();
-      console.log("🛒 [DEBUG] 장바구니 데이터:", data); // ✅ 응답 데이터 확인
+      console.log("🛒 [DEBUG] 장바구니 데이터:", data);
       setCartItems(
         (data.items || data.cartItems || data || []).map((item) => ({
           productId: item.productId || 0,
@@ -47,23 +50,18 @@ const Cart = () => {
     loadCart();
   }, []);
 
+  // ✅ 상품 삭제
   const handleRemoveItem = async (productId) => {
-    const memberId = localStorage.getItem("memberId"); // 로컬 스토리지에서 memberId 가져오기
-    // if (!memberId) {
-    //     console.error("❌ 회원 ID 없음. 로그인 필요!");
-    //     return;
-    // }
     try {
-        await deleteCartItem(memberId, productId);
-        alert("상품이 장바구니에서 삭제되었습니다.");
-        loadCart();
+      await deleteCartItem(memberId, productId);
+      alert("상품이 장바구니에서 삭제되었습니다.");
+      loadCart();
     } catch (error) {
-        console.error("상품 삭제 실패:", error);
+      console.error("상품 삭제 실패:", error);
     }
-};
+  };
 
-
-  // ✅ 상품 수량 변경
+  // ✅ 수량 변경
   const handleQuantityChange = async (productId, quantity) => {
     if (quantity < 1) return;
     try {
@@ -74,23 +72,22 @@ const Cart = () => {
     }
   };
 
-  // ✅ 구매 버튼 클릭 시
+  // ✅ 1단계: 주문 생성만
   const handleCheckout = async () => {
     if (!memberId) {
       alert("로그인이 필요합니다.");
       navigate("/login");
       return;
     }
-  
+
     if (cartItems.length === 0) {
       alert("장바구니가 비어 있습니다.");
       return;
     }
-  
+
     console.log("✅ 주문 생성 요청 시작");
-  
+
     try {
-      // ✅ 1. 주문 생성 (prepareOrder)
       const response = await axios.post(
         "http://localhost:8080/api/orders/prepare",
         { memberId },
@@ -101,40 +98,50 @@ const Cart = () => {
           withCredentials: true,
         }
       );
-      if (!response.data?.orderId) {
-        throw new Error("주문 생성 실패: orderId 없음");
-      }
+
+      const orderId = response.data?.orderId;
+      if (!orderId) throw new Error("주문 생성 실패: orderId 없음");
+
+      console.log("✅ 주문 ID:", orderId);
+      setPreparedOrderId(orderId);
+      setShowConfirmPopup(true); // ✅ 모달 열기
+    } catch (error) {
+      console.error("❌ 주문 생성 실패:", error);
+      alert("주문 생성 중 오류가 발생했습니다.");
+    }
+  };
+
+  // ✅ 2단계: 주문 확정
+  const handlePaymentConfirm = async () => {
+    if (!memberId || cartItems.length === 0) return;
+  
+    try {
+      const response = await axios.post("http://localhost:8080/api/orders/prepare", { memberId }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        withCredentials: true,
+      });
   
       const orderId = response.data.orderId;
-      console.log("✅ 주문 ID:", orderId);
-      console.log("✅ 주문 생성 성공:", response.data);
   
-      // ✅ 2. 주문 완료 처리 (completeOrder)
-      await axios.patch(
-        `http://localhost:8080/api/orders/${orderId}/complete`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          withCredentials: true,
-        }
-      );
-      console.log("✅ 주문 완료 처리 성공");
-  
-      // ✅ 3. 장바구니 다시 불러오기 (프론트 상태 초기화)
-      await loadCart(); // 이미 선언된 장바구니 로딩 함수
-  
-      alert("주문이 성공적으로 완료되었습니다!");
-      navigate("/user/my-orders");
+      const paymentData = {
+        clientId: "S2_1ec4a5325bc740acb188f9f1b51df216",
+        method: "CARD",
+        orderId: `ORDER-${orderId}`,
+        amount: response.data.totalAmount,
+        goodsName: "장바구니 상품",
+        returnUrl: "http://localhost:3000/payment-success",
+        buyerName: "홍길동",
+        buyerEmail: "test@example.com",
+      };
+      window.NICEPAY.callPay(paymentData);
+      setShowConfirmPopup(false); // 모달 닫기
   
     } catch (error) {
-      console.error("❌ 주문 처리 중 오류:", error);
-      alert("주문 처리 중 오류가 발생했습니다.");
+      console.error("❌ 결제 시작 오류:", error);
+      alert("결제를 시작할 수 없습니다.");
     }
   };
   
-
   return (
     <div className="mypage-container">
       <MyPageSidebar />
@@ -165,7 +172,16 @@ const Cart = () => {
             ))}
           </ul>
         )}
+
         <button className="checkout-button" onClick={handleCheckout}>구매하기</button>
+
+        {/* ✅ 주문 확인 모달 */}
+        {showConfirmPopup && (
+          <OrderConfirmModal
+            onConfirm={handlePaymentConfirm}
+            onCancel={() => setShowConfirmPopup(false)}
+          />
+        )}
       </div>
     </div>
   );

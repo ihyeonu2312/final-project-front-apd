@@ -12,6 +12,7 @@ import CategoryPage from "./pages/Category";
 import TestCategory1 from "./pages/TestCategory1";
 import SearchResult from "./pages/SearchResult"; // 🔍 검색 결과 페이지 추가
 import ProductDetail from "./pages/ProductDetail";
+import PaymentSuccess from "./pages/PaymentSuccess";
 import NotFound from "./pages/NotFound";
 
 
@@ -37,6 +38,8 @@ function App() {
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/search" element={<SearchResult />} />
           <Route path="/product/:productId" element={<ProductDetail />} /> 
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
