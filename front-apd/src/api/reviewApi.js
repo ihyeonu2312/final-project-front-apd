@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "/api/reviews";
+const BASE_URL = "http://localhost:8080/api/reviews";
 
 export const fetchAllReviews = async (productId) => {
   const res = await axios.get(`${BASE_URL}/product/${productId}`);

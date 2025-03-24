@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useAuthStore } from "../store/authStore";
+
 import {
   fetchAllReviews,
   fetchAverageRating,
@@ -19,6 +21,7 @@ const formatDate = (dateStr) => {
 };
 
 const ReviewList = ({ productId }) => {
+  const { user } = useAuthStore();
   const [reviews, setReviews] = useState([]);
   const [visibleCount, setVisibleCount] = useState(3);
   const [averageRating, setAverageRating] = useState(0);
@@ -26,6 +29,7 @@ const ReviewList = ({ productId }) => {
   const [newRating, setNewRating] = useState(5); // 기본 별점
 
   useEffect(() => {
+    
     const loadData = async () => {
       const [reviewData, avgRating] = await Promise.all([
         fetchAllReviews(productId),
@@ -48,7 +52,8 @@ const ReviewList = ({ productId }) => {
 
     const reviewDto = {
       productId,
-      memberId: 1, // 🔧 테스트용 memberId, 로그인 연동되면 교체
+      memberId: user?.id || 1,
+      // 🔧 테스트용 memberId, 로그인 연동되면 교체
       rating: newRating,
       comment: newComment,
       reviewImageUrl: null,
