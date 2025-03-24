@@ -75,33 +75,65 @@ const Cart = () => {
   };
 
   // ✅ 구매 버튼 클릭 시
-  const handleCheckout = async() => {
+  const handleCheckout = async () => {
     if (!memberId) {
       alert("로그인이 필요합니다.");
       navigate("/login");
       return;
     }
+  
     if (cartItems.length === 0) {
       alert("장바구니가 비어 있습니다.");
       return;
     }
-
+  
     console.log("✅ 주문 생성 요청 시작");
-
+  
     try {
-      const response = await axios.post("http://localhost:8080/api/orders/create", { memberId }, { withCredentials: true });
-
-      console.log("✅ 주문 생성 성공:", response.data);
-
-      if (response.status === 200) {
-        alert("주문이 성공적으로 생성되었습니다!");
-        navigate("/user/my-orders"); // ✅ 주문 내역 페이지로 이동
+      // ✅ 1. 주문 생성 (prepareOrder)
+      const response = await axios.post(
+        "http://localhost:8080/api/orders/prepare",
+        { memberId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      if (!response.data?.orderId) {
+        throw new Error("주문 생성 실패: orderId 없음");
       }
+  
+      const orderId = response.data.orderId;
+      console.log("✅ 주문 ID:", orderId);
+      console.log("✅ 주문 생성 성공:", response.data);
+  
+      // ✅ 2. 주문 완료 처리 (completeOrder)
+      await axios.patch(
+        `http://localhost:8080/api/orders/${orderId}/complete`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
+      console.log("✅ 주문 완료 처리 성공");
+  
+      // ✅ 3. 장바구니 다시 불러오기 (프론트 상태 초기화)
+      await loadCart(); // 이미 선언된 장바구니 로딩 함수
+  
+      alert("주문이 성공적으로 완료되었습니다!");
+      navigate("/user/my-orders");
+  
     } catch (error) {
-      console.error("❌ 주문 생성 실패:", error.response?.data || error);
-      alert("주문 생성 중 오류가 발생했습니다.");
+      console.error("❌ 주문 처리 중 오류:", error);
+      alert("주문 처리 중 오류가 발생했습니다.");
     }
   };
+  
 
   return (
     <div className="mypage-container">

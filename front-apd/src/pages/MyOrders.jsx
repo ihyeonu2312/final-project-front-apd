@@ -42,7 +42,7 @@ const MyOrders = () => {
   const loadOrders = async () => {
     setLoading(true);
     try {
-      const data = await orderApi.fetchOrders(user.memberId);
+      const data = await orderApi.fetchOrders(user.memberId); // ✅ 주문 내역 조회 API
       setOrders(data);
     } catch (error) {
       alert("주문 내역을 불러오는 데 실패했습니다.");

@@ -40,12 +40,18 @@ const ProductDetail = () => {
   const handleAddToCart = async () => {
     try {
       await addToCart(product.productId, quantity);
-      alert("✅ 장바구니에 추가되었습니다!");
-      navigate("/user/cart");
+      const confirmMove = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
+      if (confirmMove) {
+        navigate("/user/cart");
+      } else {
+        // 아무것도 안 해도 됨. 그냥 현재 페이지 유지
+      }
     } catch (error) {
       alert("❌ 장바구니 추가 실패!");
+      console.error(error);
     }
   };
+  
 
   if (loading) return <p>⏳ 상품 정보를 불러오는 중...</p>;
   if (!product) return <p>❌ 상품을 찾을 수 없습니다.</p>;
