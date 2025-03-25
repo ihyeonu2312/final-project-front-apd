@@ -6,7 +6,11 @@ const UsedProductCard = ({ product }) => {
   return (
     <div
       className="bg-white p-4 rounded-xl shadow hover:shadow-md transition cursor-pointer"
-      onClick={() => navigate(`/used-products/${product.usedProductId}`)} // ✅ 클릭 시 상세 이동
+      onClick={() => {
+        if (product?.id) navigate(`/used-products/${product.id}`);
+        else console.warn("🚨 상품 ID가 없습니다:", product);
+      }}
+      // ✅ 클릭 시 상세 이동
     >
       <img
         src={product.images?.[0]?.imageUrl || "https://placehold.co/300x200"}

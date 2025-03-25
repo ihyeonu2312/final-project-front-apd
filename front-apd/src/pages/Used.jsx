@@ -35,7 +35,7 @@ const Used = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">중고상품 목록</h1>
+      <h1 className="text-2x1 font-bold mb-4">중고상품 목록</h1>
 
       {products.length === 0 ? (
         <p>등록된 중고상품이 없습니다.</p>

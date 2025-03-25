@@ -13,7 +13,7 @@ function MainRoutes() {
   return (
     <Routes>
       <Route path="/" element={<MainPage />} />
-      <Route path="/used" element={<UsedPage />} />
+      <Route path="/used-products" element={<UsedPage />} />
       <Route path="/used-products/:id" element={<UsedProductDetail />} />
       <Route path="/support" element={<SupportPage />} />
       <Route path="/kakao/callback" element={<KakaoCallback />} /> 
