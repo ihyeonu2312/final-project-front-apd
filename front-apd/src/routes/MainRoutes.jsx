@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import MainPage from "../pages/Main";
 import UsedPage from "../pages/Used";
+import UsedProductDetail from "../pages/UsedProductDetail";
 import SupportPage from "../pages/Support";
 import KakaoCallback from "../pages/KakaoCallback";
 
@@ -13,6 +14,7 @@ function MainRoutes() {
     <Routes>
       <Route path="/" element={<MainPage />} />
       <Route path="/used" element={<UsedPage />} />
+      <Route path="/used-products/:id" element={<UsedProductDetail />} />
       <Route path="/support" element={<SupportPage />} />
       <Route path="/kakao/callback" element={<KakaoCallback />} /> 
     </Routes>
