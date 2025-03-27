@@ -7,9 +7,14 @@ const UsedProductCard = ({ product }) => {
     <div
       className="bg-white p-4 rounded-xl shadow hover:shadow-md transition cursor-pointer"
       onClick={() => {
-        if (product?.id) navigate(`/used-products/${product.id}`);
-        else console.warn("🚨 상품 ID가 없습니다:", product);
+        if (product?.id  !== undefined && product?.id  !== null) {
+          navigate(`/used-products/${product.id }`);
+        } else {
+          console.warn("🚨 상품 ID가 없습니다:", product);
+        }
+        
       }}
+      
       // ✅ 클릭 시 상세 이동
     >
       <img

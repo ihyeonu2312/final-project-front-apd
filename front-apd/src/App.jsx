@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import "./App.css";
+import './index.css';
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LoginPage from "./pages/Login";
