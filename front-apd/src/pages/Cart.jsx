@@ -10,6 +10,7 @@ import MyPageSidebar from "../components/MyPageSidebar";
 import "../styles/MyPage.css";
 import "../styles/Cart.css";
 import OrderConfirmModal from "../components/OrderConfirmModal"; // ✅ 모달 임포트
+import { callPay } from "../utils/payment";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -111,15 +112,20 @@ const Cart = () => {
     }
   };
 
-  // ✅ 2단계: 주문 확정
   const handlePaymentConfirm = async () => {
     if (!memberId || cartItems.length === 0) return;
   
     try {
-      const response = await axios.post("http://localhost:8080/api/orders/prepare", { memberId }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        "http://localhost:8080/api/orders/prepare",
+        { memberId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          withCredentials: true,
+        }
+      );
   
       const orderId = response.data.orderId;
   
@@ -133,14 +139,15 @@ const Cart = () => {
         buyerName: "홍길동",
         buyerEmail: "test@example.com",
       };
-      window.NICEPAY.callPay(paymentData);
-      setShowConfirmPopup(false); // 모달 닫기
   
+      callPay(`ORDER-${orderId}`, response.data.totalAmount);
+      setShowConfirmPopup(false); // 모달 닫기
     } catch (error) {
       console.error("❌ 결제 시작 오류:", error);
       alert("결제를 시작할 수 없습니다.");
     }
   };
+  
   
   return (
     <div className="mypage-container">
