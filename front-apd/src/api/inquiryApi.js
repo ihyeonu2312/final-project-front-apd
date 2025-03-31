@@ -40,3 +40,10 @@ export const createInquiryResponse = async (data) => {
   const res = await api.post(`${ADMIN_BASE_URL}/response`, data);
   return res.data;
 };
+
+// 관리자 전체 문의 목록 조회
+export const getAllInquiriesForAdmin = async () => {
+  const res = await api.get(`${ADMIN_BASE_URL}`);
+  return res.data;
+};
+
