@@ -10,6 +10,7 @@ import SignupPage from "./pages/Signup";
 import ResetPassword from "./pages/ResetPassword";
 import MainRoutes from "./routes/MainRoutes";
 import UserRoutes from "./routes/UserRoutes";
+import AdminRoutes from "./routes/AdminRoutes";
 import CategoryPage from "./pages/Category";
 import TestCategory1 from "./pages/TestCategory1";
 import SearchResult from "./pages/SearchResult"; // 🔍 검색 결과 페이지 추가
@@ -36,6 +37,7 @@ function App() {
         <Route path="/*" element={<MainRoutes />} />
 
           <Route path="/user/*" element={<UserRoutes />} />
+          <Route path="/admin/*" element={<AdminRoutes />} />
           <Route path="/category/test" element={<TestCategory1 />} />
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/search" element={<SearchResult />} />
