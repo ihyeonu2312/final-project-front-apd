@@ -7,10 +7,7 @@ import MyReviewsPage from "../pages/MyReviews";
 import CartPage from "../pages/Cart";
 import DeleteAccount from "../pages/DeleteAccount";
 
-// 고객센터 페이지 (👈 추가)
-import MyInquiries from "../pages/inquiry/MyInquiries";
-import InquiryWrite from "../pages/inquiry/InquiryWrite";
-import InquiryDetail from "../pages/inquiry/InquiryDetail";
+
 
 
 console.log("✅ AppRoutes 컴포넌트 파일 로드됨!");
@@ -27,11 +24,7 @@ function UserRoutes() {
       <Route path="/cart" element={<CartPage />} />
       <Route path="/delete-account" element={<DeleteAccount />} />
 
-       {/* 🆕 고객센터 라우트 */}
-       <Route path="/inquiries" element={<MyInquiries />} />
-      <Route path="/inquiries/write" element={<InquiryWrite />} />
-      <Route path="/inquiries/:inquiryId" element={<InquiryDetail />} />
-
+   
 
     </Routes>
   );

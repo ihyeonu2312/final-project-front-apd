@@ -137,9 +137,12 @@ const Header = () => {
           <li><Link to="/category/패션의류-잡화">패션의류/잡화</Link></li>
           <li><Link to="/category/생활용품">생활용품</Link></li>
           <li><Link to="/used-products">중고거래</Link></li>
-          <li><Link to={user?.role === '관리자' ? '/admin/inquiries' : '/inquiries'}>
-  고객센터
-</Link></li>
+          <li>
+  <Link to={user?.role === '관리자' ? '/admin' : '/inquiries'}>
+    {user?.role === '관리자' ? 'admin' : '고객센터'}
+  </Link>
+</li>
+
         </ul>
       </div>
     </header>
