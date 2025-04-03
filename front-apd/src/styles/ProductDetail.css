@@ -8,6 +8,24 @@
   margin: 20px auto;
   padding: 20px;
 }
+.product-detail-images {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.outer-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
 
 /* ✅ 상품 이미지 섹션 */
 .product-image-section {

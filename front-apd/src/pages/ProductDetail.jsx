@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchProductById } from "../api/productApi"; // ✅ 상품 정보 가져오기
-import { addToCart } from "../api/cartApi"; // ✅ 장바구니 추가 API
-import ProductImageGallery from "../components/ProductImageGallery"; // ✅ 추가
+import { fetchProductById } from "../api/productApi";
+import { addToCart } from "../api/cartApi";
+import ProductImageGallery from "../components/ProductImageGallery";
 import ProductDetailImageGallery from "../components/ProductDetailImageGallery";
 import ReviewList from "../components/ReviewList";
 
 import "../styles/ProductDetail.css";
-
-
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -43,34 +41,30 @@ const ProductDetail = () => {
       const confirmMove = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
       if (confirmMove) {
         navigate("/user/cart");
-      } else {
-        // 아무것도 안 해도 됨. 그냥 현재 페이지 유지
       }
     } catch (error) {
       alert("❌ 장바구니 추가 실패!");
       console.error(error);
     }
   };
-  
 
   if (loading) return <p>⏳ 상품 정보를 불러오는 중...</p>;
   if (!product) return <p>❌ 상품을 찾을 수 없습니다.</p>;
 
   return (
-    <div className="product-detail-container px-6 py-10 space-y-10">
-  
+    <div className="outer-wrapper px-6 py-10 space-y-10">
+      
       {/* ✅ 상단: 대표 이미지 + 상품 정보 */}
-      <div className="flex flex-col md:flex-row gap-10">
-        
+      <div className="product-detail-container">
         {/* 대표 이미지 */}
-        <div className="flex-1">
+        <div className="product-image-section">
           <ProductImageGallery productId={product.productId} />
         </div>
-  
+
         {/* 상품 정보 */}
-        <div className="w-full md:w-96 space-y-4">
+        <div className="product-info-section space-y-4">
           <h2 className="text-2xl font-bold">{product.name}</h2>
-  
+
           <p className="product-detail-price text-xl">
             <b>₩{product.price.toLocaleString()}</b>
             {product.originalPrice > product.price && (
@@ -84,13 +78,13 @@ const ProductDetail = () => {
               </>
             )}
           </p>
-  
+
           <p className="stock-status">
             {product.stockQuantity === 0
               ? "❌ 품절"
               : `📦 재고 있음 (${product.stockQuantity}개 남음)`}
           </p>
-  
+
           <div className="quantity-selector flex items-center gap-2">
             <label>수량:</label>
             <input
@@ -104,7 +98,7 @@ const ProductDetail = () => {
               className="border rounded w-20 text-center"
             />
           </div>
-  
+
           <div className="button-group flex gap-4 mt-4">
             <button className="add-to-cart px-4 py-2 bg-black text-white rounded" onClick={handleAddToCart}>
               장바구니 추가
@@ -113,21 +107,21 @@ const ProductDetail = () => {
               구매하기
             </button>
           </div>
-  
-          <div className="reviews mt-6">
-          <ReviewList productId={product.productId} />
-</div>
+
+          
         </div>
       </div>
-  
-      {/* ✅ 하단: 상세 이미지 갤러리 */}
+
+      {/* ✅ 하단: 상세 이미지 갤러리*/}
       <div className="product-detail-images">
         <ProductDetailImageGallery productId={product.productId} />
       </div>
-  
+      <div className="reviews mt-6">
+          <ReviewList productId={product.productId} />
+      </div>
     </div>
+    
   );
-  
 };
 
 export default ProductDetail;
