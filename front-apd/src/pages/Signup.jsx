@@ -177,7 +177,7 @@ const handleVerifyCode = async () => {
     }
 
     if (!formData.address || formData.address.trim() === "") {
-      setError("주소를 입력하세요.");
+      setError("주소를 입력해주세요.");
       return;
     }
 
