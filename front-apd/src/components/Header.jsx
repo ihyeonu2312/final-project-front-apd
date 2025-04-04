@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore"; // ✅ Zustand 상태 가져오기
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faQrcode, faUser, faCartShopping, faBars } from "@fortawesome/free-solid-svg-icons";
-import "./header.css";
+import "./Header.css";
 import logo from "../assets/logo.png";
 import qrCodeImage from "../assets/qrcode.png";
 import CategoryDropdown from "./CategoryDropdown";
