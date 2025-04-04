@@ -14,6 +14,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [selectedOptions, setSelectedOptions] = useState({});
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -36,8 +37,18 @@ const ProductDetail = () => {
   }, [productId]);
 
   const handleAddToCart = async () => {
+    const requiredOptions = product.options ? Object.keys(product.options) : [];
+    const allSelected = requiredOptions.every(
+      (key) => selectedOptions[key] && selectedOptions[key] !== ""
+    );
+
+    if (!allSelected) {
+      alert("옵션을 모두 선택해주세요!");
+      return;
+    }
+
     try {
-      await addToCart(product.productId, quantity);
+      await addToCart(product.productId, quantity, selectedOptions);
       const confirmMove = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
       if (confirmMove) {
         navigate("/user/cart");
@@ -53,7 +64,6 @@ const ProductDetail = () => {
 
   return (
     <div className="outer-wrapper px-6 py-10 space-y-10">
-      
       {/* ✅ 상단: 대표 이미지 + 상품 정보 */}
       <div className="product-detail-container">
         {/* 대표 이미지 */}
@@ -85,6 +95,29 @@ const ProductDetail = () => {
               : `📦 재고 있음 (${product.stockQuantity}개 남음)`}
           </p>
 
+          {/* ✅ 옵션 선택 UI */}
+          {product.options && Object.keys(product.options).map((optionKey) => (
+            <div key={optionKey}>
+              <label className="block font-semibold mb-1">{optionKey}:</label>
+              <select
+                className="border rounded px-2 py-1 mb-3"
+                value={selectedOptions[optionKey] || ""}
+                onChange={(e) =>
+                  setSelectedOptions((prev) => ({
+                    ...prev,
+                    [optionKey]: e.target.value
+                  }))
+                }
+              >
+                <option value="">선택하세요</option>
+                {product.options[optionKey].map((value) => (
+                  <option key={value} value={value}>{value}</option>
+                ))}
+              </select>
+            </div>
+          ))}
+
+          {/* 수량 선택 */}
           <div className="quantity-selector flex items-center gap-2">
             <label>수량:</label>
             <input
@@ -99,6 +132,7 @@ const ProductDetail = () => {
             />
           </div>
 
+          {/* 버튼 */}
           <div className="button-group flex gap-4 mt-4">
             <button className="add-to-cart px-4 py-2 bg-black text-white rounded" onClick={handleAddToCart}>
               장바구니 추가
@@ -107,20 +141,19 @@ const ProductDetail = () => {
               구매하기
             </button>
           </div>
- 
-          
         </div>
       </div>
 
-      {/* ✅ 하단: 상세 이미지 갤러리*/}
+      {/* ✅ 하단: 상세 이미지 갤러리 */}
       <div className="product-detail-images">
         <ProductDetailImageGallery productId={product.productId} />
       </div>
+
+      {/* ✅ 리뷰 섹션 */}
       <div className="reviews mt-6">
-          <ReviewList productId={product.productId} />
+        <ReviewList productId={product.productId} />
       </div>
     </div>
-    
   );
 };
 
