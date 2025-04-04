@@ -9,7 +9,8 @@
   padding: 20px;
 }
 .product-detail-images {
-  max-width: 1200px;
+  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
   margin-top: 40px;
   display: flex;
