@@ -139,7 +139,7 @@ const Header = () => {
           <li><Link to="/used-products">중고거래</Link></li>
           <li>
   <Link to={user?.role === '관리자' ? '/admin' : '/inquiries'}>
-    {user?.role === '관리자' ? 'admin' : '고객센터'}
+    {user?.role === '관리자' ? 'admin page' : '고객센터'}
   </Link>
 </li>
 
