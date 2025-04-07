@@ -128,7 +128,7 @@ const Header = () => {
                 <li><Link to="/category/beauty">뷰티</Link></li>
                 <li><Link to="/category/bags">가방</Link></li>
                 <li><Link to="/category/appliances">가전</Link></li>
-                <li><Link to="/category/home-interior">홈인테리어</Link></li>
+                <li><Link to="/category/home-interior">홈 인테리어</Link></li>
                 <li><Link to="/category/sports">스포츠</Link></li>
                 <li><Link to="/category/jewelry">쥬얼리</Link></li>
               </ul>
