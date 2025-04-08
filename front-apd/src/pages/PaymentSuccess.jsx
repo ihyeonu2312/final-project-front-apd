@@ -5,6 +5,10 @@ import axios from "axios";
 const PaymentSuccess = () => {
   const navigate = useNavigate();
 
+
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const resultCode = query.get("resultCode"); // 3001 = 결제 성공
@@ -12,7 +16,8 @@ const PaymentSuccess = () => {
     const orderId = orderIdParam?.split("-")[1];
 
     if (resultCode === "3001" && orderId) {
-      axios.patch(`http://localhost:8080/api/orders/${orderId}/complete`, {}, {
+      // 로컬 axios.patch(`http://localhost:8080/api/orders/${orderId}/complete`, {}, {
+        axios.patch(`${API_URL}/orders/${orderId}/complete`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         withCredentials: true,
       })
