@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/products"; // 백엔드 서버 주소
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/products`;
+
+// const API_BASE_URL = "http://localhost:8080/api/products"; //로컬 백엔드 서버 주소
 
 // ✅ 특정 상품의 이미지 목록 가져오기
 export const getProductImages = async (productId) => {

@@ -17,8 +17,11 @@ const KakaoCallback = () => {
       localStorage.setItem("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
+      const profileUrl = `${import.meta.env.VITE_API_BASE_URL}/user/profile`;
+      // const profileUrl = "http:localhost:8080/api/user/profile"; // 로컬전용
+
       // ✅ 서버에서 사용자 정보 가져오기
-      fetch("http://localhost:8080/api/user/profile", {
+      fetch(profileUrl, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())

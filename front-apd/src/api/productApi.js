@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api";
+const API_URL = import.meta.env.VITE_API_BASE_URL;
+
+// const API_URL = "http://localhost:8080/api"; 로컬용 주소
 
 /* 🔹 JWT 토큰 가져오기 */
 const getToken = () => localStorage.getItem("token");

@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/orders";
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/orders`;
+
+
+// const API_BASE_URL = "http://localhost:8080/api/orders"; 로컬 테스트
 
 const orderApi = {
 

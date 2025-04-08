@@ -10,7 +10,10 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
 
   const KAKAO_CLIENT_ID = "4610c131c628a71164ca55417237824b"; // 🔹 여기에 실제 클라이언트 ID 입력
-    const REDIRECT_URI = "http://localhost:8080/api/auth/kakao/callback"; // 🔹 백엔드 리다이렉트 URI
+    // const REDIRECT_URI = "http://localhost:8080/api/auth/kakao/callback"; // 🔹 백엔드 리다이렉트 URI 로컬
+
+    const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

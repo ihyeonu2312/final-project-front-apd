@@ -1,8 +1,11 @@
 // src/api/inquiryApi.js
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8080/api/inquiries';
-const ADMIN_BASE_URL = 'http://localhost:8080/api/admin/inquiries';
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/inquiries`;
+const ADMIN_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/admin/inquiries`;
+
+// const BASE_URL = 'http://localhost:8080/api/inquiries';
+// const ADMIN_BASE_URL = 'http://localhost:8080/api/admin/inquiries';
 
 // ✅ Axios 인스턴스 생성 (JWT 자동 포함)
 const api = axios.create();
