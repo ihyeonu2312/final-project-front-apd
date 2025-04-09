@@ -1,5 +1,5 @@
 [[redirects]]
   from = "/api/*"
-  to = "http://13.125.227.15:8080/api/:splat"
+  to = "https://unoeyhi.site/api/:splat"
   status = 200
   force = true
