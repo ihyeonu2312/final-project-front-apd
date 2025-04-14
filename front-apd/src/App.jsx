@@ -18,6 +18,7 @@ import ProductDetail from "./pages/ProductDetail";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import NotFound from "./pages/NotFound";
 
+console.log("✅ 현재 API URL:", import.meta.env.VITE_API_BASE_URL);
 
 console.log("✅ App 컴포넌트 파일 로드됨!");
 
