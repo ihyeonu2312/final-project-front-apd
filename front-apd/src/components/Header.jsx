@@ -78,7 +78,9 @@ const Header = () => {
             {user ? (
               <>
                 <li><FontAwesomeIcon icon={faUser} className="nav-icon" />
-                <Link to="/user/my-info" className="user-nickname">{user.nickname}</Link>
+                <Link to= {user.role === '관리자' ? '/admin' : '/user/my-info'}className="user-nickname">
+  {user.nickname}
+</Link>
                 </li>
                 <li>
               <Link to="/user/cart">

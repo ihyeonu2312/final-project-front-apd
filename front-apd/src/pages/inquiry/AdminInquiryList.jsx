@@ -40,7 +40,7 @@ const AdminInquiryList = () => {
               <p className="text-sm text-gray-700">
                 상태:{" "}
                 <span className={`font-semibold ${inquiry.status === '답변완료' ? 'text-green-600' : 'text-yellow-600'}`}>
-                  {inquiry.status === '답변완료' ? '답변 완료' : '미답변'}
+                  {inquiry.status === '답변완료' ? '답변완료' : '미답변'}
                 </span>
               </p>
             </li>
