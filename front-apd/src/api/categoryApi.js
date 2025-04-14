@@ -1,12 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/categories`;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// const API_BASE_URL = "http://localhost:8080/api/categories"; // ✅ 카테고리 API 기본 URL
-
-// ✅ Axios 인스턴스 생성
 const categoryApi = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}/categories`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,7 +12,7 @@ const categoryApi = axios.create({
 // ✅ 모든 카테고리 가져오기 (상품 목록 제외)
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get(API_BASE_URL);
+    const response = await axios.get("/");
     console.log("📌 [DEBUG] 카테고리 API 응답:", response.data); // ✅ 응답 확인
     return response.data.map(category => ({
       categoryId: category.categoryId,
