@@ -8,7 +8,7 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080', // 👉 백엔드 주소
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''), // 선택사항
+        // rewrite: (path) => path.replace(/^\/api/, ''), // 선택사항
       },
     },
   },
