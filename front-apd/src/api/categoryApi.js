@@ -12,7 +12,7 @@ const categoryApi = axios.create({
 // ✅ 모든 카테고리 가져오기 (상품 목록 제외)
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get("/");
+    const response = await categoryApi.get("/");
     console.log("📌 [DEBUG] 카테고리 API 응답:", response.data); // ✅ 응답 확인
     return response.data.map(category => ({
       categoryId: category.categoryId,
