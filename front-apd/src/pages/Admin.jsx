@@ -12,7 +12,7 @@ const Admin = () => {
           <p className="text-gray-600">고객이 남긴 문의에 답변을 등록할 수 있습니다.</p>
         </Link>
 
-        <Link to="/admin/users" className="p-4 border rounded-lg hover:shadow-md bg-white">
+        <Link to="/admin/members" className="p-4 border rounded-lg hover:shadow-md bg-white">
           <h2 className="text-xl font-semibold mb-2 text-black">회원 관리</h2>
           <p className="text-gray-600">신고된 회원 관리 및 제재 기능을 수행합니다.</p>
         </Link>

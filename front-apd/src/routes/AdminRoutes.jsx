@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/authStore";
 // 관리자 전용 페이지 import
 import AdminInquiryList from "../pages/inquiry/AdminInquiryList";
 import AdminInquiryAnswer from "../pages/inquiry/AdminInquiryAnswer";
+import AdminMemberList from "../pages/admin/AdminMemberList";
 import Admin from "../pages/Admin"; // 관리자 대시보드 (선택사항)
 
 function AdminRoutes() {
@@ -19,6 +20,8 @@ function AdminRoutes() {
       <Route path="/" element={<Admin />} />
       <Route path="inquiries" element={<AdminInquiryList />} />
       <Route path="inquiries/:inquiryId" element={<AdminInquiryAnswer />} />
+      <Route path="/members" element={<AdminMemberList />} />
+
     </Routes>
   );
 }

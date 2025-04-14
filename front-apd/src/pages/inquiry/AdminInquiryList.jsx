@@ -37,10 +37,13 @@ const AdminInquiryList = () => {
               <p className="text-sm text-gray-500">
                 작성일: {new Date(inquiry.createdAt).toLocaleString()}
               </p>
+              <p className="text-sm text-gray-500">
+      작성자: {inquiry.memberNickname} {/* ✅ 이 줄 추가 */}
+    </p>
               <p className="text-sm text-gray-700">
                 상태:{" "}
                 <span className={`font-semibold ${inquiry.status === '답변완료' ? 'text-green-600' : 'text-yellow-600'}`}>
-                  {inquiry.status === '답변완료' ? '답변완료' : '미답변'}
+                  {inquiry.status === '답변완료' ? '답변완료' : '답변대기'}
                 </span>
               </p>
             </li>
