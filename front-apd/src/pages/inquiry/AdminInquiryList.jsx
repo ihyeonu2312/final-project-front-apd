@@ -80,7 +80,7 @@ const AdminInquiryList = () => {
     setSearchKeyword(searchInput); // 버튼 누를 때만 검색 키워드 반영
     setCurrentPage(1);
   }}
-  className="px-4 py-2 rounded bg-black text-white hover:bg-gray-800"
+  className="px-4 py-2 rounded bg-black text-white focus:outline-none hover:bg-gray-800"
 >
   검색
 </button>
@@ -90,7 +90,7 @@ const AdminInquiryList = () => {
             setShowOnlyPending(prev => !prev);
             setCurrentPage(1); // 필터 바꾸면 첫 페이지로
           }}
-          className="px-4 py-2 rounded bg-black text-white hover:bg-gray-600"
+          className="px-4 py-2 rounded bg-black text-white hover:bg-gray-600 focus:outline-none"
         >
           {showOnlyPending ? "전체 보기" : "답변대기만 보기"}
         </button>
