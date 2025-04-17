@@ -12,8 +12,9 @@ const PaymentSuccess = () => {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const resultCode = query.get("resultCode"); // 3001 = 결제 성공
-    const orderIdParam = query.get("orderId");
-    const orderId = orderIdParam?.split("-")[1];
+    const rawOrderId = query.get("orderId") || "";
+    const orderId = rawOrderId.startsWith("ORDER-") ? rawOrderId.split("-")[1] : rawOrderId;
+
 
     if (resultCode === "3001" && orderId) {
       // 로컬 axios.patch(`http://localhost:8080/api/orders/${orderId}/complete`, {}, {

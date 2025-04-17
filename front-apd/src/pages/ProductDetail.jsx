@@ -36,28 +36,86 @@ const ProductDetail = () => {
     getProduct();
   }, [productId]);
 
-  const handleAddToCart = async () => {
-    const requiredOptions = product.options ? Object.keys(product.options) : [];
-    const allSelected = requiredOptions.every(
-      (key) => selectedOptions[key] && selectedOptions[key] !== ""
-    );
+  // ✅ 장바구니 추가
+const handleAddToCart = async () => {
+  const requiredOptions = product.options ? Object.keys(product.options) : [];
+  const allSelected = requiredOptions.every(
+    (key) => selectedOptions[key] && selectedOptions[key] !== ""
+  );
 
-    if (!allSelected) {
-      alert("옵션을 모두 선택해주세요!");
-      return;
-    }
+  if (!allSelected) {
+    alert("옵션을 모두 선택해주세요!");
+    return;
+  }
 
-    try {
-      await addToCart(product.productId, quantity, selectedOptions);
-      const confirmMove = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
-      if (confirmMove) {
-        navigate("/user/cart");
-      }
-    } catch (error) {
-      alert("❌ 장바구니 추가 실패!");
-      console.error(error);
+  try {
+    await addToCart(product.productId, quantity, selectedOptions);
+  } catch (error) {
+    alert("❌ 장바구니 추가 실패!");
+    console.error(error);
+    return;
+  }
+
+  const confirmMove = window.confirm("장바구니에 추가되었습니다!\n장바구니로 이동하시겠습니까?");
+  if (confirmMove) {
+    navigate("/user/cart");
+  }
+};
+
+
+
+// ✅ 즉시 구매하기
+const handleBuyNow = async () => {
+  const requiredOptions = product.options ? Object.keys(product.options) : [];
+  const allSelected = requiredOptions.every(
+    (key) => selectedOptions[key] && selectedOptions[key] !== ""
+  );
+
+  if (!allSelected) {
+    alert("옵션을 모두 선택해주세요!");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    // 1. 주문 생성
+    const orderRes = await axios.post(`${API_URL}/orders/prepare`, {
+      memberId: localStorage.getItem("memberId"),
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    });
+
+    const orderId = orderRes.data.orderId;
+
+    // 2. 결제 요청 (결제 URL 요청)
+    const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, {
+      paymentMethod: "CARD",
+      amount: product.price * quantity
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      withCredentials: true
+    });
+
+    const redirectUrl = paymentRes.data.paymentUrl || paymentRes.data.nextRedirectUrl;
+    sole.log("💳 응답 전체 확인:", paymentRes.data);
+
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+    } else {
+      alert("결제 URL을 받아오지 못했습니다.");
     }
-  };
+  } catch (err) {
+    console.error("❌ 결제 시작 실패:", err);
+    alert("결제를 시작할 수 없습니다.");
+  }
+};
+
 
   if (loading) return <p>⏳ 상품 정보를 불러오는 중...</p>;
   if (!product) return <p>❌ 상품을 찾을 수 없습니다.</p>;
@@ -137,7 +195,9 @@ const ProductDetail = () => {
             <button className="add-to-cart px-4 py-2 bg-black text-white rounded" onClick={handleAddToCart}>
               장바구니 추가
             </button>
-            <button className="buy-now px-4 py-2 border rounded">
+            <button className="buy-now px-4 py-2 border rounded"
+             onClick={handleBuyNow}
+             >
               구매하기
             </button>
           </div>
