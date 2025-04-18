@@ -75,6 +75,8 @@ const handleBuyNow = async () => {
     alert("옵션을 모두 선택해주세요!");
     return;
   }
+  const confirmMove = window.confirm("결제를 진행하시겠습니까?");
+  if (!confirmMove) return;
 
   try {
     const token = localStorage.getItem("token");
@@ -92,23 +94,26 @@ const handleBuyNow = async () => {
     const orderId = orderRes.data.orderId;
 
     // 2. 결제 요청 (결제 URL 요청)
-    const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, {
+    const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, 
+      {
       paymentMethod: "CARD",
-      amount: product.price * quantity
+      amount: Math.round(product.price * quantity)
     }, {
       headers: {
         Authorization: `Bearer ${token}`
       },
       withCredentials: true
     });
+    console.log("✅ API_URL:", API_URL);
 
     const redirectUrl = paymentRes.data.paymentUrl || paymentRes.data.nextRedirectUrl;
-    sole.log("💳 응답 전체 확인:", paymentRes.data);
+    console.log("💳 응답 전체 확인:", paymentRes.data);
 
     if (redirectUrl) {
       window.location.href = redirectUrl;
     } else {
-      alert("결제 URL을 받아오지 못했습니다.");
+      alert("결제 URL을 받아오지 못했습니다. 다시 시도해 주세요.");
+      navigate("/user/cart");
     }
   } catch (err) {
     console.error("❌ 결제 시작 실패:", err);

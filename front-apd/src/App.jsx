@@ -43,7 +43,7 @@ function App() {
           <Route path="/category/:slug" element={<CategoryPage />} />
           <Route path="/search" element={<SearchResult />} />
           <Route path="/product/:productId" element={<ProductDetail />} /> 
-          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
