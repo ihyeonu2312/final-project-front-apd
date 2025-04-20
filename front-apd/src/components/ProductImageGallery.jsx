@@ -25,7 +25,7 @@ const ProductImageGallery = ({ productId }) => {
             key={image.imageId}
             src={image.smallImageUrl}
             alt="상품 이미지"
-            className="w-12 h-12 cursor-pointer border rounded"
+   className="w-20 h-12 object-contain border rounded cursor-pointer bg-white"
             onClick={() => setSelectedImage(image.largeImageUrl)}
           />
         ))}
@@ -34,7 +34,7 @@ const ProductImageGallery = ({ productId }) => {
       {/* 클릭한 이미지 크게 표시 */}
       <div className="ml-4">
         {selectedImage && (
-          <img src={selectedImage} alt="선택된 상품 이미지" className="w-96 h-96 border rounded" />
+          <img src={selectedImage} alt="선택된 상품 이미지" className="main-image" />
         )}
       </div>
     </div>
