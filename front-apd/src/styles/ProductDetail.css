@@ -209,7 +209,7 @@ img {
   .main-image {
     width: 100%;
     height: auto;
-    aspect-ratio: 1 / 1;  /* 선택적: 비율 유지하고 싶을 때 */
+    aspect-ratio: 1 / 1;  
     border-radius: 10px;
     border: 2px solid #ddd;
     object-fit: contain;
