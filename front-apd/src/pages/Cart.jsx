@@ -10,7 +10,7 @@ import MyPageSidebar from "../components/MyPageSidebar";
 import "../styles/MyPage.css";
 import "../styles/Cart.css";
 import OrderConfirmModal from "../components/OrderConfirmModal"; // ✅ 모달 임포트
-import { callPay } from "../utils/payment";
+import { initiateNicePay } from "../utils/payment"; // ✅ REST API 방식
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -117,7 +117,7 @@ const Cart = () => {
   
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/orders/prepare",
+        `${import.meta.env.VITE_API_BASE_URL}/orders/prepare`,
         { memberId },
         {
           headers: {
@@ -128,25 +128,18 @@ const Cart = () => {
       );
   
       const orderId = response.data.orderId;
+      const totalAmount = response.data.totalAmount;
   
-      const paymentData = {
-        clientId: "S2_1ec4a5325bc740acb188f9f1b51df216",
-        method: "CARD",
-        orderId: `ORDER-${orderId}`,
-        amount: response.data.totalAmount,
-        goodsName: "장바구니 상품",
-        returnUrl: "http://localhost:3000/payment-success",
-        buyerName: "홍길동",
-        buyerEmail: "test@example.com",
-      };
+      // ✅ 웹표준 방식 제거하고 REST API 방식으로 결제창 요청
+      await initiateNicePay(orderId, totalAmount);
   
-      callPay(`ORDER-${orderId}`, response.data.totalAmount);
       setShowConfirmPopup(false); // 모달 닫기
     } catch (error) {
       console.error("❌ 결제 시작 오류:", error);
       alert("결제를 시작할 수 없습니다.");
     }
   };
+  
   
   
   return (
