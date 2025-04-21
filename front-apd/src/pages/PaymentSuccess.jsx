@@ -6,7 +6,7 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
 
 
-  const API_URL = import.meta.env.VITE_API_BASE_NICE_URL;
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
 
 
   useEffect(() => {
