@@ -29,4 +29,4 @@ const ProductDetailImageGallery = ({ productId }) => {
   );
 };
 
-export default ProductDetailImageGallery;`
+export default ProductDetailImageGallery;
