@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getInquiryDetail, createInquiryResponse } from "../../api/inquiryApi";
+import { getAdminInquiryDetail, createInquiryResponse } from "../../api/inquiryApi";
 
 const AdminInquiryAnswer = () => {
   const { inquiryId } = useParams();
@@ -13,7 +13,7 @@ const AdminInquiryAnswer = () => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const data = await getInquiryDetail(inquiryId);
+        const data = await getAdminInquiryDetail(inquiryId);
         setInquiry(data);
       } catch (err) {
         console.error('문의 상세 조회 실패:', err);

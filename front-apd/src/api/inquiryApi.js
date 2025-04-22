@@ -32,6 +32,13 @@ export const getMyInquiries = async () => {
   return res.data;
 };
 
+// ✅ 관리자용 문의 상세 조회
+export const getAdminInquiryDetail = async (inquiryId) => {
+  const res = await api.get(`${ADMIN_BASE_URL}/${inquiryId}`);
+  return res.data;
+};
+
+
 // ✅ 문의 상세 조회
 export const getInquiryDetail = async (inquiryId) => {
   const res = await api.get(`${BASE_URL}/${inquiryId}`);

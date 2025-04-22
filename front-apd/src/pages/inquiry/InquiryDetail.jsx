@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getInquiryDetail } from "../../api/inquiryApi";
+import { getInquiryDetail, getAdminInquiryDetail } from "../../api/inquiryApi"; // ✅ 관리자용 함수도 import
 
 const InquiryDetail = () => {
   const { inquiryId } = useParams();
   const [inquiry, setInquiry] = useState(null);
+  const [error, setError] = useState(false);
+
+  // ✅ 현재 경로에 "/admin"이 포함되어 있으면 관리자 페이지로 간주
+  const isAdminPage = window.location.pathname.includes('/admin');
 
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const data = await getInquiryDetail(inquiryId);
+        const data = isAdminPage
+          ? await getAdminInquiryDetail(inquiryId)
+          : await getInquiryDetail(inquiryId);
         setInquiry(data);
       } catch (err) {
         console.error('문의 상세 조회 실패:', err);
+        setError(true);
       }
     };
 
     fetchDetail();
   }, [inquiryId]);
 
+  if (error) return <p className="text-center text-red-500 mt-10">❌ 문의를 불러오지 못했습니다.</p>;
   if (!inquiry) return <p className="text-center mt-10">로딩 중...</p>;
 
   return (
@@ -40,9 +48,8 @@ const InquiryDetail = () => {
               <h4 className="font-semibold text-lg">{res.title}</h4>
               <p className="text-gray-500 text-sm">답변일: {new Date(res.responseDate).toLocaleString()}</p>
               <p className={`text-sm ${inquiry.status === '답변완료' ? 'text-green-600' : 'text-orange-600'}`}>
-  상태: {inquiry.status}
-</p>
-
+                상태: {inquiry.status}
+              </p>
               <p className="mt-2 text-gray-700 whitespace-pre-line">{res.responseText}</p>
             </li>
           ))}
