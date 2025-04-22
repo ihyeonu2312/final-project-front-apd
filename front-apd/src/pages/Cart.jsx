@@ -19,6 +19,7 @@ const Cart = () => {
   const [showConfirmPopup, setShowConfirmPopup] = useState(false); // ✅ 추가
   const [preparedOrderId, setPreparedOrderId] = useState(null);    // ✅ 추가
   const memberId = localStorage.getItem("memberId");
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
 
   // ✅ 장바구니 불러오기
   const loadCart = async () => {
@@ -90,7 +91,7 @@ const Cart = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/orders/prepare",
+        `${API_URL}/orders/prepare`,
         { memberId },
         {
           headers: {

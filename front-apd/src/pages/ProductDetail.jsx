@@ -16,6 +16,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [reviews, setReviews] = useState([]);
+  const API_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const getProduct = async () => {
