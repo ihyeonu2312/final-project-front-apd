@@ -49,7 +49,7 @@ export const initiateInicisPay = async (orderId, totalAmount) => {
     addInput('P_TIMESTAMP', timestamp);
     addInput('P_HASHDATA', hashData);
     addInput('P_GOODS', '테스트 상품');
-    addInput('P_RETURN_URL', 'https://https://unoeyhi.site/payment/success'); // 결제 완료 후 이동 URL
+    addInput('P_RETURN_URL', 'https://unoeyhi.site/payment/success'); // 결제 완료 후 이동 URL
 
     document.body.appendChild(form);
     form.submit();
