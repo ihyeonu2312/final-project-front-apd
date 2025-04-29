@@ -30,13 +30,10 @@ function App() {
       <Header />
       <main className="main-content">
         <Routes>
-        <Route path="/login" element={user ? <Navigate replace to="/" /> : <LoginPage />} />
-        <Route path="/signup" element={user ? <Navigate replace to="/" /> : <SignupPage />} />
-        
-        <Route path="/reset-password" element={<ResetPassword />} />
-
-        <Route path="/*" element={<MainRoutes />} />
-
+          <Route path="/login" element={user ? <Navigate replace to="/" /> : <LoginPage />} />
+          <Route path="/signup" element={user ? <Navigate replace to="/" /> : <SignupPage />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/*" element={<MainRoutes />} />
           <Route path="/user/*" element={<UserRoutes />} />
           <Route path="/admin/*" element={<AdminRoutes />} />
           <Route path="/category/test" element={<TestCategory1 />} />
@@ -44,7 +41,6 @@ function App() {
           <Route path="/search" element={<SearchResult />} />
           <Route path="/product/:productId" element={<ProductDetail />} /> 
           <Route path="/payment/success" element={<PaymentSuccess />} />
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
