@@ -10,7 +10,7 @@ import MyPageSidebar from "../components/MyPageSidebar";
 import "../styles/MyPage.css";
 import "../styles/Cart.css";
 import OrderConfirmModal from "../components/OrderConfirmModal"; // ✅ 모달 임포트
-import { initiateNicePay } from "../utils/payment"; // ✅ REST API 방식
+import { initiateInicisPay } from "../utils/payment";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -131,10 +131,9 @@ const Cart = () => {
       const orderId = response.data.orderId;
       const totalAmount = response.data.totalAmount;
   
-      // ✅ 웹표준 방식 제거하고 REST API 방식으로 결제창 요청
-      await initiateNicePay(orderId, totalAmount);
+      await initiateInicisPay(orderId, totalAmount);
   
-      setShowConfirmPopup(false); // 모달 닫기
+      setShowConfirmPopup(false);
     } catch (error) {
       console.error("❌ 결제 시작 오류:", error);
       alert("결제를 시작할 수 없습니다.");

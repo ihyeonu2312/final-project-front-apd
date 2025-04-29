@@ -4,34 +4,33 @@ import axios from "axios";
 
 const PaymentSuccess = () => {
   const navigate = useNavigate();
-
-
   const API_URL = import.meta.env.VITE_API_BASE_URL;
-
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
-    const resultCode = query.get("resultCode"); // 3001 = 결제 성공
-    const rawOrderId = query.get("orderId") || "";
+
+    const status = query.get("P_STATUS"); // ✅ 이니시스 결제 결과 코드
+    const rawOrderId = query.get("P_OID") || ""; // ✅ 주문번호
     const orderId = rawOrderId.startsWith("ORDER-") ? rawOrderId.split("-")[1] : rawOrderId;
+    const failMessage = query.get("P_RMESG1"); // 실패시 에러 메시지
 
-
-    if (resultCode === "3001" && orderId) {
-      // 로컬 axios.patch(`http://localhost:8080/api/orders/${orderId}/complete`, {}, {
-        axios.patch(`${API_URL}/orders/${orderId}/complete`, {}, {
+    if (status === "00" && orderId) {
+      // 결제 성공
+      axios.patch(`${API_URL}/orders/${orderId}/complete`, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         withCredentials: true,
       })
       .then(() => {
-        alert("결제가 완료되었습니다!");
+        alert("✅ 결제가 완료되었습니다!");
         navigate("/user/my-orders");
       })
       .catch(() => {
-        alert("주문 확정 중 오류가 발생했습니다.");
+        alert("❌ 주문 확정 중 오류가 발생했습니다.");
         navigate("/user/cart");
       });
     } else {
-      alert("❌ 결제가 실패했거나 취소되었습니다.");
+      // 결제 실패
+      alert(`❌ 결제 실패 또는 취소되었습니다. ${failMessage ? `\n사유: ${failMessage}` : ""}`);
       navigate("/user/cart");
     }
   }, []);

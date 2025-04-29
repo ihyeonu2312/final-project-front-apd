@@ -1,19 +1,18 @@
 import axios from "axios";
 
-/**
- * NICEPAY REST API 방식 결제 요청
- */
-export const initiateNicePay = async (orderId, totalAmount) => {
+export const initiateInicisPay = async (orderId, totalAmount) => {
   try {
     const token = localStorage.getItem("token");
 
     const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/payment/${orderId}/pay`,
+      `${import.meta.env.VITE_API_BASE_URL}/payment/inicis/request`,
+      null,
       {
-        paymentMethod: "CARD",
-        amount: totalAmount,
-      },
-      {
+        params: {
+          amount: totalAmount,
+          orderId: orderId,
+          buyerName: "테스트구매자", // 구매자 이름 필요
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -21,20 +20,42 @@ export const initiateNicePay = async (orderId, totalAmount) => {
       }
     );
 
-    const redirectUrl =
-      response.data.nextRedirectPcUrl ||
-      response.data.paymentUrl ||
-      response.data.nextRedirectUrl;
+    const {
+      mid,
+      orderId: respOrderId,
+      price,
+      timestamp,
+      hashData,
+      apiUrl,
+    } = response.data;
 
-    if (!redirectUrl) {
-      alert("❌ 결제창 URL을 받아오지 못했습니다.");
-      return;
-    }
+    // 이니시스는 form POST 방식으로 결제창 이동
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = apiUrl;
 
-    // ✅ NICEPAY 결제창으로 이동
-    window.location.href = redirectUrl;
+    const addInput = (name, value) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    };
+
+    addInput('P_MID', mid);
+    addInput('P_OID', respOrderId);
+    addInput('P_AMT', price);
+    addInput('P_UNAME', '테스트구매자');
+    addInput('P_TIMESTAMP', timestamp);
+    addInput('P_HASHDATA', hashData);
+    addInput('P_GOODS', '테스트 상품');
+    addInput('P_RETURN_URL', 'https://yourdomain.com/payment/success'); // 결제 완료 후 이동 URL
+
+    document.body.appendChild(form);
+    form.submit();
+
   } catch (err) {
-    console.error("❌ 결제 요청 실패:", err);
+    console.error("❌ 이니시스 결제 요청 실패:", err);
     alert("결제를 시작할 수 없습니다.");
   }
 };
