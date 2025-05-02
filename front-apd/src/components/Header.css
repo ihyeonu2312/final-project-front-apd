@@ -17,6 +17,10 @@
   margin: 0 auto;
 }
 
+.nav {
+  display: flex;
+}
+
 /* ✅ 헤더 내부 컨테이너 */
 .header-container {
   display: flex;
@@ -28,8 +32,13 @@
 
 /* ✅ 로고 스타일 */
 .logo img {
-  height: 70px;
+  max-height: 70px;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  display: block;
 }
+
 
 /* ✅ 검색창 스타일 */
 .search-form {
@@ -114,6 +123,7 @@
 .qr-code {
   position: absolute;
   top: 20px;
+  width: 150px;
   left: 50%;
   transform: translateX(-50%);
   background: white;
@@ -204,4 +214,96 @@
 
 .dropdown-menu li a:hover {
   background-color: black;
+}
+
+/* 햄버거 버튼 (모바일 전용) */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+/* 모바일 메뉴 숨김 기본 */
+.mobile-nav {
+  display: none;
+  background-color: #000;
+  color: white;
+  padding: 10px 0;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+}
+
+.mobile-nav.open {
+  display: block;
+}
+
+.mobile-nav ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mobile-nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+/* 모바일 기준 분기점 */
+@media (max-width: 768px) {
+  .nav {
+    display: none; /* ✅ PC용 메뉴 숨기기 */
+  }
+
+  .mobile-menu-toggle {
+    display: block; /* ✅ 햄버거 아이콘 표시 */
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    margin-left: auto;
+    cursor: pointer;
+  }
+
+  .mobile-nav {
+    display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: #000;
+    color: white;
+    z-index: 999;
+    padding: 20px 0;
+  }
+
+  .mobile-nav.open {
+    display: block; /* ✅ 메뉴 열릴 때만 보이기 */
+  }
+
+  .mobile-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .mobile-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
 }

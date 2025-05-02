@@ -1,12 +1,14 @@
-/* ✅ 상품 상세 페이지 기본 컨테이너 */
+/* ✅ 기본 컨테이너 중앙 정렬 수정 */
 .product-detail-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
   max-width: 1200px;
+  width: 100%;          /* ✅ 추가 */
   margin: 20px auto;
   padding: 20px;
+  box-sizing: border-box; /* ✅ 추가 */
 }
 .product-detail-images {
   max-width: 900px;
@@ -192,12 +194,15 @@ img {
 @media (max-width: 768px) {
   .product-detail-container {
     flex-direction: column;
-    align-items: center;
+    align-items: center;      /* ✅ 중앙 정렬 */
+    justify-content: center;  /* ✅ 중앙 정렬 */
+    padding: 10px;
   }
 
   .product-image-section {
-    flex-direction: column;
+    width: 100%;
     align-items: center;
+    justify-content: center;
   }
 
   .thumbnail-list {
@@ -224,6 +229,8 @@ img {
 
   .product-info-section {
     width: 100%;
-    max-width: 500px;
+    max-width: 100%;  /* ✅ 좌우 정렬 안 쏠리게 */
+    box-sizing: border-box;
+    margin: 0 auto;   /* ✅ 중앙 정렬 */
   }
 }

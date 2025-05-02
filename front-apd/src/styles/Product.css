@@ -17,8 +17,11 @@
   .product-card {
     border-radius: 8px;
     text-align: center;
-    flex-direction: column; 
+    flex-direction: column;
+    display: flex; /* ✅ 추가: Flex 컨테이너로 설정 */
+    align-items: center; /* ✅ 추가: 중앙 정렬 */
   }
+  
   
 
 
