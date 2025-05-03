@@ -224,6 +224,12 @@
   font-size: 24px;
   color: white;
   cursor: pointer;
+  
+}
+.mobile-menu-toggle:hover {
+  background: none;
+  cursor: pointer;
+  
 }
 
 /* 모바일 메뉴 숨김 기본 */
@@ -273,8 +279,13 @@
     color: white;
     margin-left: auto;
     cursor: pointer;
+    outline: none; /* 포커스 테두리 제거 */
   }
 
+  .mobile-menu-toggle:focus {
+    outline: none;
+    box-shadow: none;
+  }
   .mobile-nav {
     display: none;
     position: absolute;
@@ -321,6 +332,7 @@
     .dropdown span {
       display: block;
       text-align: center;
+      cursor: pointer;
       padding: 12px 0;
       color: white;
     }
