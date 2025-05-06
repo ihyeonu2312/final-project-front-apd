@@ -152,12 +152,12 @@
 
 @media (max-width: 768px) {
   .product-list {
-    grid-template-columns: repeat(2, 1fr); /* 태블릿에서는 2개씩 */
+    grid-template-columns: repeat(3, 1fr); /* 태블릿에서는 2개씩 */
   }
 }
 
 @media (max-width: 480px) {
   .product-list {
-    grid-template-columns: repeat(1, 1fr); /* 모바일에서는 1개씩 */
+    grid-template-columns: repeat(2, 1fr); /* 모바일에서는 1개씩 */
   }
 }
