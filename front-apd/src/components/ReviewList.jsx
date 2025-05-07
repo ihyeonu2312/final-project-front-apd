@@ -117,6 +117,7 @@ const ReviewList = ({ productId }) => {
         visibleReviews.map((review) => (
           <div key={review.reviewId} className="border-t py-3">
             <p className="text-sm text-gray-500">{formatDate(review.createdAt)}</p>
+            <p className="text-sm font-semibold">작성자: {review.nickname}</p> {/* ✅ 이 줄 추가 */}
             <p>{renderStars(review.rating)} ({review.rating.toFixed(1)})</p>
             <p>{review.comment}</p>
             {review.reviewImageUrl && (
