@@ -49,6 +49,10 @@ const MainPage = () => {
   return (
     <div className="main-container px-4 py-6">
       <div className="text-center mb-8">
+      <ul>
+  <li>테스트용 ID / PW: example.com / 123456</li>
+  <li>관리자용 ID / PW: admin@example.com / 123456</li>
+</ul>
         <h2 className="text-3xl font-bold">카테고리별 쇼핑</h2>
       </div>
 
