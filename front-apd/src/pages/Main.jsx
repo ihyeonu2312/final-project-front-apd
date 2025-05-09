@@ -52,34 +52,36 @@ const MainPage = () => {
         <h2 className="text-3xl font-bold">카테고리별 쇼핑</h2>
       </div>
 
-{/* 상단 배너 영역 */}
-<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-  {/* 🔥 슬라이더: 전체 폭 차지 */}
-  <div className="col-span-1 md:col-span-3">
+{/* 상단 배너 + 카테고리 영역 */}
+<div className="grid grid-cols-1 md:grid-cols-4 gap-7 mb-12">
+  {/* 🔥 슬라이더: 좌측 2칸 */}
+  <div className="col-span-1 md:col-span-2">
     <AutoSlider />
   </div>
 
-  {/* 👇 카테고리 영역: 3열로 나뉨 */}
-  {[
-    { name: "자동차용품", img: 자동차 },
-    { name: "뷰티/건강", img: 화장품 },
-    { name: "출산/유아동", img: 유아 },
-    { name: "홈인테리어", img: 공구 },
-    { name: "패션의류/잡화", img: 가방 },
-    { name: "가전디지털", img: 가전 },
-  ].map(({ name, img }, i) => {
-    const slug = name.replace(/[^\w가-힣]/g, "-").replace(/\s+/g, "-");
-    return (
-      <div
-        key={i}
-        className="bg-white p-3 border rounded shadow text-center cursor-pointer hover:shadow-md transition"
-        onClick={() => navigate(`/category/${slug}`)}
-      >
-        <p className="font-semibold">{name}</p>
-        <img src={img} alt={name} className="mx-auto h-20 object-contain" />
-      </div>
-    );
-  })}
+  {/* 👉 카테고리: 우측 2칸 + 내부 그리드로 2행 3열 */}
+  <div className="col-span-1 md:col-span-2 grid grid-cols-3 gap-4">
+    {[
+      { name: "자동차용품", img: 자동차 },
+      { name: "뷰티/건강", img: 화장품 },
+      { name: "출산/유아동", img: 유아 },
+      { name: "홈인테리어", img: 공구 },
+      { name: "패션의류/잡화", img: 가방 },
+      { name: "가전디지털", img: 가전 },
+    ].map(({ name, img }, i) => {
+      const slug = name.replace(/[^\w가-힣]/g, "-").replace(/\s+/g, "-");
+      return (
+        <div
+          key={i}
+          className="bg-white p-3 border rounded shadow text-center cursor-pointer hover:shadow-md transition"
+          onClick={() => navigate(`/category/${slug}`)}
+        >
+          <p className="font-semibold">{name}</p>
+          <img src={img} alt={name} className="mx-auto h-20 object-contain" />
+        </div>
+      );
+    })}
+  </div>
 </div>
 
       {/* 상품 목록 */}
