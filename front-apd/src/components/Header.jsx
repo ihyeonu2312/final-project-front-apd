@@ -150,7 +150,6 @@ const Header = () => {
         <li><Link to={user.role === '관리자' ? '/admin' : '/user/my-info'}>{user.nickname}</Link></li>
         <li><Link to="/user/cart">장바구니</Link></li>
         <li><Link to="/" onClick={handleLogout}>로그아웃</Link></li>
-        <CategoryDropdown />
       </>
     ) : (
       <>
@@ -158,6 +157,7 @@ const Header = () => {
         <li><Link to="/user/cart">장바구니</Link></li>
       </>
     )}
+    <CategoryDropdown />
   </ul>
 </nav>
 {!isMobile && (
