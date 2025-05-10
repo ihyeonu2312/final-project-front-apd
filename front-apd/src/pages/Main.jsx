@@ -49,10 +49,12 @@ const MainPage = () => {
   return (
     <div className="main-container px-4 py-6">
       <div className="text-center mb-8">
-      <ul>
-  <li>테스트용 ID / PW: example.com / 123456</li>
-  <li>관리자용 ID / PW: admin@example.com / 123456</li>
+      <ul className="list-none text-xs md:text-base">
+  <li className="font-semibold">TEST ID / PW</li>
+  <li>test@example.com / 123456</li>
+  <li>admin@example.com / 123456</li>
 </ul>
+
         <h2 className="text-3xl font-bold">카테고리별 쇼핑</h2>
       </div>
 
@@ -67,7 +69,7 @@ const MainPage = () => {
   <div className="col-span-1 md:col-span-2 grid grid-cols-3 gap-4">
     {[
       { name: "자동차용품", img: 자동차 },
-      { name: "뷰티/건강", img: 화장품 },
+      { name: "뷰티", img: 화장품 },
       { name: "출산/유아동", img: 유아 },
       { name: "홈인테리어", img: 공구 },
       { name: "패션의류/잡화", img: 가방 },

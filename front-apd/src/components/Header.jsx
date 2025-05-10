@@ -147,7 +147,7 @@ const Header = () => {
     </li>
     {user ? (
       <>
-        <li><Link to={user.role === '관리자' ? '/admin' : '/user/my-info'}>{user.nickname}</Link></li>
+        <li><FontAwesomeIcon icon={faUser} className="nav-icon" /><Link to={user.role === '관리자' ? '/admin' : '/user/my-info'}>{user.nickname}</Link></li>
         <li><Link to="/user/cart">장바구니</Link></li>
         <li><Link to="/" onClick={handleLogout}>로그아웃</Link></li>
       </>
@@ -162,7 +162,7 @@ const Header = () => {
 </nav>
 {!isMobile && (
       <div className="category-menu">
-        <ul>
+        <ul class="test-sx">
           <CategoryDropdown />
 
           <li><Link to="/category/패션의류-잡화">패션의류/잡화</Link></li>

@@ -116,23 +116,23 @@ const Category = () => {
 
       {/* ✅ 정렬 UI 추가 */}
       {!loading && ( // ✅ 로딩 중이면 숨기고, 로딩 끝나면 표시
-  <div className="sort-container">
-    {[
-      { value: "default", label: "최신순" },
-      { value: "priceLow", label: "낮은가격순" },
-      { value: "priceHigh", label: "높은가격순" },
-      { value: "rating", label: "평점높은순" },
-      { value: "discountHigh", label: "높은할인율" }
-    ].map((sort) => (
-      <span
-        key={sort.value}
-        className={`sort-text ${sortOption === sort.value ? "active" : ""}`}
-        onClick={() => setSortOption(sort.value)}
-      >
-        {sort.label}
-      </span>
-    ))}
-  </div>
+  <div className="sort-container flex flex-wrap">
+  {[
+    { value: "default", label: "최신순" },
+    { value: "priceLow", label: "낮은가격순" },
+    { value: "priceHigh", label: "높은가격순" },
+    { value: "rating", label: "평점높은순" },
+    { value: "discountHigh", label: "높은할인율" }
+  ].map((sort) => (
+    <span
+      key={sort.value}
+      className={`sort-text ${sortOption === sort.value ? "active" : ""}`}
+      onClick={() => setSortOption(sort.value)}
+    >
+      {sort.label}
+    </span>
+  ))}
+</div>
 )}
 
 
