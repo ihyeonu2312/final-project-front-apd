@@ -97,13 +97,16 @@ const handleBuyNow = async () => {
     // 2. 결제 요청 (결제 URL 요청)
     const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, 
       {
-      paymentMethod: "CARD",
+      paymentMethod: "CARD", 
       amount: Math.round(product.price * quantity)
     }, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
+      headers: { Authorization: `Bearer ${token}` },
       withCredentials: true
+
+    });
+
+      navigate("/payment-form", {
+      state: { inicis: paymentRes.data }
     });
     console.log("✅ API_URL:", API_URL);
 

@@ -17,6 +17,7 @@ import SearchResult from "./pages/SearchResult"; // 🔍 검색 결과 페이지
 import ProductDetail from "./pages/ProductDetail";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import NotFound from "./pages/NotFound";
+import PaymentForm from "./pages/PaymentForm";
 
 console.log("✅ 현재 API URL:", import.meta.env.VITE_API_BASE_URL);
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/product/:productId" element={<ProductDetail />} /> 
           <Route path="/payment/success" element={<PaymentSuccess />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/payment-form" element={<PaymentForm />} />
         </Routes>
       </main>
       <Footer />
