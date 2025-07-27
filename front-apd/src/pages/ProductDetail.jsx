@@ -110,8 +110,8 @@ const handleBuyNow = async () => {
     });
     console.log("✅ API_URL:", API_URL);
 
-    const redirectUrl = paymentRes.data.paymentUrl || paymentRes.data.nextRedirectUrl;
     console.log("💳 응답 전체 확인:", paymentRes.data);
+    const redirectUrl = paymentRes.data.redirectUrl;
 
     if (redirectUrl) {
       window.location.href = redirectUrl;
@@ -124,7 +124,7 @@ const handleBuyNow = async () => {
     alert("결제를 시작할 수 없습니다.");
   }
 };
-
+ 
 
   if (loading) return <p>⏳ 상품 정보를 불러오는 중...</p>;
   if (!product) return <p>❌ 상품을 찾을 수 없습니다.</p>;
