@@ -95,7 +95,7 @@ const handleBuyNow = async () => {
     const orderId = orderRes.data.orderId;
 
     // 2. 결제 요청 (결제 URL 요청)
-    const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, 
+    const paymentRes = await axios.post(`${API_URL}/payment/inicis/${orderId}/pay`, 
       {
       paymentMethod: "CARD", 
       amount: Math.round(product.price * quantity),
