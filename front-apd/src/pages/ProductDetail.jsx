@@ -98,7 +98,8 @@ const handleBuyNow = async () => {
     const paymentRes = await axios.post(`${API_URL}/payment/${orderId}/pay`, 
       {
       paymentMethod: "CARD", 
-      amount: Math.round(product.price * quantity)
+      amount: Math.round(product.price * quantity),
+      buyerName: "테스트구매자"
     }, {
       headers: { Authorization: `Bearer ${token}` },
       withCredentials: true
