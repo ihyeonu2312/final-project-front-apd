@@ -5,6 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <p>© 2025 알팡당 | All rights reserved.</p>
+      <p>0000000000000000000000000</p>
     </footer>
   );
 };
