@@ -67,6 +67,8 @@ const handleAddToCart = async () => {
 
 // ✅ 즉시 구매하기
 const handleBuyNow = async () => {
+  console.log("🔥 handleBuyNow 함수 진입");
+
   const requiredOptions = product.options ? Object.keys(product.options) : [];
   const allSelected = requiredOptions.every(
     (key) => selectedOptions[key] && selectedOptions[key] !== ""
