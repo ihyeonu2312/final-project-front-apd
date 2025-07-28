@@ -11,6 +11,9 @@ const PaymentForm = () => {
       document.getElementById("inicisForm").submit();
     }
   }, [redirectUrl, requestData]);
+  console.log("🧾 PaymentForm 진입");
+  console.log("➡️ redirectUrl:", redirectUrl);
+  console.log("📨 requestData:", requestData);
 
   if (!redirectUrl || !requestData) {
     return <p>❌ 결제 정보가 없습니다.</p>;
