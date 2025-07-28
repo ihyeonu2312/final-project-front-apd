@@ -41,6 +41,10 @@ const MyOrders = () => {
   // ✅ 주문 목록 불러오기
   const loadOrders = async () => {
     setLoading(true);
+    if (!user?.memberId) {
+      console.error("❌ memberId 없음!");
+      return;
+    }
     try {
       const data = await orderApi.fetchOrders(user.memberId); // ✅ 주문 내역 조회 API
       setOrders(data);
