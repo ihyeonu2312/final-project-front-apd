@@ -5,20 +5,20 @@ export const initiateInicisPay = async (orderId, totalAmount) => {
     const token = localStorage.getItem("token");
 
     const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/payment/inicis/request`,
-      null,
+      `${import.meta.env.VITE_API_BASE_URL}/payment/inicis/${orderId}/pay`,
       {
-        params: {
-          amount: totalAmount,
-          orderId: orderId,
-          buyerName: "테스트구매자", // 구매자 이름 필요
-        },
+        paymentMethod: "CARD",
+        amount: totalAmount,
+        buyerName: "테스트구매자",
+      },
+      {
         headers: {
           Authorization: `Bearer ${token}`,
         },
         withCredentials: true,
       }
     );
+
 
     const {
       mid,
