@@ -121,12 +121,12 @@ const handleBuyNow = async () => {
     const redirectUrl = paymentRes.data.redirectUrl;
     console.log("📡 요청 URL 확인:", redirectUrl);
 
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    } else {
-      alert("결제 URL을 받아오지 못했습니다. 다시 시도해 주세요.");
-      navigate("/user/cart");
-    }
+    // if (redirectUrl) {
+    //   window.location.href = redirectUrl;
+    // } else {
+    //   alert("결제 URL을 받아오지 못했습니다. 다시 시도해 주세요.");
+    //   navigate("/user/cart");
+    // }
   } catch (err) {
     console.error("❌ 결제 시작 실패:", err);
     alert("결제를 시작할 수 없습니다.");
