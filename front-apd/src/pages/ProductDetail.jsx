@@ -85,6 +85,7 @@ const handleBuyNow = async () => {
     // 1. 주문 생성
     const orderRes = await axios.post(`${API_URL}/orders/prepare`, {
       memberId: localStorage.getItem("memberId"),
+      
     }, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -93,6 +94,9 @@ const handleBuyNow = async () => {
     });
 
     const orderId = orderRes.data.orderId;
+
+    console.log("✅ 주문 생성 응답:", orderRes.data); // 여기에 orderId 있음
+    console.log("📦 최종 결제 요청 URL:", `${API_URL}/payment/inicis/${orderId}/pay`);
 
     // 2. 결제 요청 (결제 URL 요청)
     const paymentRes = await axios.post(`${API_URL}/payment/inicis/${orderId}/pay`, 
