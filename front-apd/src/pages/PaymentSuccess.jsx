@@ -15,7 +15,7 @@ const PaymentSuccess = () => {
     if (status === "00") {
       const memberId = localStorage.getItem("memberId");
       console.log("✅ 로컬 스토리지에서 가져온 memberId:", memberId);
-      if (!memberId) {
+      if (!memberId || memberId === "undefined") {
         alert("❌ 로그인 정보가 없습니다. 다시 로그인해주세요.");
         navigate("/");
         return;
