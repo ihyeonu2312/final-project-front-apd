@@ -86,8 +86,6 @@ const handleBuyNow = async () => {
 
     // 1. 주문 생성
     const orderRes = await axios.post(`${API_URL}/orders/prepare`, {
-      memberId: localStorage.getItem("memberId"),
-      
     }, {
       headers: {
         Authorization: `Bearer ${token}`
