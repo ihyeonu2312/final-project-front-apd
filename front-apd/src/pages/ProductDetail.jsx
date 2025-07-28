@@ -113,6 +113,7 @@ const handleBuyNow = async () => {
 
     console.log("💳 응답 전체 확인:", paymentRes.data);
     const redirectUrl = paymentRes.data.redirectUrl;
+    console.log("📡 요청 URL 확인:", paymentUrl);
 
     if (redirectUrl) {
       window.location.href = redirectUrl;
