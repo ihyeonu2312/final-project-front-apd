@@ -13,6 +13,13 @@ const PaymentSuccess = () => {
     const failMessage = query.get("P_RMESG1"); // 실패 메시지
 
     if (status === "00") {
+      const memberId = localStorage.getItem("memberId");
+      if (!memberId) {
+        alert("❌ 로그인 정보가 없습니다. 다시 로그인해주세요.");
+        navigate("/");
+        return;
+      }
+
       alert("✅ 결제가 완료되었습니다!");
       navigate("/user/my-orders");
     } else {
