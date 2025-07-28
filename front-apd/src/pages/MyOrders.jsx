@@ -36,7 +36,7 @@ const MyOrders = () => {
       return;
     }
     loadOrders();
-  }, []);
+  }, [user]);
 
   // ✅ 주문 목록 불러오기
   const loadOrders = async () => {
