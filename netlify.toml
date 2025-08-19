@@ -1,17 +1,6 @@
-[build]
-  command = "yarn build"
-  publish = "dist"
-
-# crown.unoeyhi.site 접속 시 → crown 프로젝트로 리다이렉트
 [[redirects]]
   from = "/*"
   to = "https://superlative-jalebi-d12a16.netlify.app/:splat"
   status = 200
   force = true
   conditions = { Host = ["crown.unoeyhi.site"] }
-
-# 메인 도메인(unoeyhi.site) SPA 대응
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
